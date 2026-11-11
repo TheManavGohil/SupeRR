@@ -95,11 +95,14 @@ def run_eda(root):
 
 def main():
     parser = argparse.ArgumentParser(description="Private RR analysis pipeline")
-    parser.add_argument("command", choices=["eda", "select-pilot", "fetch-cricsheet"])
+    parser.add_argument("command", choices=["eda", "select-pilot", "fetch-cricsheet", "reconcile-pilot"])
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2])
     args = parser.parse_args()
     if args.command == "eda":
         run_eda(args.root.resolve())
+    elif args.command == "reconcile-pilot":
+        from .alignment import run_pilot
+        run_pilot(args.root.resolve())
     else:
         from .external import fetch, freeze_pilot
         {"select-pilot": freeze_pilot, "fetch-cricsheet": fetch}[args.command](args.root.resolve())

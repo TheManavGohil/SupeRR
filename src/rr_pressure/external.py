@@ -17,6 +17,8 @@ from .data import fingerprints, save_json, sha256
 CUTOFF = "2026-11-01"
 ARCHIVES = {"IPL": "https://cricsheet.org/downloads/ipl_json.zip",
             "T20I": "https://cricsheet.org/downloads/t20s_male_json.zip"}
+REGISTER = {"people": "https://cricsheet.org/register/people.csv",
+            "names": "https://cricsheet.org/register/names.csv"}
 ATTRIBUTION = {"provider": "Cricsheet", "website": "https://cricsheet.org/",
                "license": "Open Data Commons Attribution License 1.0",
                "license_url": "https://opendatacommons.org/licenses/by/1-0/",
@@ -92,7 +94,7 @@ def fetch(root):
     freeze_pilot(root)
     dest = root / "data/external/cricsheet"
     dest.mkdir(parents=True, exist_ok=True)
-    for family, url in ARCHIVES.items():
+    for family, url in {**ARCHIVES, **REGISTER}.items():
         path = dest / Path(url).name
         receipt = path.with_suffix(".manifest.json")
         if path.exists():
@@ -105,9 +107,12 @@ def fetch(root):
         with urllib.request.urlopen(request, timeout=120) as response, temporary.open("wb") as target:
             while chunk := response.read(1024 * 1024):
                 target.write(chunk)
-        with ZipFile(temporary) as archive:
-            if archive.testzip() is not None:
-                raise ValueError("Corrupt archive")
+        if path.suffix == ".zip":
+            with ZipFile(temporary) as archive:
+                if archive.testzip() is not None:
+                    raise ValueError("Corrupt archive")
+        elif "identifier" not in pd.read_csv(temporary, nrows=1).columns:
+            raise ValueError("Invalid register")
         temporary.rename(path)
         save_json(receipt, {**ATTRIBUTION, "family": family, "url": url, "sha256": sha256(path),
             "retrieved_at_utc": datetime.now(timezone.utc).isoformat(), "bytes": path.stat().st_size,
@@ -117,6 +122,18 @@ def fetch(root):
 def normalize(value):
     return " ".join("".join(c.lower() if c.isalnum() else " " for c in
         unicodedata.normalize("NFKD", value) if not unicodedata.combining(c)).split())
+
+
+def register_aliases(root):
+    aliases = {}
+    for url in REGISTER.values():
+        path = root / "data/external/cricsheet" / Path(url).name
+        if json.loads(path.with_suffix(".manifest.json").read_text())["sha256"] != sha256(path):
+            raise ValueError("Register hash mismatch")
+        for row in pd.read_csv(path, keep_default_na=False).to_dict("records"):
+            aliases.setdefault(row["identifier"], set()).update(
+                normalize(row[k]) for k in ("name", "unique_name") if row.get(k))
+    return aliases
 
 
 def team_key(value):
