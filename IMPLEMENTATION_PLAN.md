@@ -1,8 +1,10 @@
 # SupeRR Selector Season 2 — architecture and implementation plan
 
-Prepared: 11 November 2026 (IST). Status: approved with amendments; local reconciliation, typed ingestion, score-independent pre-delivery states and the first EDA milestone are implemented. No predictive model, player rankings, or external alignment implemented.
+Prepared: 11 November 2026 (IST); updated 12 November. Status: approved with amendments; local reconciliation, typed ingestion, score-independent EDA and the frozen 20-match external reconciliation pilot are implemented. No predictive model or player rankings are implemented. Production score-dependent analysis remains gated on coverage and exception review.
 
 Completed milestone: [EDA report](reports/eda_2026-11-01/REPORT.md), [eight-page chart pack](reports/eda_2026-11-01/EDA_CHARTS.pdf), and [reproduction instructions](README.md). The processed proxy cohort reproduces the earlier audit's 160,186 events and 50,737 pressure flags. Exact score-dependent states remain gated on repair. This completes the usable part of T01/T02/T04 and exploratory analysis; T03 and the Mode A portion of T04 remain open.
+
+The [private pilot report](reports/reconciliation_pilot_2026-11-01/REPORT.md) separates match availability, event alignment and complete-match acceptance, with rejection reasons and verified pressure coverage. Verified pilot corrections are isolated from the production EDA artifacts. They do not certify the full corpus or establish population coverage.
 
 Approved constraints are recorded in [configs/analysis_preregistration.json](configs/analysis_preregistration.json). Audit results are in [the reconciliation report](artifacts/reconciliation_2026-11-01/REPORT.md); [the organiser clarification](ORGANISER_CLARIFICATION_DRAFT.md) is drafted and has not been sent.
 
@@ -168,11 +170,15 @@ The manifest records SHA-256 hashes of all supplied files, code/config versions,
 
 1. Produce full schema, null, type, key, foreign-key, and event-order audits.
 2. **Before any external alignment**, reconcile every run-win result under recorded-runs-only and one-per-wide/no-ball/bye/leg-bye hypotheses. Check wicket-win chases for final-event target crossing and wicket-margin consistency. Export match detail and pass rates by year, competition family, and exact competition; separate rain/revised results. This step is now complete: ordinary run-margin agreement is 24/399 (6.0%) and 100/399 (25.1%) respectively; neither rule is an accepted reconstruction.
-3. Use the evidence to select repair: prefer an organiser-supplied dictionary/corrected event export. The clarification is drafted only; sending is not authorised. Do not assume a response or stop independent work waiting for one. If authoritative quantities remain unavailable, use exact external event-ledger alignment as the repair alternative, with coverage gates. Cricsheet is a candidate, not an assumed source of complete coverage. Select 20 diagnostic matches across years/competitions and edge cases first; those checks supplement, not replace, all-retained-innings reconciliation. No alignment has started.
-4. Match using teams, competition, date with timezone tolerance, and match number; confirm lineups, innings, and scoring sequences. Ambiguous matches require review.
+3. Use the evidence to select repair: prefer an organiser-supplied dictionary/corrected event export. The clarification is drafted only; sending is not authorised. Do not assume a response or stop independent work waiting for one. Exact external event-ledger alignment is now implemented as a pilot repair alternative, with coverage gates. Twenty diagnostic matches were frozen before external matching: two per year/family, selected for ordinary scoring failure and risk/extras exposure. Do not replace unavailable matches. The pilot supplements, not replaces, all-retained-innings reconciliation.
+4. The pilot requires exact date, competition family and normalized team pair; timezone-tolerant matching is deferred for reviewed exceptions. Confirm team-scoped player identities using Cricsheet's attributed People Register, then require every striker, non-striker and bowler to agree throughout the event sequence. Unique name variants are candidates only; ambiguous identities remain quarantined.
 5. Align events by over and sequence, then verify striker/bowler identities and recorded outcomes. Do not force positional joins after one mismatch.
 6. Write an explicit scoring dictionary. Keep unknown categories unknown until supported by evidence.
 7. Reconcile all accepted complete innings with independent totals where available; verify legal-ball counts, wickets, target attainment, and match result consistency.
+
+Pilot implementation: immutable cached archives/registers with URL, retrieval time and SHA-256; per-event JSON pointers; separate candidate and verified correction outputs; full-match rejection after any unreviewed sequence, actor, batting-run or known-extra-category discrepancy. Rain-adjusted targets, retirements, penalty adjustments and miscounted overs need separate handling. Do not weaken these gates to improve the acceptance rate. Cricsheet withholds Afghanistan matches, so external availability is a systematic coverage issue.
+
+Next gate: resolve remaining identity aliases from independent sources, review field disagreements with an explicit correction ledger, then scale strict matching to the supplied cohort and audit player-level loss. Verified score states feed the registered pressure diagnostic before any contextual model is fitted. Broad late-over pressure creates a phase-overlap problem; assess support before interpreting pressure-minus-ordinary changes. Keep thresholds independent of player rankings.
 
 A final innings total alone cannot recover the timing of missing extras. Never distribute an unexplained difference across deliveries. Score-dependent features require event-level verification, or a demonstrably valid reconstruction with an independently reconciled ledger.
 
@@ -383,7 +389,9 @@ These are starting operational thresholds. Record the anonymous coverage curve a
 1. **2022:** warm-up/reference fitting; do not claim independent chronological performance estimates for this year.
 2. **2023–2024:** expanding-window development folds; each validation period uses only earlier completed matches for historical features and fitted models.
 3. **2025:** method selection and calibration checks. Use separate earlier/later calibration/evaluation blocks when calibrating probabilities; never calibrate and evaluate on the same matches.
-4. **2026:** final untouched evaluation after pressure, thresholds, weights and eligibility rules are frozen.
+4. **2026:** reserved model-evaluation period after pressure, thresholds, weights and eligibility rules are frozen. Aggregate 2026 EDA and reconciliation diagnostics have already been inspected; do not call the dataset pristine or completely unseen. Do not use 2026 player outcomes to select models or tune thresholds.
+
+The match-date cutoff remains 1 November 2026. External source snapshots were retrieved later and can contain revised historical records; keep retrieval times/revisions and distinguish retrospective score repair from a claim of publication-time availability.
 
 Implement custom match-date folds; directly applying row-level `TimeSeriesSplit` can split one match across partitions. Keep both innings of a match together and exclude same-day results from historical features when completion ordering is unknown. All preprocessing, encoders, scaling, pressure quantiles and priors fit inside each training fold.
 
@@ -485,7 +493,7 @@ Effort estimates are focused working time, not promises. Critical path is T01 �
 | T05: Baseline analysis | Rule pressure, peer expectations, first anonymous ranking diagnostics | T04 | 3–5 h | End-to-end baseline runs and every metric is explainable. |
 | T06: Advanced candidate | Calibrated leverage and context models; promotion decision | T05, Mode A | 4–7 h | Development gates pass, or baseline retained with explanation. |
 | T07: Ratings and uncertainty | Pooling, eligibility, recency, 1,000 match bootstraps, about 20 upstream-model variants; 70/30 and 50/50 comparison | T05; optional T06 | 5–7 h | Both lists have traceable evidence and uncertainty. |
-| T08: Freeze and evaluation | Frozen config, untouched 2026 evaluation, final all-data run | T07 | 3–5 h | Evaluation and final recommendation artifacts clearly separated. |
+| T08: Freeze and evaluation | Frozen config, reserved 2026 model evaluation, final all-data run | T07 | 3–5 h | Evaluation and final recommendation artifacts clearly separated; prior aggregate EDA exposure disclosed. |
 | T09: Submission package | PDF, figures, player cards, exact dropdown checklist | T08 | 5–7 h | All required brief items covered; report values match selections. |
 | T10: Optional explorer — deferred | Local interactive views only if explicitly revisited after submission readiness | T09 | 0 h in core schedule | Not a qualification deliverable or a dependency of the report. |
 
