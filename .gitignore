@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.cache/
+6af3166e7b922_data_pack/
+data/
+artifacts/
+reports/
+DATA_AUDIT.md
+ORGANISER_CLARIFICATION_DRAFT.md

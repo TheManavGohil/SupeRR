@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rr-pressure"
+version = "0.1.0"
+description = "Private, reproducible SupeRR Selector analysis"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "numpy>=2,<3",
+  "pandas>=2.2,<3",
+  "pyarrow>=18,<24",
+  "matplotlib>=3.9,<4",
+]
+
+[project.scripts]
+rr-pressure = "rr_pressure.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

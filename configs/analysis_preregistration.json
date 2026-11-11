@@ -1,0 +1,36 @@
+{
+  "status": "approved_design_constraints_not_a_trained_model_config",
+  "data_cutoff_inclusive": "2026-11-01",
+  "cutoff_field": "matches.match_date",
+  "level_change_weights": {
+    "default": {"level": 0.7, "change": 0.3},
+    "registered_variant": {"level": 0.5, "change": 0.5}
+  },
+  "bootstrap": {
+    "unit": "whole_match",
+    "debug_replicates": 200,
+    "final_replicates": 1000,
+    "model_refit_or_rolling_variants_target": 20
+  },
+  "rule_pressure": {
+    "operator": "late OR collapse OR tight_chase",
+    "late_overs_inclusive": [16, 20],
+    "recent_wickets_minimum": 2,
+    "recent_legal_ball_window": 12,
+    "early_wickets_minimum": 4,
+    "early_over_maximum_inclusive": 10,
+    "early_collapse_persists_beyond_over_10": false,
+    "chase_balls_remaining_inclusive": [1, 60],
+    "required_runs_per_ball_inclusive": [0.75, 1.5],
+    "coverage_target_percent": [20, 30],
+    "coverage_target_is_diagnostic_not_automatic_retuning": true,
+    "player_based_threshold_tuning_allowed": false,
+    "tight_chase_requires_verified_scores_for_final_analysis": true
+  },
+  "explorer_T10": {"priority": "deferred", "scheduled_core_hours": 0},
+  "scoring_hypotheses": {
+    "a": "recorded runs only",
+    "b": "recorded runs plus one per wide, Overstep, bye, or leg-bye event",
+    "accepted_for_Mode_A": false
+  }
+}
