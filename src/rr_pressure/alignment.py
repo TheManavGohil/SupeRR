@@ -89,7 +89,7 @@ def flatten(public):
     return events
 
 
-def align_events(raw, public, identities, match):
+def align_events(raw, public, identities, match, reviewed_retirements=frozenset()):
     """Return candidate corrections and all failures; callers must gate the entire match."""
     external = flatten(public)
     failures, corrections = [], []
@@ -132,8 +132,12 @@ def align_events(raw, public, identities, match):
                 errors.append("dismissal_kind")
             if identities.get(r["dismissed_player_id"]) != w["player_out"]:
                 errors.append("dismissed_player")
-        if p.get("wickets") and any(w["kind"] == "retired hurt" for w in p["wickets"]):
-            errors.append("retirement_requires_review")
+        retired = [w for w in p.get("wickets", []) if w["kind"] == "retired hurt"]
+        if retired:
+            participants = {identities.get(r["striker_id"]), identities.get(r["non_striker_id"])}
+            if (r["event_id"] not in reviewed_retirements or r["is_wicket"] or
+                    len(retired) != 1 or retired[0]["player_out"] not in participants):
+                errors.append("retirement_requires_review")
         for reason in errors:
             failures.append({"event_id": r["event_id"], "reason": reason, "detail": p["source_pointer"]})
         corrections.append({"event_id": r["event_id"], "match_id": r["match_id"], "innings": r["innings"],

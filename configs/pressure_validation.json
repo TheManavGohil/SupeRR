@@ -1,0 +1,19 @@
+{
+  "registered_before_full_corpus_pressure_comparison": true,
+  "status": "diagnostics_only_no_threshold_retuning",
+  "development_last_date": "2025-12-31",
+  "reserved_evaluation_first_date": "2026-01-01",
+  "coarse_context": ["family", "year", "innings", "phase"],
+  "finer_context": ["family", "year", "innings", "phase", "wicket_band"],
+  "minimum_events_per_group_per_cell": 20,
+  "minimum_matches_per_group_per_cell": 3,
+  "player_context": ["player_id", "family", "innings", "phase"],
+  "player_minimum_events_per_group_per_cell": 10,
+  "player_minimum_matches_per_group_per_cell": 2,
+  "minimum_pressure_support_share_for_global_change": 0.8,
+  "structural_zero_overlap_blocks_global_change": true,
+  "bootstrap_replicates": 1000,
+  "bootstrap_unit": "whole_match",
+  "seed": 1729,
+  "purpose": "Assess coverage, phase confounding and support before model fitting; coarse overlap does not establish causal identification. No outcome or player ranking used to set these checks."
+}
