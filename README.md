@@ -1,5 +1,7 @@
 # RR pressure analysis
 
+Start with [progress.md](progress.md) for the current stage, completed work, unresolved risks and the next task. Agents should read [AGENTS.md](AGENTS.md) and keep the progress record current.
+
 Private implementation for SupeRR Selector Season 2. The first milestone is complete: typed ingestion, score-independent pre-delivery states, EDA tables, player sample coverage, whole-match descriptive uncertainty, and an eight-page chart pack.
 
 Read the [implementation plan](IMPLEMENTATION_PLAN.md). The EDA report, chart pack, detailed tables, and scoring reconciliation are generated locally and excluded from the public repository because they contain competition-derived results.
