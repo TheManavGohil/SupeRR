@@ -1,10 +1,12 @@
 # SupeRR Selector Season 2 — architecture and implementation plan
 
-Prepared: 11 November 2026 (IST); updated 12 November. Status: approved with amendments; local reconciliation, typed ingestion, score-independent EDA and the frozen 20-match external reconciliation pilot are implemented. No predictive model or player rankings are implemented. Production score-dependent analysis remains gated on coverage and exception review.
+Prepared: 11 November 2026 (IST); updated 12 November. Status: local reconciliation, typed ingestion, score-independent EDA, pilot exception review, full-corpus score reconciliation and pressure-comparison validation are implemented. Verified score-dependent states are available for accepted complete matches. No predictive model or player rankings are implemented; the global pressure-change ranking design fails the comparison-support gate.
 
 Completed milestone: [EDA report](reports/eda_2026-11-01/REPORT.md), [eight-page chart pack](reports/eda_2026-11-01/EDA_CHARTS.pdf), and [reproduction instructions](README.md). The processed proxy cohort reproduces the earlier audit's 160,186 events and 50,737 pressure flags. Exact score-dependent states remain gated on repair. This completes the usable part of T01/T02/T04 and exploratory analysis; T03 and the Mode A portion of T04 remain open.
 
 The [private pilot report](reports/reconciliation_pilot_2026-11-01/REPORT.md) separates match availability, event alignment and complete-match acceptance, with rejection reasons and verified pressure coverage. Verified pilot corrections are isolated from the production EDA artifacts. They do not certify the full corpus or establish population coverage.
+
+New completed milestones: [full reconciliation and coverage](reports/full_reconciliation_2026-11-01/REPORT.md), [pressure comparison validation](reports/pressure_validation_2026-11-01/REPORT.md), and [standalone validation figures](reports/pressure_validation_2026-11-01/VALIDATION_CHARTS.pdf). Every supplied match is accounted for. Private review ledgers retain original values and evidence; unreviewed discrepancies remain excluded. This extends T03/T04 and completes the pre-model support diagnostic, without promoting unsupported rankings.
 
 Approved constraints are recorded in [configs/analysis_preregistration.json](configs/analysis_preregistration.json). Audit results are in [the reconciliation report](artifacts/reconciliation_2026-11-01/REPORT.md); [the organiser clarification](ORGANISER_CLARIFICATION_DRAFT.md) is drafted and has not been sent.
 
@@ -171,14 +173,14 @@ The manifest records SHA-256 hashes of all supplied files, code/config versions,
 1. Produce full schema, null, type, key, foreign-key, and event-order audits.
 2. **Before any external alignment**, reconcile every run-win result under recorded-runs-only and one-per-wide/no-ball/bye/leg-bye hypotheses. Check wicket-win chases for final-event target crossing and wicket-margin consistency. Export match detail and pass rates by year, competition family, and exact competition; separate rain/revised results. This step is now complete: ordinary run-margin agreement is 24/399 (6.0%) and 100/399 (25.1%) respectively; neither rule is an accepted reconstruction.
 3. Use the evidence to select repair: prefer an organiser-supplied dictionary/corrected event export. The clarification is drafted only; sending is not authorised. Do not assume a response or stop independent work waiting for one. Exact external event-ledger alignment is now implemented as a pilot repair alternative, with coverage gates. Twenty diagnostic matches were frozen before external matching: two per year/family, selected for ordinary scoring failure and risk/extras exposure. Do not replace unavailable matches. The pilot supplements, not replaces, all-retained-innings reconciliation.
-4. The pilot requires exact date, competition family and normalized team pair; timezone-tolerant matching is deferred for reviewed exceptions. Confirm team-scoped player identities using Cricsheet's attributed People Register, then require every striker, non-striker and bowler to agree throughout the event sequence. Unique name variants are candidates only; ambiguous identities remain quarantined.
+4. The original pilot requires exact dates. Full-corpus reconciliation now evaluates exact and adjacent-day candidates under [the explicit policy](configs/reconciliation_policy.json), requiring one unique complete-ledger/result match and an unused public match identity. Both supplied and public dates must respect the cutoff; raw dates are never rewritten. Team-scoped identities use the People Register and evidence-backed private aliases; every striker, non-striker and bowler must agree throughout the event sequence. IPL rescheduling ordinal differences require exact-date, source-hashed reviewed exceptions. Unique name variants are candidates only; ambiguous identities remain quarantined.
 5. Align events by over and sequence, then verify striker/bowler identities and recorded outcomes. Do not force positional joins after one mismatch.
 6. Write an explicit scoring dictionary. Keep unknown categories unknown until supported by evidence.
 7. Reconcile all accepted complete innings with independent totals where available; verify legal-ball counts, wickets, target attainment, and match result consistency.
 
 Pilot implementation: immutable cached archives/registers with URL, retrieval time and SHA-256; per-event JSON pointers; separate candidate and verified correction outputs; full-match rejection after any unreviewed sequence, actor, batting-run or known-extra-category discrepancy. Rain-adjusted targets, retirements, penalty adjustments and miscounted overs need separate handling. Do not weaken these gates to improve the acceptance rate. Cricsheet withholds Afghanistan matches, so external availability is a systematic coverage issue.
 
-Next gate: resolve remaining identity aliases from independent sources, review field disagreements with an explicit correction ledger, then scale strict matching to the supplied cohort and audit player-level loss. Verified score states feed the registered pressure diagnostic before any contextual model is fitted. Broad late-over pressure creates a phase-overlap problem; assess support before interpreting pressure-minus-ordinary changes. Keep thresholds independent of player rankings.
+Full-corpus and player-level loss audits are now generated. Remaining unresolved events, identities, adjusted targets and missing-source cohorts retain explicit dispositions. No blanket class of newly encountered field errors is auto-repaired. The next gate is methodological: the unchanged rule marks all late-over events as pressure, so the global change term lacks ordinary evidence in that phase. Keep pressure thresholds independent of players and preserve this failed gate before any contextual model is fitted.
 
 A final innings total alone cannot recover the timing of missing extras. Never distribute an unexplained difference across deliveries. Score-dependent features require event-level verification, or a demonstrably valid reconstruction with an independently reconciled ledger.
 
@@ -280,6 +282,8 @@ Select the advanced definition using pre-2026 development data only. It must:
 
 If the candidate fails, retain the rule baseline. A complex model is not a deliverable requirement. Do not tune pressure to produce preferred player names.
 
+Retaining the rule labels does not waive the comparison-support gate. Diagnostics are specified in [pressure_validation.json](configs/pressure_validation.json) before comparison inspection: family/year/innings/phase cells, plus wicket bands for the finer check; minimum 20 events and 3 matches in each group. The development support share must reach 80% and have no structural zero ordinary support for a global change interpretation. Player evidence is checked separately. Coarse overlap is descriptive support, not causal identification, because pressure is deterministic from the full state.
+
 ## 9. Measure player performance and their normal baseline
 
 ### 9.1 Separate two questions
@@ -288,6 +292,10 @@ If the candidate fails, retain the rule baseline. A complex model is not a deliv
 - **Pressure change:** how does that performance differ from the same player's usual context-adjusted level?
 
 Both appear in every player card. A player can be excellent under pressure without improving relative to an already exceptional baseline.
+
+**Current implementation gate:** do not execute the proposed global 70/30 or 50/50 ranking blends yet. The completed diagnostic demonstrates structural absence of late-phase ordinary observations. The registered weights remain unchanged and unexecuted. A proposed amendment for the next modeling stage is to separate context-adjusted pressure performance level from a change estimate restricted to explicitly supported contexts, reporting unsupported exposure and uncertainty alongside it. Freeze that estimand, its eligibility policy, and any ranking combination before fitting or inspecting player rankings. Do not silently extrapolate ordinary performance into unsupported late-phase cells.
+
+The full-cohort diagnostic reports raw differences, raw differences on the same supported cells, and context-standardized differences. These are development-only descriptive associations with 1,000 whole-match resamples, not trained models or causal effects. The 2026 partition is shown for coverage/support only and remains reserved from method selection.
 
 ### 9.2 Context expectations
 

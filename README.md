@@ -54,7 +54,34 @@ Match acceptance requires exact event order and participants, batting runs, know
 
 External data is provided by [Cricsheet](https://cricsheet.org/), using its [JSON format](https://cricsheet.org/format/json/) and [People Register](https://cricsheet.org/register/), under the [Open Data Commons Attribution License 1.0](https://opendatacommons.org/licenses/by/1-0/). Derived outputs add alignment decisions and provenance. See [coverage caveats](https://cricsheet.org/downloads/), including withheld Afghanistan matches. All downloaded data and derived competition artifacts remain excluded from this repository.
 
-Future steps are event-level score repair and coverage validation, pressure-definition validation, context-adjusted baselines, and the frozen chronological evaluation. The final ranking stage keeps 1,000 whole-match bootstrap replicates, about 20 upstream-model variants and the 70/30 versus 50/50 level/change comparison. The optional explorer is deferred. The organiser clarification is drafted and unsent.
+Next steps are to address material remaining coverage gaps, freeze a supported definition of performance change, then fit context baselines and run the chronological evaluation. The registered ranking design keeps 1,000 whole-match bootstrap replicates, about 20 upstream-model variants and the 70/30 versus 50/50 level/change comparison, subject to the support gate below. The optional explorer is deferred. The organiser clarification is drafted and unsent.
+
+## Full coverage and pressure-comparison validation
+
+```sh
+rtk proxy .venv/bin/python -m rr_pressure reconcile-full
+rtk proxy .venv/bin/python -m rr_pressure pressure-validate
+rtk proxy .venv/bin/python -m unittest discover -s tests -q
+```
+
+Private reviewed exceptions live in `data/curated/reconciliation_reviews.json`: identity aliases with evidence links, specific event-field decisions tied to source hashes and original values, reviewed retired-hurt events, and exact-date match-ordinal convention differences. Keep that private input with the source data for exact reproduction. Without it, the code performs strict reconciliation with fewer accepted matches. It never guesses new corrections or edits supplied files.
+
+Full-corpus matching evaluates exact and adjacent dates, but a shifted match needs a unique complete event/result match; both dates respect the cutoff. Every candidate is logged, and one external match cannot be counted twice. [The matching policy](configs/reconciliation_policy.json) and [pressure-support checks](configs/pressure_validation.json) are versioned separately from the unchanged pressure rule.
+
+Local outputs:
+
+| Location | Contents |
+|---|---|
+| `reports/full_reconciliation_2026-11-01/REPORT.md` | Every supplied match, year/family/competition retention, pilot dispositions and remaining exclusions. |
+| `reports/full_reconciliation_2026-11-01/candidate_audit.csv` | All date candidates and individual alignment/result failures. |
+| `reports/full_reconciliation_2026-11-01/verified_events.parquet` | Complete accepted matches with original values, adopted scores, provenance and pre-ball states. Contains outcomes; do not feed all columns into a model. |
+| `reports/pressure_validation_2026-11-01/REPORT.md` | Pressure shares, context overlap, player coverage and development-only descriptive comparisons. |
+| `reports/pressure_validation_2026-11-01/VALIDATION_CHARTS.pdf` | Standalone coverage and comparison-support figures. |
+| `reports/pressure_validation_2026-11-01/model_gate.json` | Explicit readiness decision; no predictive model has been fitted. |
+
+The global pressure-change ranking gate currently fails: all late-phase deliveries are labelled pressure, leaving no ordinary comparison in that phase. The 70/30 default and 50/50 variant remain registered but unexecuted. The next methodological step is to specify context-adjusted pressure level separately from change on supported contexts, freeze eligibility and combination rules, then fit chronological context models. Do not change pressure thresholds to improve particular players' results.
+
+Uncertainty diagnostics use 1,000 whole-match resamples, not ball resampling. Raw and supported-context contrasts describe different populations; a third contrast reports the raw difference on the supported population. Context support is a descriptive condition and does not establish a causal pressure effect. All detailed reports, exception evidence and downloaded data remain ignored by Git.
 
 Aggregate 2026 EDA has already been inspected. Keep 2026 reserved from model and threshold tuning, and describe this exposure honestly in the evaluation report.
 
