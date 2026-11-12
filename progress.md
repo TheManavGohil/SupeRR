@@ -59,6 +59,7 @@ The baseline is a transparent historical peer model. Advanced models are optiona
 
 ## Constraints and working preferences
 
+- **Selector perspective:** the user explicitly requested decisions through the lens of a professional cricket selector. Apply the cricket decision framework in [AGENTS.md](AGENTS.md): role/context, repeatability, tactical tradeoffs, counterevidence and defensible alternatives. This is a reasoning approach, not a claim of credentials. The frozen scoring method remains the active specification.
 - Match-date cutoff: **1 November 2026 inclusive**. Preserve immutable supplied inputs and source hashes.
 - 2022 is training warm-up only. Development predictions: 2023–2025. Reserved evaluation: 2026. Both innings of a match stay together; each annual fold trains on earlier years.
 - Preserve the frozen pressure rule; do not tune thresholds for particular players.
@@ -85,5 +86,7 @@ Local evidence, available with the private workspace:
 - [Current gate](reports/supported_method_2026-11-01/model_gate.json)
 
 Latest analytical milestone: `426f28f`, following method freeze `59e1453` and implementation `ff6bcd9`. Record later analytical milestones here; use Git itself for the live working-tree/synchronization state.
+
+Latest handoff update: added the selector decision framework on 12 November 2026 at the user's request. Documentation only; no model execution, score changes or new test run. Next substantive task remains the development peer baseline.
 
 After a milestone, update the current stage, verified results, unresolved risks, exact next task and artifact links. Distinguish implemented, executed, validated and proposed work. Do not mark the project complete until both submission components are ready.
