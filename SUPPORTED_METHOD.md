@@ -30,6 +30,8 @@ Supported change must independently satisfy the same pressure minimum, eight pre
 
 Source retention is measured in the same role and date window. Below 80% retention, diagnostics remain visible but an unqualified shortlist is blocked pending a documented coverage review. Never fill a ten-player list by relaxing thresholds after seeing names. Development, reserved-year diagnostics and final retrospective eligibility are separate outputs.
 
+The one-year reserved exposure diagnostic applies the same multi-year minima and may produce no eligible blends. That does not prevent evaluation of expected-outcome predictions on reserved events, but it does prevent claiming a validated reserved-year player-change ranking without enough evidence.
+
 ## Chronology and model boundary
 
 2022 is training warm-up only; it contributes no player residuals. For each of 2023, 2024, 2025 and 2026, train on complete verified matches strictly before that calendar year. All events from a match stay in the same partition. No same-day or future match can enter training. Evaluate development on 2023–2025; 2026 remains reserved from method selection. Prior aggregate 2026 EDA exposure is explicitly disclosed.

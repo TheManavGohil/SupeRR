@@ -79,10 +79,25 @@ Local outputs:
 | `reports/pressure_validation_2026-11-01/VALIDATION_CHARTS.pdf` | Standalone coverage and comparison-support figures. |
 | `reports/pressure_validation_2026-11-01/model_gate.json` | Explicit readiness decision; no predictive model has been fitted. |
 
-The global pressure-change ranking gate currently fails: all late-phase deliveries are labelled pressure, leaving no ordinary comparison in that phase. The 70/30 default and 50/50 variant remain registered but unexecuted. The next methodological step is to specify context-adjusted pressure level separately from change on supported contexts, freeze eligibility and combination rules, then fit chronological context models. Do not change pressure thresholds to improve particular players' results.
+The global pressure-change ranking gate currently fails: all late-phase deliveries are labelled pressure, leaving no ordinary comparison in that phase. The 70/30 default and 50/50 variant remain registered but unexecuted. [Supported method v1](SUPPORTED_METHOD.md) now freezes context-adjusted pressure level separately from change on supported contexts, eligibility, combination and missing-evidence rules. Do not change pressure thresholds to improve particular players' results.
 
 Uncertainty diagnostics use 1,000 whole-match resamples, not ball resampling. Raw and supported-context contrasts describe different populations; a third contrast reports the raw difference on the supported population. Context support is a descriptive condition and does not establish a causal pressure effect. All detailed reports, exception evidence and downloaded data remain ignored by Git.
 
 Aggregate 2026 EDA has already been inspected. Keep 2026 reserved from model and threshold tuning, and describe this exposure honestly in the evaluation report.
+
+## Frozen supported-context method
+
+```sh
+rtk proxy .venv/bin/python -m rr_pressure prepare-method
+rtk proxy .venv/bin/python -m unittest discover -s tests -q
+```
+
+This preflight fits no model and computes no player performance scores. The [versioned configuration](configs/supported_method_v1.json) is frozen before the new eligibility diagnostics. It splits all-pressure level from same-player, same-year supported-context change; missing change remains null and cannot enter either blend. The old failed global-change gate stays intact.
+
+`reports/supported_method_2026-11-01/` contains the local report, frozen configuration, source/config/output hashes, model gate, exposure windows, player support tables, and match fold membership. `features.parquet` contains only the event join key and four allowlisted context predictors. Outcomes live in `targets.parquet`; player identities, pressure labels and role filters live in `identities_and_exposures.parquet`. Never feed those latter tables wholesale into a predictor. The exported 2026 targets are not analyzed by this command.
+
+2022 supplies training warm-up only; scoring evidence begins in 2023. Train each annual fold on complete earlier-year matches. Development, reserved-year exposure and final retrospective exposure are audited separately. Both the population and the player need ordinary and pressure observations within the comparison cell. Under-80% source retention blocks an unqualified shortlist; insufficient comparisons do not imply poor performance.
+
+The next implementation is the registered historical peer baseline on development folds, followed by residual/calibration checks and a frozen model choice before reserved evaluation. The live preflight does not execute the component estimators; those are checked using synthetic contributions. They preserve a fixed support population during match resampling and withhold selection scores when too many draws lack comparison groups. Further dependencies are model validation, the complete bootstrap/ranking runner, sensitivity analysis and evidence review.
 
 The source data, generated artifacts, detailed data audit, and organiser clarification are private competition materials. They are excluded from version control by default. Running the pipeline overwrites its generated EDA artifacts; raw source files are fingerprinted and never edited.

@@ -1,6 +1,6 @@
 # SupeRR Selector Season 2 — architecture and implementation plan
 
-Prepared: 11 November 2026 (IST); updated 12 November. Status: local reconciliation, typed ingestion, score-independent EDA, pilot exception review, full-corpus score reconciliation and pressure-comparison validation are implemented. Verified score-dependent states are available for accepted complete matches. No predictive model or player rankings are implemented; the global pressure-change ranking design fails the comparison-support gate.
+Prepared: 11 November 2026 (IST); updated 12 November. Status: local reconciliation, typed ingestion, score-independent EDA, pilot exception review, full-corpus score reconciliation, pressure-comparison validation and a frozen supported-context method preflight are implemented. Verified score-dependent states are available for accepted complete matches. No predictive model or player rankings are implemented; the global pressure-change ranking design fails the comparison-support gate. [Supported method v1](SUPPORTED_METHOD.md) now supersedes the global player-change model below and specifies the next baseline.
 
 Completed milestone: [EDA report](reports/eda_2026-11-01/REPORT.md), [eight-page chart pack](reports/eda_2026-11-01/EDA_CHARTS.pdf), and [reproduction instructions](README.md). The processed proxy cohort reproduces the earlier audit's 160,186 events and 50,737 pressure flags. Exact score-dependent states remain gated on repair. This completes the usable part of T01/T02/T04 and exploratory analysis; T03 and the Mode A portion of T04 remain open.
 
@@ -293,7 +293,7 @@ Retaining the rule labels does not waive the comparison-support gate. Diagnostic
 
 Both appear in every player card. A player can be excellent under pressure without improving relative to an already exceptional baseline.
 
-**Current implementation gate:** do not execute the proposed global 70/30 or 50/50 ranking blends yet. The completed diagnostic demonstrates structural absence of late-phase ordinary observations. The registered weights remain unchanged and unexecuted. A proposed amendment for the next modeling stage is to separate context-adjusted pressure performance level from a change estimate restricted to explicitly supported contexts, reporting unsupported exposure and uncertainty alongside it. Freeze that estimand, its eligibility policy, and any ranking combination before fitting or inspecting player rankings. Do not silently extrapolate ordinary performance into unsupported late-phase cells.
+**Current implementation gate:** do not execute global 70/30 or 50/50 ranking blends. The completed diagnostic demonstrates structural absence of late-phase ordinary observations. [Supported method v1](SUPPORTED_METHOD.md) and [its frozen configuration](configs/supported_method_v1.json) now specify all-pressure level separately from same-player, same-year supported-context change. The weights remain unchanged, with missing change blocking both blends. The `prepare-method` command exports allowlisted features, separate targets/identities, strictly chronological match folds, and outcome-independent support/eligibility checks. No model or player score is fitted. Do not silently extrapolate ordinary performance into unsupported late-phase cells.
 
 The full-cohort diagnostic reports raw differences, raw differences on the same supported cells, and context-standardized differences. These are development-only descriptive associations with 1,000 whole-match resamples, not trained models or causal effects. The 2026 partition is shown for coverage/support only and remains reserved from method selection.
 
@@ -339,6 +339,8 @@ The 60/40 split is an explicit starting preference for run production/control wi
 
 ### 9.5 Player baseline, pressure change, and shrinkage
 
+**Superseded design:** the global alpha/delta regression in this subsection is retained for the decision history, not implementation. Supported method v1 uses separate recency-weighted pressure level and within-cell change, with fixed role-specific regularization. It keeps year in comparison cells, requires peer and player support, preserves unavailable change as null, and gates coverage separately. Its formulas and bootstrap missing-group policy take precedence over this original proposal.
+
 Fit a partially pooled player model to contextual contribution residuals:
 
 ```text
@@ -359,6 +361,8 @@ The pressure effect is an adjusted association, not a causal psychological trait
 
 ### 9.6 Ranking rule
 
+Under supported method v1, `pressure_change` below means change only in supported contexts, while `pressure_level` uses all pressure opportunities. The blend is a decision index of different populations, not a global effect. Both variants require the same eligible cohort. A level-only table remains separate. Withhold a bootstrap selection score if fewer than 95% of draws retain all required groups; never silently drop unsupported cells in a draw. Final rankings remain gated pending model validation and uncertainty checks.
+
 ```text
 point_score = 0.70 * pressure_level + 0.30 * pressure_change
 selection_score = 10th percentile of the match-bootstrap point_score distribution
@@ -378,7 +382,7 @@ Initial eligibility thresholds, frozen after inspecting anonymous sample distrib
 - Ordinary-context evidence from at least five matches and 100 opportunities for a strongly supported personal baseline.
 - Effective recency-weighted opportunity count at least 40; show `n_eff = (sum w)^2 / sum(w^2)` as a weight-concentration diagnostic, not an independent-ball sample size.
 
-These are starting operational thresholds. Record the anonymous coverage curve and any adjustment before freezing. Do not relax them just to include a favourite player. Keep an explicit insufficient-evidence/watchlist table. If fewer than ten meet a role threshold, document a uniform predeclared relaxation and show the resulting uncertainty.
+Supported method v1 now freezes these sample minima with separate level/change gates, pressure-specific effective counts and same-window source coverage. Record the anonymous eligibility counts and keep an insufficient-evidence/watchlist table. If fewer than ten pass, report the limitation; this version does not authorize automatic relaxation to fill the list. A future change requires a versioned, justified amendment before new scores are inspected.
 
 ## 10. IPL, T20I, and player comparability
 
@@ -408,7 +412,7 @@ Two final artifacts have different purposes:
 - `evaluation_2026`: ratings formed using pre-2026 information, tested against 2026 performance. Report survival/availability and exposure coverage; missing appearances are not failures.
 - `final_rankings`: use all valid supplied data through 1 November 2026 with the frozen methodology. These are retrospective final recommendations, not themselves a held-out prediction result.
 
-For final evidence, use out-of-match nuisance predictions. 2023–2026 can use chronological predictions; 2022 may use match-group cross-fitting as a clearly labelled warm-up exception. Check rankings with 2022 removed. Never present in-sample residuals as held-out performance.
+For final evidence, use out-of-match nuisance predictions. Supported method v1 uses chronological predictions for 2023–2026 and reserves 2022 for training warm-up only; the earlier proposed 2022 cross-fitting exception is not used. Disclose the resulting loss of player scoring evidence. Never present in-sample residuals as held-out performance.
 
 ### Benchmark comparisons
 
