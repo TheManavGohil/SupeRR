@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "match_date_candidate_tolerance_days": 1,
+  "match_date_cutoff_inclusive": "2026-11-01",
+  "supplied_and_external_dates_must_both_respect_cutoff": true,
+  "date_shift_acceptance": "Exactly one candidate with identical full delivery sequence/participants, reviewed outcomes, source result and match number when available",
+  "exact_date_does_not_override_contradictory_event_evidence": true,
+  "external_member_may_map_to_at_most_one_supplied_match": true,
+  "raw_match_dates_are_not_rewritten": true,
+  "automatic_event_sequence_edits_allowed": false,
+  "automatic_new_field_corrections_allowed": false
+}

@@ -47,3 +47,15 @@ def apply_reviews(raw, member_sha256, entries):
             event[field] = entry["new_value"]
         applied.append(dict(entry))
     return patched, applied, retirements
+
+
+def match_number_review(match, external_number, digest, entries, date_offset):
+    if date_offset != 0:
+        return None
+    for entry in entries:
+        if entry["match_id"] == match["match_id"] and entry["source_member_sha256"] == digest:
+            if (entry["field"] != "match_number" or entry["supplied_value"] != str(match["match_number"]) or
+                    entry["external_value"] != str(external_number) or not entry.get("evidence_urls")):
+                raise ValueError("Reviewed match ordinal no longer agrees")
+            return entry
+    return None

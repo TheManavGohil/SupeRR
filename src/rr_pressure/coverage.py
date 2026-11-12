@@ -10,9 +10,9 @@ import pandas as pd
 
 from .alignment import align_events, candidates_for, player_crosswalk, score_checks, verified_states
 from .data import fingerprints, load, save_json, sha256
-from .external import ARCHIVES, ATTRIBUTION, CUTOFF, index_archives, register_aliases
+from .external import ARCHIVES, ATTRIBUTION, CUTOFF, index_archives, register_aliases, team_key
 from .pilot_report import markdown_table
-from .reviews import apply_reviews, load_reviews
+from .reviews import apply_reviews, load_reviews, match_number_review
 
 
 def coverage_summary(matches, keys):
@@ -30,6 +30,7 @@ def write_manifest(root, out, raw_hashes, extra=None):
     save_json(out / "manifest.json", {"cutoff": CUTOFF, "source_sha256": raw_hashes,
         "raw_inputs_unchanged": True, "attribution": ATTRIBUTION,
         "config_sha256": sha256(root / "configs/analysis_preregistration.json"),
+        "policy_sha256": sha256(root / "configs/reconciliation_policy.json"),
         "review_sha256": sha256(root / "data/curated/reconciliation_reviews.json") if (root / "data/curated/reconciliation_reviews.json").exists() else None,
         "code_sha256": {str(p.relative_to(root)): sha256(p) for p in sorted((root / "src").rglob("*.py"))},
         "external_snapshots": {p.name: json.loads(p.read_text()) for p in sorted((root / "data/external/cricsheet").glob("*.manifest.json"))},
@@ -37,10 +38,51 @@ def write_manifest(root, out, raw_hashes, extra=None):
         "models_fitted": False, **(extra or {})})
 
 
+def nearby_candidates(match, index, tolerance):
+    key = "|".join(sorted(map(team_key, [match["home_team"], match["away_team"]])))
+    pool = index.loc[index.family.eq(match["family"]) & index.teams_key.eq(key)].copy()
+    pool["date_offset_days"] = (pd.to_datetime(pool.date) - pd.Timestamp(match["match_date"])).dt.days
+    pool = pool.loc[pool.date_offset_days.abs().le(tolerance) & pool.date.le(CUTOFF)]
+    pool["absolute_offset"] = pool.date_offset_days.abs()
+    return pool.sort_values(["absolute_offset", "date", "member"]).drop_duplicates(["archive", "member"])
+
+
+def evaluate_candidate(raw, match, candidate, payload, aliases, reviews):
+    digest = hashlib.sha256(payload).hexdigest()
+    if digest != candidate["member_sha256"]:
+        raise ValueError("Source member changed")
+    public = json.loads(payload)
+    # Reviews are tied to a specific source, so never apply one to a different nearby game.
+    relevant = [r for r in reviews["events"] if r["source_member_sha256"] == digest]
+    patched, used, retired = apply_reviews(raw, digest, relevant)
+    crosswalk, rows = player_crosswalk(patched, public, match, aliases)
+    proposed, issues = align_events(patched, public, crosswalk, match, retired)
+    checks = score_checks(public, match)
+    number = public["info"].get("event", {}).get("match_number")
+    ordinal_review = None
+    if number is not None and match.get("match_number") and str(number) != str(match["match_number"]):
+        ordinal_review = match_number_review(match, number, digest, reviews.get("matches", []), candidate["date_offset_days"])
+        if ordinal_review is None:
+            issues.append({"event_id": "", "reason": "match_number_conflict", "detail": f"supplied={match['match_number']} external={number}"})
+    return {"candidate": candidate, "patched": patched, "used": used, "retired": retired,
+            "identities": rows, "proposed": proposed, "issues": issues, "checks": checks,
+            "accepted": not issues and checks["score_pass"], "ordinal_review": ordinal_review}
+
+
+def choose_candidate(evaluated):
+    accepted = [e for e in evaluated if e["accepted"]]
+    if len(accepted) == 1:
+        return accepted[0], False
+    # Rejected candidates remain diagnostic only. Choosing the closest to display
+    # is not acceptance; retain every alternative in candidate_audit.csv.
+    return evaluated[0], len(accepted) > 1
+
+
 def run_full(root):
     source = root / "6af3166e7b922_data_pack"
     original = fingerprints(source)
     config = json.loads((root / "configs/analysis_preregistration.json").read_text())
+    policy = json.loads((root / "configs/reconciliation_policy.json").read_text())
     if config["data_cutoff_inclusive"] != CUTOFF:
         raise ValueError("Cutoff changed")
     _, matches, events, _, _ = load(root, CUTOFF)
@@ -49,7 +91,7 @@ def run_full(root):
     index = index_archives(root)
     reviews, aliases = load_reviews(root, register_aliases(root))
     groups = {mid: group.sort_values(["innings", "innings_ball_num"]).to_dict("records") for mid, group in events.groupby("match_id")}
-    results, corrections, failures, identities, states, applied = [], [], [], [], [], []
+    results, corrections, failures, identities, states, applied, candidate_audit, ordinal_reviews = [], [], [], [], [], [], [], []
     with ExitStack() as stack:
         archives = {Path(url).name: stack.enter_context(ZipFile(root / "data/external/cricsheet" / Path(url).name)) for url in ARCHIVES.values()}
         for ordinal, match in enumerate(matches.to_dict("records"), 1):
@@ -64,29 +106,38 @@ def run_full(root):
                 result["status"] = "no_supplied_deliveries" if not raw else "outside_primary_scope"
                 results.append(result)
                 continue
-            candidates = candidates_for(match, index)
-            result.update(candidate_count=len(candidates), matched=len(candidates) == 1)
-            if len(candidates) != 1:
-                result["status"] = "missing_external_match" if candidates.empty else "ambiguous_external_match"
+            candidates = nearby_candidates(match, index, policy["match_date_candidate_tolerance_days"])
+            exact = candidates.loc[candidates.date_offset_days.eq(0)]
+            result.update(candidate_count=len(candidates), exact_date_candidates=len(exact), matched=not candidates.empty)
+            if candidates.empty:
+                result["status"] = "missing_external_match"
                 results.append(result)
                 continue
-            candidate = candidates.iloc[0].to_dict()
-            payload = archives[candidate["archive"]].read(candidate["member"])
-            digest = hashlib.sha256(payload).hexdigest()
-            if digest != candidate["member_sha256"]:
-                raise ValueError("Source member changed")
-            public = json.loads(payload)
-            patched, used, retired = apply_reviews(raw, digest, reviews["events"])
+            evaluated = []
+            for candidate in candidates.to_dict("records"):
+                evaluation = evaluate_candidate(raw, match, candidate,
+                    archives[candidate["archive"]].read(candidate["member"]), aliases, reviews)
+                evaluated.append(evaluation)
+                candidate_audit.append({"match_id": mid, "member": candidate["member"], "external_date": candidate["date"],
+                    "date_offset_days": candidate["date_offset_days"], "source_sha256": candidate["member_sha256"],
+                    "alignment_failure_count": len(evaluation["issues"]), "candidate_pass": evaluation["accepted"],
+                    "score_reason": evaluation["checks"]["score_reason"],
+                    "alignment_reasons": "|".join(sorted({i["reason"] for i in evaluation["issues"]}))})
+            selected, ambiguous = choose_candidate(evaluated)
+            if selected["ordinal_review"] is not None:
+                ordinal_reviews.append(selected["ordinal_review"])
+            candidate = selected["candidate"]
+            patched, used, retired = selected["patched"], selected["used"], selected["retired"]
+            digest = candidate["member_sha256"]
             applied.extend({"match_id": mid, **entry} for entry in used)
-            crosswalk, rows = player_crosswalk(patched, public, match, aliases)
-            identities.extend(rows)
-            proposed, issues = align_events(patched, public, crosswalk, match, retired)
-            checks = score_checks(public, match)
+            identities.extend(selected["identities"])
+            proposed, issues, checks = selected["proposed"], selected["issues"], selected["checks"]
             result.update(checks)
             result.update(member=candidate["member"], source_member_sha256=digest,
+                external_date=candidate["date"], date_offset_days=candidate["date_offset_days"],
                 alignment_pass=not issues, alignment_failure_count=len(issues),
-                accepted=not issues and checks["score_pass"], reviewed_events=len(used))
-            result["status"] = "accepted" if result["accepted"] else "quarantined"
+                accepted=selected["accepted"] and not ambiguous, reviewed_events=len(used))
+            result["status"] = "ambiguous_external_match" if ambiguous else ("accepted" if result["accepted"] else "quarantined")
             result["accepted_events"] = len(raw) if result["accepted"] else 0
             results.append(result)
             failures.extend({"match_id": mid, **issue} for issue in issues)
@@ -104,6 +155,8 @@ def run_full(root):
             if ordinal % 100 == 0:
                 print(f"Checked {ordinal}/{len(matches)} matches", flush=True)
     result_frame = pd.DataFrame(results)
+    duplicate_members = result_frame.loc[result_frame.accepted, "member"].value_counts().loc[lambda s: s > 1].index
+    result_frame.loc[result_frame.member.isin(duplicate_members), ["accepted", "accepted_events", "status"]] = [False, 0, "duplicate_external_match"]
     identity_frame = pd.DataFrame(identities)
     resolved = identity_frame.loc[identity_frame.identity_resolved]
     bad_ids = resolved.groupby("player_id").public_person_id.nunique().loc[lambda s: s > 1].index
@@ -119,9 +172,10 @@ def run_full(root):
     verified = correction_frame.loc[correction_frame.match_accepted].copy()
     state_frame = pd.DataFrame(states)
     state_frame = state_frame.loc[state_frame.match_id.isin(accepted_ids)].rename(columns={"score_verified_pilot": "score_verified"})
-    frames = {"matches": result_frame, "alignment_failures": pd.DataFrame(failures),
+    frames = {"matches": result_frame, "alignment_failures": pd.DataFrame(failures), "candidate_audit": pd.DataFrame(candidate_audit),
         "player_crosswalk": identity_frame, "global_identity_conflicts": conflicts,
-        "applied_reviews": pd.DataFrame(applied), "unresolved_identities": identity_frame.loc[~identity_frame.identity_resolved],
+        "applied_reviews": pd.DataFrame(applied), "reviewed_match_ordinals": pd.DataFrame(ordinal_reviews),
+        "unresolved_identities": identity_frame.loc[~identity_frame.identity_resolved],
         "coverage_by_year_family": coverage_summary(result_frame, ["year", "family"]),
         "coverage_by_competition": coverage_summary(result_frame, ["year", "family", "comp_id", "comp_name"])}
     # Preserve pilot history and record every selected match's new disposition.
@@ -147,9 +201,11 @@ def run_full(root):
         f"Primary IPL/T20I: {len(primary)} matches, {primary.supplied_events.sum():,} events. "
         f"Accepted: {len(accepted_ids)} complete matches, {len(verified):,} events.", "",
         "All supplied matches are accounted for, including abandoned matches without deliveries and Other T20 outside the registered primary scope. Match retention uses matches with deliveries; event retention uses all supplied events in each row. Super-over rows remain in the denominator and are excluded from verified ordinary innings.", "",
+        "Candidate search includes the exact date and one day either side, with both supplied and public dates respecting the cutoff. A shifted date requires exactly one candidate passing complete delivery, actor, result and available match-number checks. No supplied date is rewritten. All candidates, including misleading exact-date candidates, are recorded in candidate_audit.csv; accepted source members must be unique across supplied matches.", "",
+        f"Reviewed numbering-convention differences: {len(ordinal_reviews)}. These are explicit source-hashed exceptions for exact-date IPL 2025 matches with agreeing full ledgers. Official IPL announcements preserve original fixture numbers after rescheduling while source ordinals can follow chronology. Both labels are retained; no raw date, result or model feature is modified. Details: reviewed_match_ordinals.csv.", "",
         markdown_table(frames["coverage_by_year_family"].round(2)), "", markdown_table(reasons), "",
         "## Pilot exceptions", "", markdown_table(frames["pilot_review_dispositions"]), "",
-        "Explicit reviewed aliases resolve the five pilot identity exceptions. Two adjacent batting-run values and three bye/leg-bye labels were adjudicated against the hashed external ledger; all original values are retained. Two retired-hurt events were reviewed as zero wickets, with exact participant and subsequent event alignment. Detailed rationales, evidence URLs and source hashes are in the private review JSON and applied_reviews.csv. These are source-adjudicated repairs, not claims that two independent ball feeds agree.", "",
+        f"Loaded {len(reviews['aliases'])} reviewed identity aliases and applied {len(applied)} event reviews. The private review ledger records original/adopted values, rationales, evidence URLs and source hashes. Retired-hurt exceptions preserve zero wickets only when the event names a verified participant and the complete sequence agrees. These are source-adjudicated repairs, not claims that two independent ball feeds agree.", "",
         "Rain/shortened matches retain their exclusion because target/allotted-ball timing is unverified. Missing external matches remain a coverage limitation; no guessed extras or replacement samples are used. New full-corpus disagreements are listed individually and not automatically repaired using pilot exceptions.", "",
         "## Identity consistency", "",
         f"{len(conflicts)} identity observations across {len(conflict_matches)} matches require global identity review. Any supplied ID linked to multiple external people, or public person linked to multiple supplied IDs, quarantines all involved matches. No player is merged silently.", "",
