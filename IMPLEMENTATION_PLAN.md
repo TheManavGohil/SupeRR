@@ -1,6 +1,6 @@
 # SupeRR Selector Season 2 — architecture and implementation plan
 
-Prepared: 11 November 2026 (IST); updated 12 November. Status: local reconciliation, typed ingestion, score-independent EDA, pilot exception review, full-corpus score reconciliation, pressure-comparison validation and a frozen supported-context method preflight are implemented. Verified score-dependent states are available for accepted complete matches. No predictive model or player rankings are implemented; the global pressure-change ranking design fails the comparison-support gate. [Supported method v1](SUPPORTED_METHOD.md) now supersedes the global player-change model below and specifies the next baseline.
+Prepared: 11 November 2026 (IST); updated 12 November. Status: reconciliation, EDA, pressure comparison checks, supported-method preflight and the historical peer development baseline are implemented. The baseline improves prediction loss but fails the calibration screen; reserved evaluation and player rankings remain gated. [progress.md](progress.md) is the current handoff record. [Supported method v1](SUPPORTED_METHOD.md) supersedes the original global player-change model below.
 
 Completed milestone: [EDA report](reports/eda_2026-11-01/REPORT.md), [eight-page chart pack](reports/eda_2026-11-01/EDA_CHARTS.pdf), and [reproduction instructions](README.md). The processed proxy cohort reproduces the earlier audit's 160,186 events and 50,737 pressure flags. Exact score-dependent states remain gated on repair. This completes the usable part of T01/T02/T04 and exploratory analysis; T03 and the Mode A portion of T04 remain open.
 
@@ -298,6 +298,8 @@ Both appear in every player card. A player can be excellent under pressure witho
 The full-cohort diagnostic reports raw differences, raw differences on the same supported cells, and context-standardized differences. These are development-only descriptive associations with 1,000 whole-match resamples, not trained models or causal effects. The 2026 partition is shown for coverage/support only and remains reserved from method selection.
 
 ### 9.2 Context expectations
+
+Implemented first baseline: `fit-baseline` trains historical hierarchical peer means on earlier years and evaluates 2023–2025 under [the validation specification](configs/baseline_validation_v1.json). Default prior strength remains 200; all five registered strengths were evaluated across three folds. The [local report](reports/baseline_development_2026-11-01/REPORT.md) records modest loss improvements and material calibration alerts. Preserve this benchmark; define a focused development-only amendment before further fitting or reserved evaluation. The broader feature/model ideas below remain proposals, not implemented adjustments.
 
 Estimate expected runs and wicket probabilities conditional on pre-ball context. Start with shrunk phase × innings × competition-family peer averages; promote small regression/classification models only if they improve chronological validation.
 

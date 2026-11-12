@@ -95,11 +95,14 @@ def run_eda(root):
 
 def main():
     parser = argparse.ArgumentParser(description="Private RR analysis pipeline")
-    parser.add_argument("command", choices=["eda", "select-pilot", "fetch-cricsheet", "reconcile-pilot", "reconcile-full", "pressure-validate", "prepare-method"])
+    parser.add_argument("command", choices=["eda", "select-pilot", "fetch-cricsheet", "reconcile-pilot", "reconcile-full", "pressure-validate", "prepare-method", "fit-baseline"])
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2])
     args = parser.parse_args()
     if args.command == "eda":
         run_eda(args.root.resolve())
+    elif args.command == "fit-baseline":
+        from .baseline import run_baseline
+        run_baseline(args.root.resolve())
     elif args.command == "prepare-method":
         from .supported_method import prepare_method
         prepare_method(args.root.resolve())

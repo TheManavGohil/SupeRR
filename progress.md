@@ -1,7 +1,7 @@
 # Project progress and agent handoff
 
 Last updated: 12 November 2026 (IST).
-Current stage: data and method preparation complete for the accepted cohort; development baseline fitting is next.
+Current stage: the development peer baseline is implemented and evaluated. It passes prediction-loss benchmarks but fails the calibration screen; a focused development-only amendment is next, before reserved evaluation or player rankings.
 
 ## Read this first
 
@@ -16,7 +16,7 @@ The downloaded Round 1 brief asks for a system that compares batting and bowling
 
 The reproducible pipeline supports those deliverables; it is not a separate required submission component. A website, auction simulator, advanced ML model and explorer are not on the critical path. Qualification is not established by implementation progress.
 
-**Present status:** no predictive model fitted, no player scores or rankings produced, no final methodology document completed, no submission made. The project has a verified analytical foundation, not a submission-ready result.
+**Present status:** historical peer models have been fitted and evaluated on 2023–2025. No player scores or rankings have been produced, no final methodology document is completed, and no submission has been made. Reserved 2026 outcome evaluation has not been performed. The project has a working baseline with identified limitations, not a submission-ready result.
 
 ## Completed work and why it matters
 
@@ -31,12 +31,24 @@ The reproducible pipeline supports those deliverables; it is not a separate requ
 | Comparison check | Every late-over event is pressure; ordinary controls are absent there. Only 35.35% of development pressure events pass the earlier population context-support check. | Blocks an unsupported global pressure-minus-ordinary interpretation. |
 | Supported method freeze | Separate all-pressure performance level from change within supported same-player/year contexts. Preserve unavailable change as missing. | Defines what we can honestly estimate for each player. |
 | Model preflight | Separate features, targets and identities; complete-match chronological folds and outcome-independent eligibility tables exported. | Makes the first baseline ready to implement without future-outcome leakage. |
+| Development baseline | Historical peer models evaluated across 402 matches / 95,945 delivery events in 2023–2025, using earlier-year training. Four targets, five registered prior settings, 15 fold/setting bundles. | Produces out-of-time expected runs and wicket probabilities, plus transparent historical comparators. |
+| Baseline validation | Default improves pooled primary loss for all four targets against global and family means, and against global means in all three years. Found 29 overlapping material calibration alerts. | Shows the baseline is informative, but could misattribute scoring-context differences to players if promoted now. |
 
-Latest implementation verification: **66 tests passed** at the supported-method milestone. This documentation update does not represent a new test run.
+Latest implementation verification: **77 tests passed** after baseline execution, including training/evaluation isolation, recursive shrinkage, role denominators, unseen-context fallback, match resampling and artifact provenance. The baseline run took approximately 44 seconds locally. Inspected the annual prediction-loss figure; `git diff --check` passed.
+
+## Latest baseline findings and decision
+
+- The default remains 200 prior events. Loss reductions against the training global mean are 0.74% for batting runs, 0.69% for bowling concessions, 0.44% for striker dismissals and 0.39% for bowler wickets. These are modest predictive gains, not player performance improvements. All paired whole-match 10th–90th percentile loss-difference intervals favour the context model.
+- Calibration screening was specified before the first fit in [baseline_validation_v1.json](configs/baseline_validation_v1.json). Material thresholds are 0.10 runs or 0.01 wickets per opportunity, at least 500 events and ten matches, and a match-bootstrap interval excluding zero. These are project screening choices, not universal standards.
+- There are 29 overlapping alerts: 27 for run expectations and two for wicket expectations. Most run alerts involve underpredicted IPL scoring. For example, 2024 IPL second-innings powerplay batting runs exceed expectations by 28.16 per 100 non-wide opportunities. The cause could involve changing scoring conditions or player mix; the diagnostic does not establish a cause.
+- Overall ordinary batting opportunities average +11.03 runs per 100 above expectations, while pressure opportunities average −2.84. Those populations differ; this is not a player-change or causal estimate. It flags a potential distortion to investigate before judging players against the reference.
+- No development observation required an unseen-context fallback. Sparse-context handling is tested, but absent cells do not explain the observed live bias.
+- **Decision:** preserve this baseline as the benchmark; do not promote it to reserved evaluation or final player scoring yet. Development reference scales are exported as candidates, not frozen final scales. All frozen pressure/weight/cutoff rules remain intact.
 
 ## Main limitations and alignment risks
 
-- **Final recommendations are still missing.** The next substantial work must produce and assess baseline expectations and player evidence, rather than expand the infrastructure.
+- **Final recommendations are still missing.** Address the measured baseline bias with a focused development revision, then move to player evidence; avoid unrelated infrastructure expansion.
+- **A predictive improvement is not sufficient contextual fairness.** The baseline fails its calibration screen. A revision should address scoring drift and missing match-state context, not merely optimize a global loss or subtract evaluation-group means using those same outcomes.
 - **Coverage is uneven.** T20I retention is materially below IPL retention. Missing-source and quarantined players cannot be interpreted as weak performers. Resolve remaining cases selectively when they materially affect plausible recommendations; do not restart exhaustive repair by default.
 - **Comparison eligibility is restrictive.** In the final 2023–2026 scoring window, 93 batters / 150 bowlers pass level sample checks; only 11 / 16 also pass supported-change and 80% source-retention requirements. Development counts for those combined checks are 6 / 12. These are evidence counts, not a shortlist or performance result.
 - **Ranking only the blended cohort may exclude strong specialists.** A late-over specialist can have substantial pressure performance evidence but little ordinary comparison evidence. Evaluate this selection limitation explicitly before claiming the ten best players overall. Keep level evidence visible for the wider population. Do not fill missing change with zero or relax rules to obtain preferred names.
@@ -49,7 +61,8 @@ The narrower blended cohort is a project risk to resolve through evidence and a 
 
 | Stage | Concrete output | Completion condition |
 | --- | --- | --- |
-| **1. Development peer baseline — next task** | Historical expected batting runs, striker dismissals, bowling conceded runs and bowler wickets; predictions for 2023–2025 using earlier years only. | Train-only fitting/scaling, attribution and chronological checks pass; prediction errors, wicket calibration, sparse-context fallback and year/family/phase diagnostics are reported. Retain failed or inconclusive results honestly. |
+| 1. Development peer baseline — completed | Historical expected runs and wickets, annual/pooled losses, calibration, fallback, sensitivity, whole-match uncertainty and chart pack. | Executed with 77 passing tests; benchmark screen passes, calibration screen fails. Preserve the failed gate and its evidence. |
+| **1b. Focused baseline amendment — next task** | Versioned development-only response to measured scoring bias; keep the original baseline as comparator and define acceptance before new fits. | Examine whether historical training and available pre-ball score/chase context can address the flagged situations. Specify one focused candidate and its budget before fitting; preserve future-outcome isolation. Do not relax the calibration screen to pass the current model. |
 | 2. Model freeze and reserved evaluation | Frozen model choice and development reference scales; separate 2026 evaluation artifact. | No reserved outcomes used for selection; model limitations and drift recorded. |
 | 3. Player evidence and reliability | Pressure level and supported change, wider level-only evidence, 1,000 whole-match bootstrap draws, 70/30 and 50/50 comparison, stability and coverage checks. | Scores trace to verified events; missing comparisons remain explicit; assess whether eligibility excludes credible top-ten candidates and whether enough reliable candidates remain. Any necessary method amendment is versioned and justified. |
 | 4. Final selections and report | Two ordered lists, evidence cards, supporting/counterexample matches, near-miss review, figures and methodology document. | Recommendations explain consistency and uncertainty; report and exported lists agree; user can review and defend them. |
@@ -64,7 +77,7 @@ The baseline is a transparent historical peer model. Advanced models are optiona
 - 2022 is training warm-up only. Development predictions: 2023–2025. Reserved evaluation: 2026. Both innings of a match stay together; each annual fold trains on earlier years.
 - Preserve the frozen pressure rule; do not tune thresholds for particular players.
 - Keep 70/30 level/change as default and 50/50 as registered variant, with the same eligible cohort. The active amendment limits change to supported contexts.
-- Use 1,000 whole-match resamples; approximately 20 model fold/setting bundles. Report uncertainty conditional on fitted models and support.
+- Use 1,000 whole-match resamples; approximately 20 model fold/setting bundles. The first baseline consumed 15 distinct development fold/setting bundles. Account explicitly for the remaining five when defining a revision and reserved evaluation; do not restart an unlimited search. Report uncertainty conditional on fitted models and support.
 - Source data, detailed reports, player tables and review ledgers stay private and Git-ignored. Public commits contain code, configurations and documentation.
 - Organiser clarification is drafted only; sending is not authorized.
 - Explorer T10 remains deferred. Avoid adding a website or auction simulator to this round's deliverables.
@@ -73,20 +86,23 @@ The baseline is a transparent historical peer model. Advanced models are optiona
 
 ## Where to resume
 
-Implemented entry point: `rtk proxy .venv/bin/python -m rr_pressure prepare-method`.
-The historical peer fitting command is **not implemented yet**; do not describe the preflight as a trained model.
+Implemented commands: `rtk proxy .venv/bin/python -m rr_pressure prepare-method` and `rtk proxy .venv/bin/python -m rr_pressure fit-baseline`.
+`fit-baseline` executes development folds only. It deliberately refuses 2026 fitting in this stage and exports a failed promotion gate when material bias remains. The preflight artifacts retain their original no-model status as historical inputs; use the newer baseline gate for current model readiness.
 
-Key code: [supported_method.py](src/rr_pressure/supported_method.py), [pressure_validation.py](src/rr_pressure/pressure_validation.py), [coverage.py](src/rr_pressure/coverage.py), [cli.py](src/rr_pressure/cli.py).
+Key code: [baseline.py](src/rr_pressure/baseline.py), [baseline_figures.py](src/rr_pressure/baseline_figures.py), [supported_method.py](src/rr_pressure/supported_method.py), [pressure_validation.py](src/rr_pressure/pressure_validation.py), [coverage.py](src/rr_pressure/coverage.py), [cli.py](src/rr_pressure/cli.py).
 
 Local evidence, available with the private workspace:
 
 - [Full reconciliation report](reports/full_reconciliation_2026-11-01/REPORT.md)
 - [Pressure-comparison validation](reports/pressure_validation_2026-11-01/REPORT.md)
 - [Supported-method preflight](reports/supported_method_2026-11-01/REPORT.md)
-- [Current gate](reports/supported_method_2026-11-01/model_gate.json)
+- [Historical preflight gate](reports/supported_method_2026-11-01/model_gate.json)
+- [Development baseline report](reports/baseline_development_2026-11-01/REPORT.md)
+- [Baseline diagnostic chart pack](reports/baseline_development_2026-11-01/BASELINE_CHARTS.pdf)
+- [Current baseline promotion gate](reports/baseline_development_2026-11-01/model_gate.json)
 
-Latest analytical milestone: `426f28f`, following method freeze `59e1453` and implementation `ff6bcd9`. Record later analytical milestones here; use Git itself for the live working-tree/synchronization state.
+Latest analytical milestone: development peer baseline, completed 12 November 2026. Its manifest records source/config/model/output hashes. Previous preparation milestone: `426f28f`, following method freeze `59e1453` and implementation `ff6bcd9`. Use Git itself for the live working-tree/synchronization state.
 
-Latest handoff update: added the selector decision framework on 12 November 2026 at the user's request. Documentation only; no model execution, score changes or new test run. Next substantive task remains the development peer baseline.
+Latest handoff update: recorded the executed baseline, 77-test result, calibration failure, remaining model budget and focused next task. The selector decision framework remains active: an underpredicted scoring environment must not become unexplained player credit or blame.
 
 After a milestone, update the current stage, verified results, unresolved risks, exact next task and artifact links. Distinguish implemented, executed, validated and proposed work. Do not mark the project complete until both submission components are ready.

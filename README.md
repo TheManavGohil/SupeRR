@@ -79,7 +79,7 @@ Local outputs:
 | `reports/full_reconciliation_2026-11-01/verified_events.parquet` | Complete accepted matches with original values, adopted scores, provenance and pre-ball states. Contains outcomes; do not feed all columns into a model. |
 | `reports/pressure_validation_2026-11-01/REPORT.md` | Pressure shares, context overlap, player coverage and development-only descriptive comparisons. |
 | `reports/pressure_validation_2026-11-01/VALIDATION_CHARTS.pdf` | Standalone coverage and comparison-support figures. |
-| `reports/pressure_validation_2026-11-01/model_gate.json` | Explicit readiness decision; no predictive model has been fitted. |
+| `reports/pressure_validation_2026-11-01/model_gate.json` | Historical comparison-support decision from before model fitting. |
 
 The global pressure-change ranking gate currently fails: all late-phase deliveries are labelled pressure, leaving no ordinary comparison in that phase. The 70/30 default and 50/50 variant remain registered but unexecuted. [Supported method v1](SUPPORTED_METHOD.md) now freezes context-adjusted pressure level separately from change on supported contexts, eligibility, combination and missing-evidence rules. Do not change pressure thresholds to improve particular players' results.
 
@@ -100,6 +100,20 @@ This preflight fits no model and computes no player performance scores. The [ver
 
 2022 supplies training warm-up only; scoring evidence begins in 2023. Train each annual fold on complete earlier-year matches. Development, reserved-year exposure and final retrospective exposure are audited separately. Both the population and the player need ordinary and pressure observations within the comparison cell. Under-80% source retention blocks an unqualified shortlist; insufficient comparisons do not imply poor performance.
 
-The next implementation is the registered historical peer baseline on development folds, followed by residual/calibration checks and a frozen model choice before reserved evaluation. The live preflight does not execute the component estimators; those are checked using synthetic contributions. They preserve a fixed support population during match resampling and withhold selection scores when too many draws lack comparison groups. Further dependencies are model validation, the complete bootstrap/ranking runner, sensitivity analysis and evidence review.
+The historical peer baseline is now implemented and evaluated as described below. The live preflight does not execute the component estimators; those are checked using synthetic contributions. They preserve a fixed support population during match resampling and withhold selection scores when too many draws lack comparison groups. Further dependencies are resolving baseline calibration, reserved evaluation, the complete player-bootstrap/ranking runner, sensitivity analysis and evidence review.
+
+## Development peer baseline
+
+```sh
+rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-baseline
+```
+
+The command validates the frozen preflight artifacts and trains on earlier years to predict 2023–2025. It estimates batting runs/striker dismissals on non-wide opportunities and bowling conceded runs/credited wickets on all attempts. Models use family, innings, phase and wicket band, with hierarchical shrinkage and broader historical fallback. Player identities and pressure labels are excluded from predictors. Reserved 2026 targets are excluded from the loaded development table.
+
+All five registered prior strengths are reported, consuming 15 of the 20 fold/setting bundles. The default remains 200. Validation compares training-only global/family averages, checks annual loss and subgroup calibration, and uses 1,000 common whole-match resamples for prediction-loss and mean-bias intervals. [The validation screen](configs/baseline_validation_v1.json) was specified before fitting. These intervals are conditional on the fitted models and are separate from future player-rating bootstrap intervals.
+
+Local outputs are under `reports/baseline_development_2026-11-01/`: `REPORT.md`, `BASELINE_CHARTS.pdf`, per-fold model parameters/predictions, annual and pooled metrics, calibration/reliability/fallback tables, reference scales, `model_gate.json`, and a provenance manifest.
+
+The first run improves primary prediction loss for every target but flags systematic subgroup bias. Its promotion gate fails; reference scales remain candidates and 2026 evaluation remains gated. No player scores or rankings were generated. The next task is a versioned, focused development revision addressing the observed scoring-context bias while preserving the model budget. Read [progress.md](progress.md) for the measured results and current decision.
 
 The source data, generated artifacts, detailed data audit, and organiser clarification are private competition materials. They are excluded from version control by default. Running the pipeline overwrites its generated EDA artifacts; raw source files are fingerprinted and never edited.
