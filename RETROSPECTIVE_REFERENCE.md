@@ -58,3 +58,23 @@ Pressure labels, 730-day rating recency, warm-up exclusion, source-retention req
 ## Next implementation milestone
 
 Implement the exact two-partition hierarchical reference and development runner. Test match/partition outcome isolation at every hierarchy level, missing cells, year boundaries, role exposure, numerical domains, frozen assignment, source hashes and budget accounting. Run the fixed development evaluation once and export losses, both fold screens, support/fallback tables, comparisons, candidate scales and a promotion gate. Only a passing gate permits the separately frozen reserved procedure. No player selection is authorized by a feasibility pass alone.
+
+## Execution result — 13 November 2026
+
+The milestone above is now implemented and executed with the frozen specification from commit `b81d01a`. Run with `rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-retrospective-reference`. Source: [retrospective_reference.py](src/rr_pressure/retrospective_reference.py). Private outputs: `reports/retrospective_reference_development_2026-11-01/`.
+
+Two development bundles fitted eight target models across 402 matches / 95,945 delivery events in approximately 53 seconds. Cumulative usage is 20 of 22. All four targets beat opposite-partition same-year global/family means in pooled loss and beat the global mean in each of the three years. The peer-support gate passes; no event needs unseen-cell fallback. Sparse existing cells still shrink toward their parents.
+
+| Screen | Batting runs | Bowling runs | Striker wickets | Bowler wickets | Total alerts |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Combined held-out predictions | 0 | 0 | 0 | 0 | 0 |
+| Evaluation fold 0 | 11 | 10 | 8 | 8 | 37 |
+| Evaluation fold 1 | 9 | 9 | 6 | 7 | 31 |
+
+All 68 separate-fold alerts occur in year/family/innings/phase groups; they overlap across targets and partitions. This is not a count directly comparable with earlier models' pooled-only alert totals. For example, 2023 T20I second-innings middle-over batting bias is −18.87 runs per 100 opportunities in fold 0 and +17.39 in fold 1. Both intervals exclude zero. Opposing errors can disappear when the held-out predictions are combined. The partition's match counts are balanced by construction within family/year, but that does not establish comparable scoring conditions or player/opposition mix. The diagnostic does not identify the cause.
+
+Compared with historical v1, run-loss differences are negligible and their match-bootstrap intervals span zero; wicket Brier loss is slightly worse. Contextual v2 has better run prediction than this reference (MSE is approximately 1.77% higher for batting and 1.63% higher for bowling here). These comparisons do not override the preregistered gate or validate v2, whose own gate remains failed.
+
+**Decision: do not promote this reference.** The unchanged separate-fold screen fails. Development scales remain candidates, the two reserved bundles remain unused, and no 2026 outcome evaluation or player scores were produced. Do not change the seed, prior, tolerances or pressure labels, or launch another candidate automatically. Next is a bounded review of the failed contexts and reference instability before a documented decision about how defensible player evidence can be produced within these limits.
+
+Validation: 107 full-suite tests pass, including complete-partition outcome mutation tests, hand-calculated shrinkage, forbidden predictors, role denominators, frozen assignment, year boundaries, budget enforcement, comparison contracts, fold-gate veto and artifact hashes. The chart pack was generated and the calibration-alert figure inspected. Match-bootstrap intervals retain the conditional-reference limitations specified above.

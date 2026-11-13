@@ -1,7 +1,7 @@
 # Project progress and agent handoff
 
 Last updated: 13 November 2026 (IST).
-Current stage: retrospective reference decision and outcome-free feasibility audit completed. A fixed two-fold, same-season peer candidate is specified; 99.1% of development pressure opportunities have sufficient finest-context peers in the opposite partition. Next implement and evaluate that candidate on development only. Neither historical model is promoted; no player scores or reserved outcome evaluation yet.
+Current stage: the fixed retrospective reference is implemented and evaluated on development. Loss benchmarks and peer support pass, but 68 separate-fold calibration alerts fail the preregistered gate despite zero pooled alerts. No reference is promoted. Next review the failed contexts and partition instability before a documented player-evidence decision; no further automatic fits, reserved outcome evaluation or player scoring.
 
 ## Read this first
 
@@ -16,7 +16,7 @@ The downloaded Round 1 brief asks for a system that compares batting and bowling
 
 The reproducible pipeline supports those deliverables; it is not a separate required submission component. A website, auction simulator, advanced ML model and explorer are not on the critical path. Qualification is not established by implementation progress.
 
-**Present status:** historical peer models have been fitted and evaluated on 2023–2025. No player scores or rankings have been produced, no final methodology document is completed, and no submission has been made. Reserved 2026 outcome evaluation has not been performed. The project has a working baseline with identified limitations, not a submission-ready result.
+**Present status:** historical, contextual and retrospective peer models have been evaluated on 2023–2025; all fail their required calibration gates. No player scores or rankings have been produced, no final methodology document is completed, and no submission has been made. Reserved 2026 outcome evaluation has not been performed. Prediction validation is implemented, but no reference is approved for final ratings.
 
 ## Completed work and why it matters
 
@@ -36,10 +36,13 @@ The reproducible pipeline supports those deliverables; it is not a separate requ
 | One contextual revision | Fixed ridge/logistic models add verified pre-ball pace, wickets/progress and chase context, with 365-day expectation recency. Three development bundles; 18 cumulative. | Tests whether more precise cricket context reduces unfair attribution of scoring conditions. |
 | Revision assessment | Batting/bowling run loss improves 1.74%/1.61% against v1; wicket gains are inconclusive. Alerts fall to 18; unchanged promotion gate fails. | Preserves a better predictive benchmark without claiming it is ready to select players. |
 | Retrospective reference decision and support audit | Compared exact match exclusion with two fixed match partitions using development exposures only. Two-fold pressure peer support is 99.12% batting / 99.12% bowling; weakest year/family/role/exposure group 95.83%. | Supports testing contemporary peers for retrospective selection without evaluating a match against its own outcomes. Availability is established; accuracy remains untested. |
+| Retrospective reference implementation and validation | Two fixed development bundles / eight target models; 402 matches / 95,945 events. All targets beat global/family benchmarks; zero pooled but 68 separate-fold calibration alerts. | Exposes substantial opposite-direction reference errors hidden by aggregate centering; blocks unsupported player credit or blame. |
 
 Latest implementation verification: **88 tests passed** after contextual revision execution, covering pre-ball target validity, forbidden predictors, training-only scaling, numerical convergence, unchanged validation gates, cohort agreement and provenance, in addition to earlier checks. The first contextual run took approximately 35 seconds locally. Inspected the comparison figure. A repeat execution of the identical frozen candidate verifies the final provenance checks; it is not a new model setting.
 
 Latest verification: **96 tests passed** across the full suite, including eight new reference-audit tests for whole-match peer exclusion at parent/child levels, opposite-partition isolation, fixed balanced assignment, sparse cells, role denominators, development-only exposure access and artifact provenance. The audit opened no target files and fitted no models. `git diff --check` also passed.
+
+Latest implementation verification: **107 tests passed** across the full suite after the retrospective execution. New checks cover hand-calculated recursive means and same-year comparators, complete-partition outcome mutation, forbidden predictors, unseen contexts, role exposure, frozen assignment, development-only target access, budget enforcement, historical cohort/target agreement, fold alerts vetoing pooled success, and output provenance. The single real development execution took 52.64 seconds. Generated the three-page chart pack and inspected the calibration-alert figure. `git diff --check` passed. No new candidate, parameter sweep or reserved fit was run.
 
 ## Original baseline findings
 
@@ -62,9 +65,9 @@ Latest verification: **96 tests passed** across the full suite, including eight 
 
 ## Main limitations and alignment risks
 
-- **Final recommendations are still missing.** The reference decision is now specified. Implement its single development candidate next; do not add more candidates or infrastructure.
+- **Final recommendations are still missing.** The specified retrospective development candidate is now evaluated and fails promotion. Next perform a bounded review of failed contexts/reference instability and document a player-evidence decision; do not add more candidates or infrastructure automatically.
 - **A predictive improvement is not sufficient contextual fairness.** Both expectation candidates fail the calibration screen. Do not silently promote v2, relax the screen, or subtract evaluation-group means using those same outcomes and call that independent validation.
-- **Contemporary reference is specified, not validated.** [The reference decision](RETROSPECTIVE_REFERENCE.md) selects two fixed whole-match partitions, with year in the peer hierarchy. The audit passes its predeclared support screen, but no new expectation model has been fitted. Other matches later in the season can inform the reference; this is not a match-date forecast. The candidate uses pooled development partitions, then a separately frozen within-2026 procedure only if development passes. Aggregate centering alone cannot validate it.
+- **Contemporary reference fails partition calibration.** [The reference decision](RETROSPECTIVE_REFERENCE.md) and models are implemented. Other matches later in the season inform the reference. Zero pooled alerts conceal 68 separate-fold alerts (39 run / 29 wicket alerts), all in year/family/innings/phase groups. For 2023 T20I second-innings middle-over batting, the biases are −18.87 and +17.39 runs per 100 opportunities in the two folds, with both intervals excluding zero. Match-count balance does not ensure comparable scoring conditions or player/opposition mix; the cause is not established. The unchanged gate blocks promotion and reserved fitting.
 - **Coverage is uneven.** T20I retention is materially below IPL retention. Missing-source and quarantined players cannot be interpreted as weak performers. Resolve remaining cases selectively when they materially affect plausible recommendations; do not restart exhaustive repair by default.
 - **Comparison eligibility is restrictive.** In the final 2023–2026 scoring window, 93 batters / 150 bowlers pass level sample checks; only 11 / 16 also pass supported-change and 80% source-retention requirements. Development counts for those combined checks are 6 / 12. These are evidence counts, not a shortlist or performance result.
 - **Ranking only the blended cohort may exclude strong specialists.** A late-over specialist can have substantial pressure performance evidence but little ordinary comparison evidence. Evaluate this selection limitation explicitly before claiming the ten best players overall. Keep level evidence visible for the wider population. Do not fill missing change with zero or relax rules to obtain preferred names.
@@ -80,7 +83,8 @@ The narrower blended cohort is a project risk to resolve through evidence and a 
 | 1. Development peer baseline — completed | Historical expected runs and wickets, annual/pooled losses, calibration, fallback, sensitivity, whole-match uncertainty and chart pack. | Executed with 77 passing tests; benchmark screen passes, calibration screen fails. Preserve the failed gate and its evidence. |
 | 1b. Focused baseline amendment — completed | One fixed contextual revision, paired comparisons, calibration report, convergence checks and chart pack. | Executed with 88 passing tests; run prediction improves but the unchanged calibration gate fails. No promotion or further automatic candidate fits. |
 | 1c. Rating-reference decision — completed | Outcome-free support audit and frozen two-fold same-season reference specification; rejected hundreds of exact leave-match-out fits. | Audit passes; no targets opened. Explicit budget maximum amended to 22 for two development and two reserved bundles. No new fits spent. |
-| **1d. Retrospective development reference — next task** | One fixed hierarchical peer model per training partition, four targets each; held-out predictions, calibration by fold, original tolerances, comparisons and gate. | Test isolation of all evaluation-match outcomes from every reference level. Execute only the two registered development bundles. Require the frozen benchmark/calibration/support gates before any reserved procedure. |
+| 1d. Retrospective development reference — completed, gate failed | Two registered bundles, models/membership, held-out predictions, losses, pooled and separate-fold calibration, comparisons and chart pack. | 107 tests pass; benchmarks/support pass; zero pooled / 68 separate-fold alerts. Candidate scales stay unfrozen; cumulative usage 20 of 22. |
+| **1e. Reference-instability review — next task** | Bounded review of failed contexts and their match/role exposure, using existing predictions; documented decision on defensible player evidence. | Preserve failed gates. No new candidate or partition search, threshold relaxation, reserved outcome access or player scores by default. Resolve the reference limitation explicitly before resuming rating stages. |
 | 2. Model freeze and reserved evaluation | Frozen model choice and development reference scales; separate two-fold 2026 evaluation artifact. | No reserved outcomes used for method selection. Other-fold 2026 outcomes may set a match-excluded reference after freeze; label retrospective procedure evaluation, not outcome-free forecasting. Preserve limitations and failed gates. |
 | 3. Player evidence and reliability | Pressure level and supported change, wider level-only evidence, 1,000 whole-match bootstrap draws, 70/30 and 50/50 comparison, stability and coverage checks. | Scores trace to verified events; missing comparisons remain explicit; assess whether eligibility excludes credible top-ten candidates and whether enough reliable candidates remain. Any necessary method amendment is versioned and justified. |
 | 4. Final selections and report | Two ordered lists, evidence cards, supporting/counterexample matches, near-miss review, figures and methodology document. | Recommendations explain consistency and uncertainty; report and exported lists agree; user can review and defend them. |
@@ -95,7 +99,7 @@ The baseline is a transparent historical peer model. Advanced models are optiona
 - 2022 contributes no player scoring evidence. Historical v1/v2 annual folds trained on earlier years. The specified retrospective candidate instead uses two complete-match development partitions across 2023–2025, with year in the hierarchy; no 2022 data enters that candidate. Both innings stay together. The 2026 procedure remains reserved from method selection.
 - Preserve the frozen pressure rule; do not tune thresholds for particular players.
 - Keep 70/30 level/change as default and 50/50 as registered variant, with the same eligible cohort. The active amendment limits change to supported contexts.
-- Use 1,000 whole-match resamples; approximately 20 model fold/setting bundles. Historical v1 used 15, contextual v2 used three: **18 used**. The documented retrospective amendment raises the internal maximum from 20 to **22**, reserving two development and two reserved bundles (four targets per bundle). One fixed setting and partition salt; no hidden leave-match-out fits or full-data refit. This audit spent zero. Stop at 20 used if development fails. Report uncertainty conditional on fitted models and support.
+- Use 1,000 whole-match resamples; approximately 20 model fold/setting bundles. Historical v1 used 15, contextual v2 three, retrospective development two: **20 used of amended maximum 22**. The two reserved bundles remain unused because development failed. One fixed setting and partition salt; no hidden leave-match-out fits or full-data refit. Do not repurpose reserved capacity for another automatic search. Report uncertainty conditional on fitted models and support.
 - Source data, detailed reports, player tables and review ledgers stay private and Git-ignored. Public commits contain code, configurations and documentation.
 - Organiser clarification is drafted only; sending is not authorized.
 - Explorer T10 remains deferred. Avoid adding a website or auction simulator to this round's deliverables.
@@ -107,13 +111,15 @@ The baseline is a transparent historical peer model. Advanced models are optiona
 Implemented commands: `rtk proxy .venv/bin/python -m rr_pressure prepare-method` and `rtk proxy .venv/bin/python -m rr_pressure fit-baseline`.
 `fit-baseline` executes development folds only. It deliberately refuses 2026 fitting in this stage and exports a failed promotion gate when material bias remains. The preflight artifacts retain their original no-model status as historical inputs; use the newer baseline gate for current model readiness.
 
-Contextual revision: `rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-context-baseline`. This also executes development only, preserves the original artifacts and enforces the preregistered single-candidate budget. Its output gate is the latest decision; the v1 gate remains a historical result.
+Contextual revision: `rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-context-baseline`. This executes development only and preserves the original artifacts. Its failed gate remains a historical result alongside v1; the retrospective gate is now the latest decision.
 
 Key code: [baseline.py](src/rr_pressure/baseline.py), [baseline_figures.py](src/rr_pressure/baseline_figures.py), [supported_method.py](src/rr_pressure/supported_method.py), [pressure_validation.py](src/rr_pressure/pressure_validation.py), [coverage.py](src/rr_pressure/coverage.py), [cli.py](src/rr_pressure/cli.py).
 
 Revision code: [context_baseline.py](src/rr_pressure/context_baseline.py), [context_figures.py](src/rr_pressure/context_figures.py).
 
-Reference audit: `rtk proxy .venv/bin/python -m rr_pressure audit-reference`. Code: [reference_audit.py](src/rr_pressure/reference_audit.py). This command consumes development exposure/context files only. [RETROSPECTIVE_REFERENCE.md](RETROSPECTIVE_REFERENCE.md) and [retrospective_reference_v1.json](configs/retrospective_reference_v1.json) govern the next expectation candidate, including the explicit budget and temporal-boundary amendments; supported-change and ranking rules remain in `SUPPORTED_METHOD.md`. The model runner itself is not yet implemented.
+Reference audit: `rtk proxy .venv/bin/python -m rr_pressure audit-reference`. Code: [reference_audit.py](src/rr_pressure/reference_audit.py). This command consumes development exposure/context files only. [RETROSPECTIVE_REFERENCE.md](RETROSPECTIVE_REFERENCE.md) and [retrospective_reference_v1.json](configs/retrospective_reference_v1.json) govern the implemented candidate, including explicit budget and temporal-boundary amendments; supported-change and ranking rules remain in `SUPPORTED_METHOD.md`.
+
+Reference development: `rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-retrospective-reference`. Code: [retrospective_reference.py](src/rr_pressure/retrospective_reference.py), [retrospective_figures.py](src/rr_pressure/retrospective_figures.py). It reads only development targets, reuses frozen match assignments, produces two four-target bundles and exports the failed gate. Do not rerun it as a new experiment or open reserved outcomes automatically. Review the saved predictions and diagnostics next.
 
 Local evidence, available with the private workspace:
 
@@ -126,13 +132,17 @@ Local evidence, available with the private workspace:
 - [Original baseline promotion gate](reports/baseline_development_2026-11-01/model_gate.json)
 - [Contextual revision report](reports/context_baseline_v2_2026-11-01/REPORT.md)
 - [Contextual comparison chart pack](reports/context_baseline_v2_2026-11-01/CONTEXT_CHARTS.pdf)
-- [Latest promotion gate](reports/context_baseline_v2_2026-11-01/model_gate.json)
+- [Contextual promotion gate — historical failed result](reports/context_baseline_v2_2026-11-01/model_gate.json)
 - [Retrospective reference feasibility report](reports/reference_audit_2026-11-01/REPORT.md)
 - [Reference feasibility gate — not a promotion gate](reports/reference_audit_2026-11-01/feasibility_gate.json)
 - [Fixed development match partitions](reports/reference_audit_2026-11-01/match_partitions.csv)
+- [Retrospective development report](reports/retrospective_reference_development_2026-11-01/REPORT.md)
+- [Latest promotion gate — failed](reports/retrospective_reference_development_2026-11-01/model_gate.json)
+- [Retrospective chart pack](reports/retrospective_reference_development_2026-11-01/REFERENCE_CHARTS.pdf)
+- [Separate-fold calibration](reports/retrospective_reference_development_2026-11-01/fold_calibration.csv)
 
-Latest analytical milestone: outcome-free retrospective reference audit, executed 13 November 2026 with input/config/code/output provenance. Previous model milestone: contextual revision, executed after specification commit `018af8f` and pushed as `f50e72a`. Original baseline: `6b065d2`; preparation: `426f28f`. Use Git itself for live synchronization state.
+Latest analytical milestone: retrospective development reference, executed 13 November 2026 under specification commit `b81d01a`, with input/config/code/output provenance. Previous model milestone: contextual revision, specified as `018af8f` and pushed as `f50e72a`. Original baseline: `6b065d2`; preparation: `426f28f`. Use Git itself for live synchronization state.
 
-Latest handoff update: completed the retrospective decision and outcome-free audit, recorded the explicit 22-bundle maximum and specified one development candidate. Existing forecast failures remain unchanged; peer availability is not evidence of fair scores. Next implement the frozen reference and evaluate development before opening reserved outcomes or producing rankings.
+Latest handoff update: implemented/evaluated the fixed retrospective reference, recorded 107 passing tests and the separate-fold failure, and stopped at 20 used bundles. Existing forecast failures remain unchanged. Next review saved failed contexts/reference instability and document the player-evidence decision; do not equate pooled centering with valid selection scores or start another search.
 
 After a milestone, update the current stage, verified results, unresolved risks, exact next task and artifact links. Distinguish implemented, executed, validated and proposed work. Do not mark the project complete until both submission components are ready.

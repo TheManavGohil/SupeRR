@@ -126,6 +126,17 @@ rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pr
 
 The revision consumes three bundles, bringing the cumulative total to 18. It reuses the original validation screen and additionally compares paired losses with the original baseline. Outputs under `reports/context_baseline_v2_2026-11-01/` include a report, standalone chart pack, per-fold models/predictions, convergence/clipping diagnostics, paired whole-match intervals, calibration tables and a provenance manifest. These artifacts remain private and ignored by Git.
 
-Run prediction improves and calibration alerts fall from 29 to 18; wicket gains are inconclusive. The candidate still fails promotion. No reserved outcomes or player scores are analyzed. The next task is a documented rating-reference decision tied to retrospective selection, with validation and budget implications specified before more fitting. Do not automatically promote this candidate or launch another search.
+Run prediction improves and calibration alerts fall from 29 to 18; wicket gains are inconclusive. The candidate still fails promotion. No reserved outcomes or player scores are analyzed. The retrospective reference below is now specified and evaluated; the historical failures remain preserved.
+
+## Contemporary peer reference
+
+```sh
+rtk proxy .venv/bin/python -m rr_pressure audit-reference
+rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-retrospective-reference
+```
+
+[The fixed reference specification](RETROSPECTIVE_REFERENCE.md) uses two balanced hash partitions of complete matches and a year/family/innings/phase/wicket-band hierarchy with 200 prior events. Every evaluated match is excluded from all fitted means, comparators and validation scales. Later matches within a season may enter its opposite-partition reference, so this is retrospective cross-fitting. Development targets are restricted to 2023–2025; 2026 remains gated. The explicit internal budget maximum is 22 bundles; 20 have now been used, including the two development bundles here. No parameter or partition search is run.
+
+Local outputs in `reports/retrospective_reference_development_2026-11-01/` include models with membership/counts/shrinkage, predictions, annual and partition metrics, shared whole-match intervals, pooled and partition calibration screens, support/concentration diagnostics, candidate scales, a chart pack and provenance manifest. The loss benchmark and peer-support screens pass. Calibration has zero pooled alerts but 68 separate-fold alerts, so promotion fails. Candidate scales stay unfrozen; no reserved outcome evaluation or player scores are produced. The runner does not fit another candidate or spend reserved bundles automatically. See [progress.md](progress.md) for the next decision.
 
 The source data, generated artifacts, detailed data audit, and organiser clarification are private competition materials. They are excluded from version control by default. Running the pipeline overwrites its generated EDA artifacts; raw source files are fingerprinted and never edited.
