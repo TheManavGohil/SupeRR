@@ -170,7 +170,7 @@ def _interval(group, value, matches, weights):
     return (float(np.quantile(finite, .1)), float(np.quantile(finite, .9)), len(finite)) if len(finite) else (np.nan, np.nan, 0)
 
 
-def diagnostic_tables(default, config):
+def diagnostic_tables(default, config, include_backoff=True):
     matches, weights = match_draws(default, config)
     comparisons, calibration, reliability, backoff = [], [], [], []
     for target, group in default.groupby("target"):
@@ -181,9 +181,10 @@ def diagnostic_tables(default, config):
             comparisons.append(dict(target=target, comparator=comparator, primary_loss_delta=float(delta.mean()),
                 relative_improvement_percent=float(-100 * delta.mean() / base) if base else np.nan,
                 p10=low, p90=high, finite_replicates=finite, bootstrap_unit="whole_match"))
-        backoff.append(dict(target=target, events=len(group), unseen_finest_context_events=int(group.backoff_depth.lt(4).sum()),
-            global_fallback_events=int(group.backoff_depth.eq(0).sum()),
-            minimum_reference_events=int(group.reference_events.min())))
+        if include_backoff:
+            backoff.append(dict(target=target, events=len(group), unseen_finest_context_events=int(group.backoff_depth.lt(4).sum()),
+                global_fallback_events=int(group.backoff_depth.eq(0).sum()),
+                minimum_reference_events=int(group.reference_events.min())))
         if TARGETS[target][1] == "wickets":
             binned = group.assign(probability_bin=pd.cut(group.prediction, config["reliability_bin_edges"], include_lowest=True))
             for bucket, part in binned.groupby("probability_bin", observed=True):

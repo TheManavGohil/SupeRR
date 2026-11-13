@@ -114,6 +114,18 @@ All five registered prior strengths are reported, consuming 15 of the 20 fold/se
 
 Local outputs are under `reports/baseline_development_2026-11-01/`: `REPORT.md`, `BASELINE_CHARTS.pdf`, per-fold model parameters/predictions, annual and pooled metrics, calibration/reliability/fallback tables, reference scales, `model_gate.json`, and a provenance manifest.
 
-The first run improves primary prediction loss for every target but flags systematic subgroup bias. Its promotion gate fails; reference scales remain candidates and 2026 evaluation remains gated. No player scores or rankings were generated. The next task is a versioned, focused development revision addressing the observed scoring-context bias while preserving the model budget. Read [progress.md](progress.md) for the measured results and current decision.
+The first run improves primary prediction loss for every target but flags systematic subgroup bias. Its promotion gate fails; reference scales remain candidates and 2026 evaluation remains gated. No player scores or rankings were generated. The focused contextual revision below is now executed. Read [progress.md](progress.md) for the measured results and current decision.
+
+## One contextual revision
+
+```sh
+rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-context-baseline
+```
+
+[The preregistered amendment](CONTEXT_BASELINE_V2.md) adds verified pre-ball scoring pace, progress/wickets and chase requirements, using a fixed ridge/logistic model and 365-day historical expectation weighting. It preserves role attribution, the 730-day player-rating policy, pressure thresholds and comparison eligibility. All preprocessing and fitting use earlier-year matches. The original baseline and its artifacts remain intact.
+
+The revision consumes three bundles, bringing the cumulative total to 18. It reuses the original validation screen and additionally compares paired losses with the original baseline. Outputs under `reports/context_baseline_v2_2026-11-01/` include a report, standalone chart pack, per-fold models/predictions, convergence/clipping diagnostics, paired whole-match intervals, calibration tables and a provenance manifest. These artifacts remain private and ignored by Git.
+
+Run prediction improves and calibration alerts fall from 29 to 18; wicket gains are inconclusive. The candidate still fails promotion. No reserved outcomes or player scores are analyzed. The next task is a documented rating-reference decision tied to retrospective selection, with validation and budget implications specified before more fitting. Do not automatically promote this candidate or launch another search.
 
 The source data, generated artifacts, detailed data audit, and organiser clarification are private competition materials. They are excluded from version control by default. Running the pipeline overwrites its generated EDA artifacts; raw source files are fingerprinted and never edited.

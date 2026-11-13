@@ -2,6 +2,8 @@
 
 This amendment replaces the unsupported global change term in sections 9.5–9.6 of the original plan. It is frozen in [the executable configuration](configs/supported_method_v1.json) before model fitting or player scores. The earlier failed global-comparison gate remains part of the audit trail. This is a pre-model specification, not evidence that a model or ranking has passed validation.
 
+Implementation status: the historical expectation baseline and [one contextual revision](CONTEXT_BASELINE_V2.md) have now been evaluated. Both fail the calibration promotion screen; neither is approved for final ratings. The contextual candidate amends expectation features and training recency only. Its results do not change the supported-change or ranking rules below. See [progress.md](progress.md) for the current decision and remaining work.
+
 ## What the two components mean
 
 **Pressure level** measures a player's recency-weighted contribution against historical peer expectations on all verified pressure opportunities, including late overs. Peers in late overs can themselves be under pressure: estimating an expected outcome there does not require ordinary observations. This estimates performance relative to peers, not improvement caused by pressure.
