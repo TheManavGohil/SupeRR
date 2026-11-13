@@ -4,6 +4,8 @@ This amendment replaces the unsupported global change term in sections 9.5–9.6
 
 Implementation status: the historical expectation baseline and [one contextual revision](CONTEXT_BASELINE_V2.md) have now been evaluated. Both fail the calibration promotion screen; neither is approved for final ratings. The contextual candidate amends expectation features and training recency only. Its results do not change the supported-change or ranking rules below. See [progress.md](progress.md) for the current decision and remaining work.
 
+Next expectation candidate: [the retrospective reference decision](RETROSPECTIVE_REFERENCE.md) specifies two whole-match partitions and contemporary peers, with an explicit internal budget amendment from 20 to 22 bundles. Its outcome-free support audit passes; its models are not yet implemented or fitted. For that candidate only, the new specification replaces the annual forecasting boundary below. The contribution, supported-change, eligibility and ranking rules here remain unchanged. Neither an audit pass nor this specification promotes a reference to final scoring.
+
 ## What the two components mean
 
 **Pressure level** measures a player's recency-weighted contribution against historical peer expectations on all verified pressure opportunities, including late overs. Peers in late overs can themselves be under pressure: estimating an expected outcome there does not require ordinary observations. This estimates performance relative to peers, not improvement caused by pressure.
