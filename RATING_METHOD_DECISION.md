@@ -1,6 +1,6 @@
 # Rating decision after the first validated evidence tables
 
-14 November 2026. Status: **concrete recommended amendment, not activated**. The user authorized making this decision at the initial-table checkpoint. Changing the earlier explicitly registered primary 70/30 level/change ordering is stated separately below and requires acceptance of this amendment. No new rating estimator, composite player scores, full dossier pack or 2026 outcome evaluation has been executed.
+14 November 2026. Status: **user-approved amendment**. The user accepted this exact primary-ordering change with “yes, go ahead!” after the concrete recommendation was presented. [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and [the activated development configuration](configs/descriptive_rating_v2.json) govern implementation. Approval does not imply that development validation has passed; see [progress.md](progress.md) for current execution status. The rationale and proposed algebra below are retained as the pre-execution specification.
 
 ## Decision and cricket question
 
@@ -112,12 +112,12 @@ For an optional descriptive companion index, orient and scale the supported obse
 
 Where both components and uncertainty are adequate, report `0.70*L + 0.30*C_descriptive` and `0.50*L + 0.50*C_descriptive` on the identical comparison-eligible cohort and shared draws. Do not order the broad primary list by either companion and do not compare its shortlist with a different eligibility cohort as a weight effect. In the current development evidence, none qualifies for a reliable supported-change interval, so no such companion ordering can be claimed.
 
-**This recommendation changes the original mandatory 70/30 level/change primary ranking into a pressure primary ranking plus conditional companion comparisons.** It also replaces predictive residual scales/expectations with an explicitly descriptive empirical comparison. These are substantive method amendments. They are recommended because the original method cannot produce a reliable development ranking from the available evidence; they are not already approved by the user's instruction about timing. Until accepted, [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md) remains active and blocked. Its original 70/30 default and 50/50 variant remain in the audit record and are not silently replaced.
+**This amendment changes the original mandatory 70/30 level/change primary ranking into a pressure primary ranking plus conditional companion comparisons.** It also replaces predictive residual scales/expectations with an explicitly descriptive empirical comparison. The user's subsequent explicit approval activates these changes under version 2; the earlier timing instruction alone did not authorize them. [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md), its original weights and all failed gates remain in the historical audit record.
 
 ## What remains before any score or reserved evaluation
 
-1. Accept or reject the explicit amendment above before implementing player rating outputs. Do not polish the full dossier pack while this primary decision remains unresolved.
-2. If accepted, version the active method/config and implement **this one fixed estimator**, not another family of predictive candidates. Verify hand-calculated scores, monotonic metric direction, leave-player-out benchmark isolation, shared resampling, peer-loss invalidation and denominator handling.
+1. **Completed:** the user explicitly accepted the amendment and its changed primary ordering. No further approval is needed for this accepted formula.
+2. Version the active method/config and implement **this one fixed estimator**, not another family of predictive candidates. Verify hand-calculated scores, monotonic metric direction, leave-player-out benchmark isolation, shared resampling, peer-loss invalidation and denominator handling. Activation and focused numerical checks are complete; use progress for the subsequent execution status.
 3. Execute development ratings once. Verify exposure/support, reference recomputation, finite-draw reliability and that at least ten candidates per role actually qualify. Publish limitations and cohort attrition. This is feasibility of a descriptive selection procedure, not predictive calibration or evidence of qualification.
 4. Produce fixed run/wicket sensitivities, leave-one-match and leave-one-season influence, family-separated results and counterexamples. Keep the declared primary ordering even when a variant is more appealing. Sensitivity findings can qualify a selection claim; they do not authorize automatic retuning or reputation overrides.
 5. Freeze development scales, code/config hashes and the final transfer/check protocol, then evaluate 2026 separately. Recompute the accepted same-year descriptive peers using 2026 outcomes as expressly retrospective evidence; never claim an outcome-free forecast. Prior aggregate 2026 EDA remains disclosed.
@@ -128,6 +128,6 @@ If fewer than ten valid candidates remain in either development or final evidenc
 
 ## Checkpoint disposition
 
-Completed: initial development tables and descriptive uncertainty; aggregate decision evidence; outcome-free pressure-peer availability audit; this concrete recommendation before full dossier polishing.
+Completed: initial development tables and descriptive uncertainty; aggregate decision evidence; outcome-free pressure-peer availability audit; concrete recommendation before full dossier polishing; explicit user approval; active versioned specification and fixed estimator implementation with focused numerical checks.
 
-Pending: acceptance of the substantive amendment; rating implementation and development execution; proposed peer-inclusive uncertainty validation; development scale freeze; reserved evaluation; full dossiers; final selections and methodology. No final player ability claims follow from the initial tables alone.
+Pending at the activation checkpoint: complete development execution and empirical peer-inclusive uncertainty validation; numerical scale freeze; reserved evaluation; full dossiers; final selections and methodology. See progress for later completed checks. No final player ability claims follow from the initial tables alone.

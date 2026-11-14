@@ -1,6 +1,6 @@
 # Player evidence dossiers: implementation plan
 
-Status: updated 14 November 2026. Initial development evidence tables and descriptive uncertainty are implemented, executed and reconciled. The checkpoint recommendation is in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md); its substantive amendment is not activated. Full dossier rendering and rating execution remain pending. The active scoring specification has not changed.
+Status: updated 14 November 2026. Initial development evidence tables and descriptive uncertainty are implemented, executed and reconciled. The user approved the checkpoint amendment in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md); [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) is now active. The fixed development estimator is implemented; execution and full dossier rendering remain pending at this activation checkpoint.
 
 ## Purpose and immediate decision
 
@@ -17,7 +17,7 @@ Build observed development evidence while preparing one explicit rating-method d
 - Development dossiers use verified **2023–2025** events only, referenced to 31 December 2025. The final cutoff remains **1 November 2026 inclusive**; 2022 contributes no player-selection evidence.
 - Reuse frozen pressure flags, opportunity definitions, source exclusions, support rules and the 730-day recency half-life. Display ordinary and pressure denominators separately.
 - Keep 1,000 whole-match bootstrap draws, stratified by competition family/year and shared across players and roles. Do not resample deliveries independently.
-- [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md) and [its configuration](configs/supported_method_v1.json) remain the active rating method. Their 70/30 level/change default and 50/50 variant are unchanged unless explicitly amended. No approved expectation reference currently exists.
+- [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and [its approved configuration](configs/descriptive_rating_v2.json) govern the primary pressure ordering. The user explicitly approved moving 70/30 and 50/50 level/change blends to conditional companion comparisons. Original support/exposure rules remain inherited where specified; no failed expectation reference is promoted.
 - Dossier rates and intervals are descriptive. They are not contextual residuals, a causal pressure effect, forecasts of IPL 2027 performance, or selection scores. Failed-reference exposure is an uncertainty annotation, not a performance deduction.
 - Keep detailed player outputs private under `reports/`. Commit code, tests, specifications and aggregate progress at coherent milestones.
 
@@ -132,6 +132,8 @@ Once D4 permits a provisional ordering, review at least three plausible alternat
 
 ## D4: bounded rating-method decision
 
+This decision checkpoint is now completed: the user approved the explicit descriptive amendment. The options and acceptance requirements below record the decision process; do not reopen the approval or automatic model search. Execute the accepted version under [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md).
+
 Complete this decision immediately after the first validated aggregate tables, **before rendering or polishing the full dossier pack**, final ordering or reserved outcome access. The user confirmed this checkpoint on 14 November 2026. It is not another open-ended model workstream.
 
 Prepare one decision note comparing these two paths against the actual evidence:
@@ -201,8 +203,8 @@ Use a small anonymous fixture first, then one complete development execution and
 ## Milestones and next handoff
 
 1. **Completed initial evidence milestone:** D0–D1 contract, safe loader, reconciled development ledger and initial uncertainty/comparison tables. Contract commit: `1dfb4e7`.
-2. **Current decision milestone after validated tables:** D4 concrete recommendation is written; accept/reject its explicit amendment before rating execution or full dossier rendering/polishing.
+2. **Current decision milestone after validated tables:** D4 recommendation is approved and its fixed development implementation is ready for execution. Validate it before full dossier rendering/polishing or reserved evaluation.
 3. **Following evidence milestone:** D2–D3 complete dossier pack, uncertainty, cases and selector review ledger, then D5 final-window evidence and checks. Publish aggregate findings in progress; detailed outputs remain private.
 4. **Final milestone:** D6 two defensible ordered lists and the matching methodology, ready for the user's submission review.
 
-The next task is resolving the explicit amendment in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md), followed by its fixed development implementation if accepted. Do not start the full dossier renderer, another predictive experiment or reserved evaluation while that decision remains pending. The project is complete only when both Round 1 deliverables are ready.
+The next task is development verification and execution of the accepted amendment in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md). Do not repeat the approval request, start another predictive experiment or skip the development checks before reserved evaluation. The project is complete only when both Round 1 deliverables are ready.

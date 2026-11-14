@@ -1,0 +1,136 @@
+{
+  "method_id": "descriptive_peer_pressure_v2",
+  "status": "user_approved_for_development_execution",
+  "decision_document": "RATING_METHOD_DECISION.md",
+  "automatic_execution_permitted": false,
+  "player_score_outputs_permitted": true,
+  "reserved_outcomes_permitted": false,
+  "cutoff_inclusive": "2026-11-01",
+  "development_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "development_reference_date": "2025-12-31",
+  "final_reference_date": "2026-11-01",
+  "recency_half_life_days": 730,
+  "comparison": {
+    "kind": "descriptive_empirical_leave_player_out_pressure_peer_means",
+    "context_keys": [
+      "family",
+      "year",
+      "innings",
+      "phase",
+      "wicket_band"
+    ],
+    "pressure_only": true,
+    "exclude_all_evaluated_player_role_events": true,
+    "peer_population": "all_verified_other_player_opportunities_not_just_eligible_candidates",
+    "minimum_peer_opportunities": 20,
+    "minimum_peer_matches": 3,
+    "fallback": null,
+    "minimum_pressure_retention_count_and_weight": 0.8
+  },
+  "outcome_scales": {
+    "source": "all_verified_development_pressure_opportunities_per_role",
+    "kind": "recency_weighted_population_outcome_SD",
+    "reference_date": "2025-12-31",
+    "floors": {
+      "runs": 0.05,
+      "wickets": 0.01
+    },
+    "freeze_before_reserved_outcomes": true,
+    "fixed_in_bootstrap": true
+  },
+  "orientation": {
+    "batting": {
+      "runs": 1,
+      "wickets": -1
+    },
+    "bowling": {
+      "runs": -1,
+      "wickets": 1
+    }
+  },
+  "outcome_weights": {
+    "default": [
+      0.6,
+      0.4
+    ],
+    "sensitivities": [
+      [
+        0.5,
+        0.5
+      ],
+      [
+        0.7,
+        0.3
+      ]
+    ]
+  },
+  "primary": "pressure_mass_weighted_mean_of_oriented_standardized_player_minus_other_player_cell_means",
+  "shrinkage": "n_eff/(n_eff+k_role)",
+  "role_pseudo_events": {
+    "batting": 75,
+    "bowling": 60
+  },
+  "eligibility": "original_level_and_source_retention_plus_reapply_pressure_minima_inside_peer_supported_cells",
+  "ordinary_comparison_required_for_primary": false,
+  "ordinary_comparison_policy": "original_support_sample_and_missing_group_rules_preserved",
+  "supported_change": "separate_descriptive_same_player_difference_scaled_and_paired_count_shrunk_not_original_residual_change",
+  "companion_level_change_weights": {
+    "default": [
+      0.7,
+      0.3
+    ],
+    "registered_variant": [
+      0.5,
+      0.5
+    ]
+  },
+  "companion_primary_ordering_permitted": false,
+  "missing_change": null,
+  "bootstrap": {
+    "unit": "whole_match",
+    "replicates": 1000,
+    "seed": 1729,
+    "strata": [
+      "family",
+      "year"
+    ],
+    "recompute": [
+      "player_means",
+      "leave_player_out_peer_means",
+      "workload_weights",
+      "effective_counts",
+      "shrinkage"
+    ],
+    "freeze": [
+      "eligibility",
+      "supported_cells",
+      "development_scale_constants"
+    ],
+    "positive_own_cell_mass_with_zero_peer_mass": "invalid_player_draw",
+    "zero_own_cell_mass": "zero_workload_weight",
+    "minimum_finite_fraction": 0.95,
+    "primary_quantile": 0.1,
+    "ties": [
+      "point_pressure_rating_descending",
+      "supported_pressure_matches_descending",
+      "player_id_ascending"
+    ]
+  },
+  "predictive_fit_bundles_used": 20,
+  "new_predictive_candidates_permitted": false,
+  "causal_or_IPL2027_forecast_claims_permitted": false,
+  "development_execution_permitted": true,
+  "execution_window": "development_only",
+  "approved_proposal_sha256": "b72e1a8bbc13ed4fb71352d6b8b418263304739dd68adea99a19d0e88df8ae8f",
+  "base_method_config": "configs/supported_method_v1.json",
+  "base_method_config_sha256": "b87ae619a1817c8ee41de56be23d509fefab36d0116060752a07a51419153209",
+  "approval": {
+    "date_IST": "2026-11-14",
+    "user_reply": "yes, go ahead!",
+    "scope": "Approve pressure-primary ordering and conditional 70/30 and 50/50 level/change companions."
+  }
+}

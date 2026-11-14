@@ -4,7 +4,7 @@ Read [progress.md](progress.md) before starting substantive work. It records the
 
 Update `progress.md` after each meaningful milestone or material change in direction. Keep completed and proposed work distinct, and record checks actually run. Current user instructions take precedence.
 
-Use [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md) and its linked frozen configuration for the active scoring method; they supersede the original global pressure-change proposal in the implementation plan.
+Use [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and its linked approved configuration for the active scoring method. The user approved this amendment after the first validated evidence tables. [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md) remains the historical residual-method specification and supplies unchanged exposure/ordinary-support rules where explicitly inherited. Both supersede the original global pressure-change proposal in the implementation plan.
 
 Commit and push at appropriate milestones. The user explicitly removed the earlier preference for three commits each time.
 

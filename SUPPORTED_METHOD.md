@@ -1,5 +1,7 @@
 # Supported pressure comparisons, version 1
 
+**Historical method:** the user approved the explicit descriptive amendment on 14 November 2026. [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and [its configuration](configs/descriptive_rating_v2.json) now govern active development scoring. The original rules below remain the audit record and source of explicitly inherited exposure/ordinary-support constraints; no failed prediction model is promoted.
+
 This amendment replaces the unsupported global change term in sections 9.5–9.6 of the original plan. It is frozen in [the executable configuration](configs/supported_method_v1.json) before model fitting or player scores. The earlier failed global-comparison gate remains part of the audit trail. This is a pre-model specification, not evidence that a model or ranking has passed validation.
 
 Implementation status: the historical expectation baseline and [one contextual revision](CONTEXT_BASELINE_V2.md) have now been evaluated. Both fail the calibration promotion screen; neither is approved for final ratings. The contextual candidate amends expectation features and training recency only. Its results do not change the supported-change or ranking rules below. See [progress.md](progress.md) for the current decision and remaining work.
