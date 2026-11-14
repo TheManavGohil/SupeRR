@@ -171,6 +171,21 @@ class DescriptiveAlgebraTests(unittest.TestCase):
         self.assertEqual(set(result["ratings"].variant), {"default_60_40", "runs_wickets_50_50", "runs_wickets_70_30"})
         self.assertEqual(result["draws"].shape, (1000, 2))
 
+    def test_peers_outside_candidate_cohort_still_enter_the_benchmark(self):
+        d = events()
+        d["supported"] = False
+        c = pd.DataFrame([dict(role="batting", player_id="p", level_sample_eligible=True, coverage_ready=True,
+            pressure_events=2, pressure_weight_sum=2., change_sample_eligible=False)])
+        base = copy.deepcopy(BASE)
+        base.update(peer_minimum_events_per_group=2, peer_minimum_matches_per_group=2,
+            minimum_pressure_matches=1, minimum_effective_pressure_events=1)
+        base["roles"]["batting"].update(minimum_total_events=1, minimum_pressure_events=1)
+        result = evaluate_development(d, c, pressure_peer_support(d, base), CONFIG, base,
+            {"batting": {"runs": 1., "wickets": 1.}})
+        default = result["ratings"].loc[result["ratings"].variant.eq("default_60_40")].iloc[0]
+        self.assertAlmostEqual(default.raw_point, 1.2)
+        self.assertAlmostEqual(default.point, 1.2 * 2 / 77)
+
 
 class DevelopmentArtifactTests(unittest.TestCase):
     def test_loader_uses_only_validated_development_ledger(self):
@@ -189,6 +204,71 @@ class DevelopmentArtifactTests(unittest.TestCase):
             ledger, cohort, base, receipt = load_development(ROOT, CONFIG)
         self.assertEqual(len(reads), 1)
         self.assertEqual(ledger.match_id.nunique(), 402)
+
+    def test_development_outputs_gates_variants_and_freeze_provenance(self):
+        out = ROOT / "reports/descriptive_rating_development_2026-11-01"
+        if not (out / "manifest.json").exists():
+            self.skipTest("Private descriptive development execution unavailable")
+        manifest = json.loads((out / "manifest.json").read_text())
+        self.assertEqual(manifest["config_sha256"], sha256(ROOT / "configs/descriptive_rating_v2.json"))
+        for name, digest in manifest["output_sha256"].items():
+            self.assertEqual(sha256(out / name), digest, name)
+        for name, digest in manifest["code_sha256"].items():
+            self.assertEqual(sha256(ROOT / name), digest, name)
+        for name, digest in manifest["preserved_gate_sha256"].items():
+            self.assertEqual(sha256(ROOT / name), digest, name)
+        self.assertEqual(manifest["cumulative_predictive_bundles"], 20)
+        self.assertFalse(manifest["reserved_outcomes_read"] or manifest["predictive_models_fitted"] or manifest["final_rankings_created"])
+        frozen = json.loads((out / "frozen_scales.json").read_text())
+        self.assertEqual(sha256(out / "frozen_scales.json"), manifest["frozen_scales_sha256"])
+        self.assertEqual(frozen["development_years"], [2023, 2024, 2025])
+        ratings = pd.read_parquet(out / "ratings.parquet")
+        for _, group in ratings.groupby(["role", "player_id"]):
+            self.assertEqual(len(group), 3)
+            self.assertEqual(group.selection_ready.nunique(), 1)
+            self.assertEqual(group.finite_fraction.nunique(), 1)
+        for _, group in ratings.loc[ratings.selection_ready].groupby(["role", "variant"]):
+            self.assertEqual(sorted(group["rank"]), list(range(1, len(group) + 1)))
+        gate = json.loads((out / "development_gate.json").read_text())
+        counts = ratings.loc[ratings.variant.eq("default_60_40") & ratings.selection_ready].groupby("role").size()
+        self.assertEqual(gate["development_feasible"], bool(counts.reindex(["batting", "bowling"], fill_value=0).ge(10).all()))
+        self.assertFalse(gate["final_rankings_permitted"] or gate["reserved_outcomes_evaluated"])
+        companions = pd.read_parquet(out / "companions.parquet")
+        self.assertTrue(companions.loc[~companions.interval_reliable, "p10"].isna().all())
+
+    def test_every_live_default_point_matches_independent_grouped_formula(self):
+        out = ROOT / "reports/descriptive_rating_development_2026-11-01"
+        if not (out / "manifest.json").exists():
+            self.skipTest("Private descriptive development execution unavailable")
+        pressure = pd.read_parquet(ROOT / "reports/player_evidence_development_2026-11-01/event_role_ledger.parquet",
+            filters=[("year", "in", [2023, 2024, 2025]), ("pressure_full", "==", True)])
+        audit = pd.read_csv(out / "pressure_peer_support.csv", dtype={"player_id": str})
+        scales = json.loads((out / "frozen_scales.json").read_text())["outcome_scales"]
+        saved = pd.read_parquet(out / "ratings.parquet")
+        saved = saved.loc[saved.variant.eq("default_60_40")]
+        expected = []
+        for row in saved.itertuples():
+            population = pressure.loc[pressure.role.eq(row.role)]
+            own = population.loc[population.player_id.eq(row.player_id)]
+            cells = audit.loc[audit.role.eq(row.role) & audit.player_id.eq(row.player_id) & audit.peer_supported, CONTEXT]
+            own = own.merge(cells, on=CONTEXT, validate="many_to_one")
+            # Directly select other players, rather than using the engine's total-minus-own arrays.
+            others = population.loc[population.player_id.ne(row.player_id)]
+            peer = others.groupby(CONTEXT)[["weight", "weighted_runs", "weighted_wickets"]].sum()
+            actor = own.groupby(CONTEXT)[["weight", "weighted_runs", "weighted_wickets"]].sum()
+            peer = peer.reindex(actor.index)
+            mass = actor.weight.sum()
+            if mass == 0:
+                expected.append(np.nan)
+                continue
+            raw = 0.
+            for metric, weight in [("runs", .6), ("wickets", .4)]:
+                rate = actor["weighted_" + metric] / actor.weight
+                peer_rate = peer["weighted_" + metric] / peer.weight
+                raw += weight * CONFIG["orientation"][row.role][metric] * ((actor.weight / mass) * (rate - peer_rate)).sum() / scales[row.role][metric]
+            neff = mass ** 2 / own.weight_squared.sum()
+            expected.append(raw * neff / (neff + CONFIG["role_pseudo_events"][row.role]))
+        np.testing.assert_allclose(saved.point.to_numpy(), expected, atol=1e-12, rtol=1e-11, equal_nan=True)
 
 
 if __name__ == "__main__":

@@ -32,7 +32,7 @@ These findings apply to development. They do not establish that the combined 202
 
 Raw pressure rates also differ materially by cricket situation. For example, pooled IPL batting pressure outcomes are 123.87 runs and 3.54 attributed dismissals per 100 middle-over opportunities, versus 169.77 runs and 7.54 dismissals at the death. Thus a plain pooled run-rate ranking would reward a different workload and conceal the dismissal tradeoff. These aggregate differences are descriptive, not effects caused by the phase.
 
-An outcome-free feasibility audit excludes every event of the evaluated player from their same-context pressure peer population and requires 20 peer opportunities across three matches. **Every pressure opportunity of all 62 batting / 90 bowling level-plus-coverage entries has that peer support in development.** This establishes availability only; no peer means, composite ratings, ordering or bootstrap reliability for the proposed index have been evaluated. Ten final selections are not guaranteed by these counts.
+An outcome-free feasibility audit excludes every event of the evaluated player from their same-context pressure peer population and requires 20 peer opportunities across three matches. **Every pressure opportunity of all 62 batting / 90 bowling level-plus-coverage entries has that peer support in development.** At the decision checkpoint this established availability only, before peer means, composite ratings, ordering or index uncertainty were evaluated. Subsequent development execution is recorded below and in progress. Ten final selections are not guaranteed by these counts.
 
 Reproducible private evidence: `reports/player_evidence_development_2026-11-01/validation.json`, `decision_evidence_summary.json`, `observed_uncertainty.parquet`, `pressure_peer_support.csv` and the manifest. No named performance ordering was inspected to choose this recommendation.
 
@@ -92,7 +92,7 @@ Retain the original source-retention threshold and level sample requirements. Al
 
 Thus the primary list requires: original total exposure; source retention at least 80%; at least 75 batting / 60 bowling supported pressure opportunities; eight supported pressure matches; effective supported pressure count at least 40; pressure-peer retention at least 80% by count and weight; and sufficient finite bootstrap draws. Publish all attrition reasons. Coverage-limited or unsupported players keep diagnostic evidence; do not assign poor-performance scores or silently override their exclusions.
 
-No ordinary observations are required for the primary pressure rating. Do not claim this gate has passed numerically just because the exposure-only feasibility audit passes. The proposed score and its uncertainty are unimplemented.
+No ordinary observations are required for the primary pressure rating. Exposure-only feasibility cannot establish numerical score reliability. Subsequent approved development execution has now passed the primary score/uncertainty gates for 62 batting / 90 bowling entries; final-window execution remains pending.
 
 ### Bootstrap and ordering
 
@@ -128,6 +128,6 @@ If fewer than ten valid candidates remain in either development or final evidenc
 
 ## Checkpoint disposition
 
-Completed: initial development tables and descriptive uncertainty; aggregate decision evidence; outcome-free pressure-peer availability audit; concrete recommendation before full dossier polishing; explicit user approval; active versioned specification and fixed estimator implementation with focused numerical checks.
+Completed: initial development tables and descriptive uncertainty; aggregate decision evidence; outcome-free pressure-peer availability audit; concrete recommendation before full dossier polishing; explicit user approval; active versioned specification; fixed estimator implementation and development execution under commit `54be28b`; frozen numerical scales; peer-inclusive uncertainty, same-cohort outcome-weight sensitivities, family and match/season diagnostics. All 62 batting / 90 bowling primary sample-plus-coverage entries pass the finite-draw gate. Every development point score reproduces an independent grouped calculation.
 
-Pending at the activation checkpoint: complete development execution and empirical peer-inclusive uncertainty validation; numerical scale freeze; reserved evaluation; full dossiers; final selections and methodology. See progress for later completed checks. No final player ability claims follow from the initial tables alone.
+Pending: player-level role/counterexample review of the development evidence; freeze and execution of the separate reserved/final-window stage; full dossiers; final selections and methodology. The method, normalization constants and primary ordering are fixed; do not reopen automatic model search or request the same approval again. No final player ability claims follow from development feasibility alone.

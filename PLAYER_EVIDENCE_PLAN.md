@@ -1,6 +1,6 @@
 # Player evidence dossiers: implementation plan
 
-Status: updated 14 November 2026. Initial development evidence tables and descriptive uncertainty are implemented, executed and reconciled. The user approved the checkpoint amendment in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md); [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) is now active. The fixed development estimator is implemented; execution and full dossier rendering remain pending at this activation checkpoint.
+Status: updated 14 November 2026. Initial development evidence and approved v2 development ratings are implemented, executed and validated. The user approved [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md); [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) is active. Development scales are frozen; 62 batting / 90 bowling entries pass primary gates. Full dossier rendering, player-level counterexample review, reserved/final-window execution and final lists remain pending.
 
 ## Purpose and immediate decision
 
@@ -203,8 +203,8 @@ Use a small anonymous fixture first, then one complete development execution and
 ## Milestones and next handoff
 
 1. **Completed initial evidence milestone:** D0–D1 contract, safe loader, reconciled development ledger and initial uncertainty/comparison tables. Contract commit: `1dfb4e7`.
-2. **Current decision milestone after validated tables:** D4 recommendation is approved and its fixed development implementation is ready for execution. Validate it before full dossier rendering/polishing or reserved evaluation.
+2. **Completed method milestone after validated tables:** D4 recommendation was approved, committed as `54be28b`, executed once on development and validated. Primary gates pass for 62 batting / 90 bowling entries; numerical scales are frozen.
 3. **Following evidence milestone:** D2–D3 complete dossier pack, uncertainty, cases and selector review ledger, then D5 final-window evidence and checks. Publish aggregate findings in progress; detailed outputs remain private.
 4. **Final milestone:** D6 two defensible ordered lists and the matching methodology, ready for the user's submission review.
 
-The next task is development verification and execution of the accepted amendment in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md). Do not repeat the approval request, start another predictive experiment or skip the development checks before reserved evaluation. The project is complete only when both Round 1 deliverables are ready.
+The next task is development player evidence review and dossier generation using the accepted ratings, especially boundary candidates, specialists, family dependence and adverse cases. Freeze the separate final-window execution protocol before reserved access. Do not repeat the approval request or start another predictive experiment. The project is complete only when both Round 1 deliverables are ready.

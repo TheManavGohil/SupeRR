@@ -2,6 +2,8 @@
 
 The user approved the explicit primary-ordering amendment on 14 November 2026 with “yes, go ahead!” after reviewing the initial evidence and rating recommendation. [The active configuration](configs/descriptive_rating_v2.json) activates development execution of the exact formula in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md). The disabled proposal remains a historical record. Approval is not evidence that the implementation or development gate has passed.
 
+Development execution is now completed under implementation/specification commit `54be28b`: 62 batting / 90 bowling entries pass the primary sample, coverage and finite-draw gates. Numerical scales are frozen. All development point scores reproduce an independent grouped calculation. This is descriptive feasibility and implementation validation; no predictive model is promoted, 2026 outcomes remain unevaluated, and final selections are unfinished. See [progress.md](progress.md) for sensitivity and remaining evidence work.
+
 This amendment supersedes the residual-based primary ordering in [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md). Its opportunity definitions, original exposure/source-coverage thresholds, supported ordinary comparison rules, 730-day recency, pressure labels and 1,000 shared whole-match bootstrap remain in force except for the explicit changes below. All earlier prediction gates remain failed historical results; no predictive model is promoted.
 
 ## Approved changes
