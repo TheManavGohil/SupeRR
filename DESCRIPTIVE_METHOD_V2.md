@@ -25,6 +25,8 @@ Before reserved evaluation, validate development feasibility (at least ten quali
 
 The final match-date cutoff remains 1 November 2026 inclusive; 2022 contributes no scoring evidence. Reserved outcomes remain disabled for this development implementation. A separate final-window execution stage must consume the frozen scales and unchanged accepted method. Aggregate 2026 EDA was previously seen; it is not pristine unseen data.
 
+The user subsequently requested role-based dossiers/counterexample review followed by frozen final-window evaluation. Development review is complete. [FINAL_WINDOW_PROTOCOL.md](FINAL_WINDOW_PROTOCOL.md) and [its configuration](configs/final_window_v1.json) now define that separate authorized stage, with Git/dependency checks before the first reserved outcome read. The original development command/config remain unchanged and cannot independently access reserved outcomes.
+
 ## Interpretation and remaining evidence
 
 The rating describes observed performance relative to contemporaneous retained peers in broad contexts. It is not a causal pressure effect, fully adjusted player ability, an outcome-free forecast or an IPL 2027 prediction. Target difficulty, exact remaining balls, venue and opposition strength remain incompletely measured. Family-specific results, roles, repeatability and counterexamples must accompany selection claims.

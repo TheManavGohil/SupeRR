@@ -1,0 +1,77 @@
+{
+  "protocol_id": "final_window_v1",
+  "status": "frozen_before_reserved_performance_evaluation",
+  "user_authorized_final_evaluation": true,
+  "cutoff_inclusive": "2026-11-01",
+  "method_changes_permitted": false,
+  "predictive_fits_permitted": false,
+  "window_order": [
+    "reserved_2026",
+    "final_2023_2026"
+  ],
+  "windows": {
+    "reserved_2026": {
+      "first_date": "2026-01-01",
+      "last_date": "2026-11-01",
+      "reference_date": "2026-11-01",
+      "exposure_prefix": "reserved_exposure_only",
+      "expected": {
+        "events": 25946,
+        "matches": 109,
+        "batting_opportunities": 24868,
+        "batting_pressure_opportunities": 8693,
+        "batting_level_eligible": 7,
+        "batting_level_coverage_ready": 6,
+        "batting_blend_coverage_ready": 0,
+        "bowling_opportunities": 25946,
+        "bowling_pressure_opportunities": 9109,
+        "bowling_level_eligible": 34,
+        "bowling_level_coverage_ready": 28,
+        "bowling_blend_coverage_ready": 0
+      }
+    },
+    "final_2023_2026": {
+      "first_date": "2023-01-01",
+      "last_date": "2026-11-01",
+      "reference_date": "2026-11-01",
+      "exposure_prefix": "final_retrospective_exposure_only",
+      "expected": {
+        "events": 121891,
+        "matches": 511,
+        "batting_opportunities": 117127,
+        "batting_pressure_opportunities": 41022,
+        "batting_level_eligible": 93,
+        "batting_level_coverage_ready": 75,
+        "batting_blend_coverage_ready": 11,
+        "bowling_opportunities": 121891,
+        "bowling_pressure_opportunities": 43029,
+        "bowling_level_eligible": 150,
+        "bowling_level_coverage_ready": 104,
+        "bowling_blend_coverage_ready": 16
+      }
+    }
+  },
+  "frozen_sha256": {
+    "configs/descriptive_rating_v2.json": "dea1c3fa14bbde370b4343665e1f0fe402c4338c5ad403aeb5d2f1aa4e69bc10",
+    "configs/supported_method_v1.json": "b87ae619a1817c8ee41de56be23d509fefab36d0116060752a07a51419153209",
+    "configs/analysis_preregistration.json": "1ada4ae2d019b9a4f88abe47525d7899f7ae19f665d23386a24218b8b3b11823",
+    "configs/player_evidence_v1.json": "8e903c2087562f23cb35c83ff10a06e92d743f02170e3fab47f650acd7f84ddf",
+    "FINAL_WINDOW_PROTOCOL.md": "68ad0262a3ad55925d7d4763e027f25d9e351b2b246b81fcd0a745f154e41880",
+    "reports/descriptive_rating_development_2026-11-01/frozen_scales.json": "1f94bf865521a892952124c33f6e03014436ad6b4f610f0fdc982dacf55409ca",
+    "reports/descriptive_rating_development_2026-11-01/manifest.json": "03eab188925bfaebe037c4df177ba0fd3f6073d127680a2041b3d26c5098779e",
+    "reports/player_dossiers_development_2026-11-01/manifest.json": "c63e54185e9f31e760c3763ff5de148e8984665cb38624f8447e5ef090f9953f",
+    "reports/player_dossiers_development_2026-11-01/EXPERT_REVIEW.md": "e11790580bceb361f36d20d401df3dcf82f9477a6dba1da2b2bd9f2eaa48fba1",
+    "reports/supported_method_2026-11-01/manifest.json": "f5f476756a03c854d755c5ce1e5a3202eb78c530a6ef135cbd4541f0fdc8b3ab",
+    "reports/full_reconciliation_2026-11-01/manifest.json": "a6d8b07b1159696b63c11c2951af779855bdea91b395828c6209c3b3bbc1df7c",
+    "src/rr_pressure/final_window.py": "b20d9ebe288e83398fb15f44705498859220d00c59b962a2ba658b04199810b4",
+    "src/rr_pressure/player_dossiers.py": "60449f8e1279a63af4fd68bc255c9cdccff67154f7b9eea3a64bcb1d794bd577",
+    "src/rr_pressure/descriptive_rating.py": "061b0177e234ccc0dbfa0f74121ea5fe4df8610f777476a2788998eef524b33b",
+    "src/rr_pressure/player_evidence.py": "658e9d3a194a5c3df53b3c719c7d2394729587901604511989254265cc5f8c2a",
+    "src/rr_pressure/supported_method.py": "563f7a630a471b1d91325dc6a9844fdbca04aa449704e7726c136964945c4e6f",
+    "src/rr_pressure/baseline.py": "7ae04968beb38abcb6ac71ba125ab349e000b43e49ec6783f5bf0f8bdf0873b8",
+    "src/rr_pressure/data.py": "980bd083a52b7d69f66345e5295a9b521a79b70a258df687e19d35138a92cff2"
+  },
+  "one_year_minimum_ten_required": false,
+  "final_minimum_per_role": 10,
+  "submission_permitted": false
+}
