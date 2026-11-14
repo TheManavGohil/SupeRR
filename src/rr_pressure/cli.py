@@ -95,11 +95,14 @@ def run_eda(root):
 
 def main():
     parser = argparse.ArgumentParser(description="Private RR analysis pipeline")
-    parser.add_argument("command", choices=["eda", "select-pilot", "fetch-cricsheet", "reconcile-pilot", "reconcile-full", "pressure-validate", "prepare-method", "fit-baseline", "fit-context-baseline", "audit-reference", "fit-retrospective-reference"])
+    parser.add_argument("command", choices=["eda", "select-pilot", "fetch-cricsheet", "reconcile-pilot", "reconcile-full", "pressure-validate", "prepare-method", "fit-baseline", "fit-context-baseline", "audit-reference", "fit-retrospective-reference", "review-reference"])
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2])
     args = parser.parse_args()
     if args.command == "eda":
         run_eda(args.root.resolve())
+    elif args.command == "review-reference":
+        from .reference_review import run_reference_review
+        run_reference_review(args.root.resolve())
     elif args.command == "fit-retrospective-reference":
         from .retrospective_reference import run_retrospective_reference
         run_retrospective_reference(args.root.resolve())
