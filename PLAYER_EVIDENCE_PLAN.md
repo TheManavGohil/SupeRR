@@ -33,7 +33,7 @@ Build observed development evidence while preparing one explicit rating-method d
 | D5. Apply the frozen decision to the final window | Check whether the conclusions survive the reserved period and current evidence. | Separate 2026 diagnostics and refreshed 2023–1 November 2026 dossiers, followed by permitted ratings. | D4 is resolved before reserved outcomes are read; any failed check is reported without automatic retuning. |
 | D6. Select and package | Defend the two ordered lists against credible alternatives. | Ten batting selections, ten bowling selections, alternative/counterexample review, methodology and dropdown mapping. | Ordering and report agree; each selection has evidence and limitations; exact submission names are checked. |
 
-D0–D3 are the immediate implementation scope. D4 starts alongside them as a decision document and closes before D5. D5–D6 depend on that decision; they are not authorized by a dossier being generated successfully.
+D0–D1 and the initial analytical tables are the immediate implementation scope. **User-confirmed sequence: validate those tables, then complete D4 before rendering or polishing the full D2–D3 dossier pack.** Initial observed uncertainty/comparison tables may support the decision; full cards and narrative review follow it. D5–D6 depend on the accepted method decision; they are not authorized by a dossier being generated successfully.
 
 ## D0–D1: inputs, access and cohort
 
@@ -132,7 +132,7 @@ Once D4 permits a provisional ordering, review at least three plausible alternat
 
 ## D4: bounded rating-method decision
 
-Complete this decision after the first validated aggregate tables and before any final ordering or reserved outcome access. It runs alongside dossier interpretation; it is not another open-ended model workstream.
+Complete this decision immediately after the first validated aggregate tables, **before rendering or polishing the full dossier pack**, final ordering or reserved outcome access. The user confirmed this checkpoint on 14 November 2026. It is not another open-ended model workstream.
 
 Prepare one decision note comparing these two paths against the actual evidence:
 
@@ -201,8 +201,8 @@ Use a small anonymous fixture first, then one complete development execution and
 ## Milestones and next handoff
 
 1. **Next implementation milestone:** D0–D1 contract, safe loader and reconciled development ledger. Update `progress.md`; commit/push the coherent change.
-2. **Next evidence milestone:** D2–D3 complete dossier pack, uncertainty, cases and selector review ledger. Publish aggregate findings in progress; detailed outputs remain private.
-3. **Next decision milestone:** D4 accepted rating specification, then D5 final-window evidence and checks.
+2. **Immediate decision milestone after validated tables:** D4 concrete rating recommendation and accepted specification before full dossier rendering/polishing.
+3. **Following evidence milestone:** D2–D3 complete dossier pack, uncertainty, cases and selector review ledger, then D5 final-window evidence and checks. Publish aggregate findings in progress; detailed outputs remain private.
 4. **Final milestone:** D6 two defensible ordered lists and the matching methodology, ready for the user's submission review.
 
 The next task is **D0–D1**, not another model fit. This planning milestone is complete when this document and the handoff distinguish the completed review, proposed dossier work and unresolved rating decision. The project is complete only when both Round 1 deliverables are ready.

@@ -1,0 +1,38 @@
+{
+  "evidence_id": "observed_development_evidence_v1",
+  "status": "frozen_before_named_development_performance_tables",
+  "window": "development",
+  "years": [2023, 2024, 2025],
+  "reference_date": "2025-12-31",
+  "project_cutoff_inclusive": "2026-11-01",
+  "method_config": "configs/supported_method_v1.json",
+  "recency_half_life_days": 730,
+  "role_denominators": {
+    "batting": "nonwide_striker_opportunities_including_noballs",
+    "bowling": "all_delivery_attempts"
+  },
+  "metrics": {
+    "batting": {"runs": "batter_runs", "wickets": "bowler_attributable_striker_dismissals"},
+    "bowling": {"runs": "batter_runs_plus_wides_plus_noballs", "wickets": "bowler_credited_wickets"}
+  },
+  "rate_multiplier": 100,
+  "supported_context_keys": ["family", "year", "innings", "phase", "wicket_band"],
+  "missing_comparisons": "null_never_zero",
+  "bootstrap": {"unit": "whole_match", "replicates": 1000, "seed": 1729,
+    "strata": ["family", "year"], "interval_quantiles": [0.1, 0.9], "minimum_finite_fraction": 0.95},
+  "case_display": {"batting_minimum_pressure_opportunities": 10,
+    "bowling_minimum_pressure_attempts": 6,
+    "cases": ["maximum_run_rate", "minimum_run_rate", "maximum_wicket_rate", "minimum_wicket_rate", "nearest_weighted_median_run_rate"],
+    "ties": ["pressure_opportunities_descending", "match_date_ascending", "match_id_ascending"]},
+  "expected": {"matches": 402, "events": 95945,
+    "batting_opportunities": 92259, "bowling_opportunities": 95945,
+    "batting_pressure_opportunities": 32329, "bowling_pressure_opportunities": 33920,
+    "batting_level_eligible": 73, "bowling_level_eligible": 122,
+    "batting_level_coverage_ready": 62, "bowling_level_coverage_ready": 90,
+    "batting_blend_coverage_ready": 6, "bowling_blend_coverage_ready": 12},
+  "decision_checkpoint": "validated_initial_tables_then_rating_decision_before_full_dossier_rendering",
+  "model_fits_permitted": false,
+  "composite_ratings_permitted": false,
+  "reserved_outcomes_permitted": false,
+  "full_dossier_rendering_permitted": false
+}
