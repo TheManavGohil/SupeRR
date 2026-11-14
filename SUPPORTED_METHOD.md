@@ -6,6 +6,8 @@ Implementation status: the historical expectation baseline and [one contextual r
 
 Latest expectation candidate: [the retrospective reference decision](RETROSPECTIVE_REFERENCE.md) specifies two whole-match partitions and contemporary peers, with an explicit internal budget amendment from 20 to 22 bundles. It is implemented and evaluated on development: peer support and loss benchmarks pass, but 68 separate-fold calibration alerts block promotion despite zero pooled alerts. Twenty bundles have now been used. For that candidate only, the new specification replaces the annual forecasting boundary below. Contribution, supported-change, eligibility and ranking rules here remain unchanged. No expectation candidate is approved for final scoring; 2026 outcomes remain reserved.
 
+Initial observed development evidence is now implemented and reconciled. None of its eight batting / fifteen bowling sample-eligible supported-change entries reaches 95% finite bootstrap draws; this is descriptive support evidence, not a residual-model validation. [The rating decision](RATING_METHOD_DECISION.md) recommends a substantive descriptive amendment after those first tables and before full dossier polishing. That proposal is not activated and does not supersede this specification until accepted. Automatic predictive experimentation is stopped.
+
 ## What the two components mean
 
 **Pressure level** measures a player's recency-weighted contribution against historical peer expectations on all verified pressure opportunities, including late overs. Peers in late overs can themselves be under pressure: estimating an expected outcome there does not require ordinary observations. This estimates performance relative to peers, not improvement caused by pressure.

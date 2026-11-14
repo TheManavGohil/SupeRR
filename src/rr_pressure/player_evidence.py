@@ -110,7 +110,7 @@ def role_ledger(data, cells, config):
         if age.lt(0).any():
             raise ValueError("Future role evidence")
         g["weight"] = np.exp2(-age / config["recency_half_life_days"])
-        g["boundary"] = g.batter_runs.isin([4, 6]).astype(int)
+        g["four_or_six_run_event"] = g.batter_runs.isin([4, 6]).astype(int)
         g["boundary_flag_disagrees"] = ((g.batter_runs.eq(4) != g.is_four) | (g.batter_runs.eq(6) != g.is_six)).astype(int)
         g["zero_runs"] = g.runs.eq(0).astype(int)
         g["wide_noball_runs"] = g.extras_wides + g.extras_noballs
@@ -133,7 +133,7 @@ def role_ledger(data, cells, config):
 def summarize(ledger, keys):
     g = ledger.groupby(keys, observed=True, dropna=False, sort=True)
     result = g.agg(opportunities=("event_id", "size"), matches=("match_id", "nunique"),
-        runs=("runs", "sum"), wickets=("wickets", "sum"), boundaries=("boundary", "sum"),
+        runs=("runs", "sum"), wickets=("wickets", "sum"), four_or_six_run_events=("four_or_six_run_event", "sum"),
         boundary_flag_disagreements=("boundary_flag_disagrees", "sum"),
         zero_run_opportunities=("zero_runs", "sum"), wide_noball_runs=("wide_noball_runs", "sum"),
         excluded_dismissal_events=("excluded_dismissal_event", "sum"),
@@ -251,6 +251,48 @@ def validate_tables(data, ledger, cohort, contexts, config):
     return counts
 
 
+def pressure_peer_support(ledger, method):
+    """Outcome-free feasibility of a proposed descriptive leave-player-out benchmark."""
+    rows = []
+    for key, g in ledger.loc[ledger.pressure_full].groupby(["role"] + CONTEXT, observed=True, sort=True):
+        for player, own in g.groupby("player_id", sort=True):
+            other = g.loc[g.player_id.ne(player)]
+            rows.append(dict(zip(["role"] + CONTEXT, key), player_id=player,
+                pressure_events=len(own), pressure_weight=own.weight.sum(),
+                other_player_events=len(other), other_player_matches=other.match_id.nunique()))
+    result = pd.DataFrame(rows)
+    result["peer_supported"] = (result.other_player_events.ge(method["peer_minimum_events_per_group"]) &
+        result.other_player_matches.ge(method["peer_minimum_matches_per_group"]))
+    return result
+
+
+def decision_summary(cohort, intervals, peer_support):
+    rows = []
+    for role, players in cohort.groupby("role", sort=True):
+        eligible = players.loc[players.level_sample_eligible]
+        ready = eligible.loc[eligible.coverage_ready]
+        change = intervals.loc[intervals.role.eq(role) & intervals.estimand.eq("supported_difference")].drop_duplicates("player_id")
+        pressure = intervals.loc[intervals.role.eq(role) & intervals.estimand.eq("pressure_rate")].drop_duplicates("player_id")
+        audit = peer_support.loc[peer_support.role.eq(role)].copy()
+        audit["supported_events"] = audit.pressure_events.where(audit.peer_supported, 0)
+        retention = audit.groupby("player_id").agg(total=("pressure_events", "sum"), supported=("supported_events", "sum"))
+        retention["fraction"] = retention.supported / retention.total
+        retention = retention.reindex(ready.player_id)
+        rows.append(dict(role=role, level_sample_eligible=len(eligible), level_and_coverage_ready=len(ready),
+            blend_and_coverage_ready=int(players.unqualified_shortlist_evidence_ready.sum()),
+            change_sample_eligible=int(players.change_sample_eligible.sum()),
+            change_interval_reliable=int(change.interval_reliable.sum()),
+            change_finite_fraction_min=float(change.finite_fraction.min()),
+            change_finite_fraction_median=float(change.finite_fraction.median()),
+            change_finite_fraction_max=float(change.finite_fraction.max()),
+            pressure_interval_reliable=int(pressure.interval_reliable.sum()),
+            median_supported_ordinary_comparison_fraction=float(eligible.supported_pressure_fraction.median()),
+            no_supported_ordinary_comparison=int(eligible.supported_pressure_events.eq(0).sum()),
+            pressure_peer_coverage_min=float(retention.fraction.min()),
+            pressure_peer_coverage_atleast_80_percent=int(retention.fraction.ge(.8).sum())))
+    return rows
+
+
 def build_player_evidence(root):
     start = time.monotonic()
     config_path = root / "configs/player_evidence_v1.json"
@@ -265,11 +307,16 @@ def build_player_evidence(root):
     counts = validate_tables(data, ledger, cohort, contexts, config)
     comparison, paired = supported_comparisons(contexts, cohort)
     intervals, matches, draws = uncertainty(ledger, cohort, config)
+    peer_support = pressure_peer_support(ledger, method)
+    decision = decision_summary(cohort, intervals, peer_support)
     out = root / "reports/player_evidence_development_2026-11-01"
     out.mkdir(parents=True, exist_ok=True)
     # Names are labels only; expose aliases instead of merging people by name.
     labels = ledger[KEY + ["player_name"]].drop_duplicates().sort_values(KEY + ["player_name"])
     labels.to_csv(out / "name_aliases.csv", index=False)
+    collisions = labels.groupby(["role", "player_name"]).player_id.nunique().rename("distinct_player_ids").reset_index()
+    labels.merge(collisions.loc[collisions.distinct_player_ids.gt(1)], on=["role", "player_name"], validate="many_to_one").to_csv(
+        out / "name_label_collisions.csv", index=False)
     labels = labels.groupby(KEY).agg(player_name=("player_name", "first"), name_alias_count=("player_name", "nunique")).reset_index()
     cohort = cohort.merge(labels, on=KEY, how="left", validate="one_to_one")
     cohort.to_csv(out / "cohort_register.csv", index=False)
@@ -281,6 +328,11 @@ def build_player_evidence(root):
     summarize(ledger, KEY + ["match_id", "match_date", "family", "year", "innings", "pressure_full"]).to_parquet(out / "player_match_ledger.parquet", index=False)
     ledger.to_parquet(out / "event_role_ledger.parquet", index=False)
     intervals.to_parquet(out / "observed_uncertainty.parquet", index=False)
+    peer_support.to_csv(out / "pressure_peer_support.csv", index=False)
+    save_json(out / "decision_evidence_summary.json", decision)
+    issues = data.loc[(data.batter_runs.eq(4) != data.is_four) | (data.batter_runs.eq(6) != data.is_six),
+        ["event_id", "match_id", "match_date", "batter_runs", "is_four", "is_six", "source_pointer"]]
+    issues.to_csv(out / "boundary_annotation_disagreements.csv", index=False)
     matches.to_csv(out / "bootstrap_matches.csv", index=False)
     np.save(out / "bootstrap_multiplicities.npy", draws, allow_pickle=False)
     summary = dict(counts, validated_initial_tables=True, decision_checkpoint_reached=True,
@@ -292,8 +344,10 @@ def build_player_evidence(root):
         "Development event counts, per-player exposure, pressure/support and recency sums reproduce the frozen preflight.",
         "Saved targets independently reproduce verified source attribution. Rates are per 100 analytical opportunities, not official economy or strike rate.",
         "Runs and wickets remain separate. Ordinary comparisons use original supported same-year cells; unavailable headline change stays missing.",
+        "Four/six-run events are not labelled verified boundaries. Supplied boundary-flag discrepancies and shared name labels have separate audit files; identities are not merged by name.",
         "Intervals use 1,000 shared whole-match draws, conditional on retained matches and fixed support; they do not cover missing data or contextual confounding.", "",
         "**Checkpoint reached: make the rating-method recommendation before rendering the full dossier pack.**", "",
+        "See `decision_evidence_summary.json` for anonymous cohort/uncertainty findings and `pressure_peer_support.csv` for outcome-free feasibility of a proposed peer benchmark. Feasibility does not validate ratings.", "",
         "No model fits, composite ratings, reserved outcome evaluation, dossier cards or rating amendment were created.", ""]))
     if gate_hashes != {str(p.relative_to(root)): sha256(p) for p in gates}:
         raise ValueError("Evidence generation changed an existing model gate")

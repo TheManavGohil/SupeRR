@@ -1,6 +1,6 @@
 # Player evidence dossiers: implementation plan
 
-Status: proposed implementation sequence, 14 November 2026. The reference-instability review is complete; dossier generation and the rating-method decision below have not been implemented. This plan changes the next work item, not the frozen scoring specification.
+Status: updated 14 November 2026. Initial development evidence tables and descriptive uncertainty are implemented, executed and reconciled. The checkpoint recommendation is in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md); its substantive amendment is not activated. Full dossier rendering and rating execution remain pending. The active scoring specification has not changed.
 
 ## Purpose and immediate decision
 
@@ -166,7 +166,7 @@ The final methodology must explain pressure (including its roughly 35% event sha
 
 ## Implementation layout and validation
 
-Proposed code: `src/rr_pressure/player_evidence.py` for development-only loading and aggregations; `player_evidence_report.py` for cards and review tables; `tests/test_player_evidence.py` for the analytical and access contracts. Add one `build-player-evidence` CLI command with development as its only permitted window until D4 is resolved. Reuse existing support, weights, targets and bootstrap utilities where their contracts match; do not refactor unrelated modules.
+Implemented code: `src/rr_pressure/player_evidence.py` for development-only loading, aggregates and initial descriptive uncertainty; `tests/test_player_evidence.py` for the analytical and access contracts; `build-player-evidence` CLI with development as its only permitted window. The full card renderer `player_evidence_report.py` remains proposed and unimplemented. Reuse existing support, weights, targets and bootstrap utilities where their contracts match; do not refactor unrelated modules.
 
 Proposed private output directory: `reports/player_evidence_development_2026-11-01/` (the directory names the project cutoff; the manifest and every card state that the evidence window is 2023–2025):
 
@@ -200,9 +200,9 @@ Use a small anonymous fixture first, then one complete development execution and
 
 ## Milestones and next handoff
 
-1. **Next implementation milestone:** D0–D1 contract, safe loader and reconciled development ledger. Update `progress.md`; commit/push the coherent change.
-2. **Immediate decision milestone after validated tables:** D4 concrete rating recommendation and accepted specification before full dossier rendering/polishing.
+1. **Completed initial evidence milestone:** D0–D1 contract, safe loader, reconciled development ledger and initial uncertainty/comparison tables. Contract commit: `1dfb4e7`.
+2. **Current decision milestone after validated tables:** D4 concrete recommendation is written; accept/reject its explicit amendment before rating execution or full dossier rendering/polishing.
 3. **Following evidence milestone:** D2–D3 complete dossier pack, uncertainty, cases and selector review ledger, then D5 final-window evidence and checks. Publish aggregate findings in progress; detailed outputs remain private.
 4. **Final milestone:** D6 two defensible ordered lists and the matching methodology, ready for the user's submission review.
 
-The next task is **D0–D1**, not another model fit. This planning milestone is complete when this document and the handoff distinguish the completed review, proposed dossier work and unresolved rating decision. The project is complete only when both Round 1 deliverables are ready.
+The next task is resolving the explicit amendment in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md), followed by its fixed development implementation if accepted. Do not start the full dossier renderer, another predictive experiment or reserved evaluation while that decision remains pending. The project is complete only when both Round 1 deliverables are ready.

@@ -11,7 +11,7 @@ import pandas as pd
 
 from rr_pressure.data import sha256
 from rr_pressure.player_evidence import (KEY, CONTEXT, load_evidence, rate_draws, role_ledger,
-    summarize, supported_comparisons, uncertainty, validate_contract)
+    summarize, supported_comparisons, uncertainty, validate_contract, pressure_peer_support)
 from rr_pressure.supported_method import delivery_tables
 
 
@@ -145,6 +145,27 @@ class PlayerEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "duplicate"):
             role_ledger(d, pd.concat([cells, cells]), CONFIG)
 
+    def test_peer_support_excludes_every_observation_of_the_evaluated_player(self):
+        d, cells = fixture()
+        ledger = role_ledger(d, cells, CONFIG)
+        # Multiple actors on different matches, with an asymmetric own workload.
+        first = ledger.loc[ledger.role.eq("batting") & ledger.pressure_full].copy()
+        other = first.iloc[:1].assign(player_id="peer", event_id="peer-event", match_id="peer-match")
+        audit = pressure_peer_support(pd.concat([first, other]), METHOD).set_index("player_id")
+        self.assertEqual(audit.loc["bat", "other_player_events"], 1)
+        self.assertEqual(audit.loc["bat", "other_player_matches"], 1)
+        self.assertEqual(audit.loc["peer", "other_player_events"], 2)
+        self.assertEqual(audit.loc["peer", "other_player_matches"], 2)
+        self.assertFalse(audit.peer_supported.any())
+
+    def test_four_run_event_is_not_automatically_a_verified_boundary(self):
+        d, cells = fixture()
+        d.loc[0, "is_four"] = False
+        table = summarize(role_ledger(d, cells, CONFIG), KEY + ["pressure_full"])
+        pressure = table.loc[table.pressure_full]
+        self.assertTrue(pressure.four_or_six_run_events.eq(1).all())
+        self.assertTrue(pressure.boundary_flag_disagreements.eq(1).all())
+
 
 TARGET_COLUMNS = ["bat_runs", "striker_wicket", "bowl_runs", "bowler_wicket"]
 
@@ -177,6 +198,8 @@ class PlayerEvidenceArtifactTests(unittest.TestCase):
         manifest = json.loads((out / "manifest.json").read_text())
         for name, digest in manifest["output_sha256"].items():
             self.assertEqual(sha256(out / name), digest, name)
+        for name, digest in manifest["code_sha256"].items():
+            self.assertEqual(sha256(ROOT / name), digest, name)
         self.assertEqual(manifest["config_sha256"], sha256(ROOT / "configs/player_evidence_v1.json"))
         self.assertFalse(manifest["models_fitted"] or manifest["reserved_outcomes_read"] or
             manifest["player_composite_scores_created"] or manifest["dossier_cards_created"])
@@ -186,6 +209,11 @@ class PlayerEvidenceArtifactTests(unittest.TestCase):
         self.assertTrue(validation["validated_initial_tables"] and validation["decision_checkpoint_reached"])
         for name, value in CONFIG["expected"].items():
             self.assertEqual(validation[name], value)
+        decision = json.loads((out / "decision_evidence_summary.json").read_text())
+        for row in decision:
+            self.assertEqual(row["change_interval_reliable"], 0)
+            self.assertEqual(row["pressure_interval_reliable"], row["level_sample_eligible"])
+            self.assertEqual(row["pressure_peer_coverage_atleast_80_percent"], row["level_and_coverage_ready"])
         matches = pd.read_csv(out / "bootstrap_matches.csv", dtype={"match_id": str})
         draws = np.load(out / "bootstrap_multiplicities.npy", allow_pickle=False)
         self.assertEqual(draws.shape, (1000, 402))
