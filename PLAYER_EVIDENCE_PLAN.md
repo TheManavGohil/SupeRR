@@ -1,6 +1,6 @@
 # Player evidence dossiers: implementation plan
 
-Status: updated 14 November 2026. Initial development evidence and approved v2 development ratings are implemented, executed and validated. The user approved [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md); [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) is active. Development scales are frozen; 62 batting / 90 bowling entries pass primary gates. Full dossier rendering, player-level counterexample review, reserved/final-window execution and final lists remain pending.
+Status: updated 14 November 2026. D0–D5 are implemented, executed and validated: 195 development dossiers, priority counterexample review before reserved access, frozen final evaluation, 243 final dossiers and two analytical top-ten lists. The active [descriptive method](DESCRIPTIVE_METHOD_V2.md), scales and ordering remain unchanged. Combined-window primary gates pass for 75 batting / 104 bowling entries. A matching private methodology and final selection review exist; D6 still requires exact dropdown mapping and submission packaging. See [progress.md](progress.md) for current results and artifact links; the package contracts below retain their original development scope.
 
 ## Purpose and immediate decision
 
@@ -168,7 +168,7 @@ The final methodology must explain pressure (including its roughly 35% event sha
 
 ## Implementation layout and validation
 
-Implemented code: `src/rr_pressure/player_evidence.py` for development-only loading, aggregates and initial descriptive uncertainty; `tests/test_player_evidence.py` for the analytical and access contracts; `build-player-evidence` CLI with development as its only permitted window. The full card renderer `player_evidence_report.py` remains proposed and unimplemented. Reuse existing support, weights, targets and bootstrap utilities where their contracts match; do not refactor unrelated modules.
+Implemented code: `src/rr_pressure/player_evidence.py` for development-only loading, aggregates and initial descriptive uncertainty; `tests/test_player_evidence.py` for the analytical and access contracts; `build-player-evidence` CLI with development as its only permitted window. The full renderer is implemented as `src/rr_pressure/player_dossiers.py`; separate frozen transfer is implemented as `src/rr_pressure/final_window.py`. Their tests cover cases, attribution, access, provenance and independent score reproduction. Reuse existing support, weights, targets and bootstrap utilities where their contracts match; do not refactor unrelated modules.
 
 Proposed private output directory: `reports/player_evidence_development_2026-11-01/` (the directory names the project cutoff; the manifest and every card state that the evidence window is 2023–2025):
 
@@ -204,7 +204,7 @@ Use a small anonymous fixture first, then one complete development execution and
 
 1. **Completed initial evidence milestone:** D0–D1 contract, safe loader, reconciled development ledger and initial uncertainty/comparison tables. Contract commit: `1dfb4e7`.
 2. **Completed method milestone after validated tables:** D4 recommendation was approved, committed as `54be28b`, executed once on development and validated. Primary gates pass for 62 batting / 90 bowling entries; numerical scales are frozen.
-3. **Following evidence milestone:** D2–D3 complete dossier pack, uncertainty, cases and selector review ledger, then D5 final-window evidence and checks. Publish aggregate findings in progress; detailed outputs remain private.
-4. **Final milestone:** D6 two defensible ordered lists and the matching methodology, ready for the user's submission review.
+3. **Completed evidence/final-evaluation milestone:** D2–D3 produced 195 development cards and review of 27 priority entries. D5 protocol/code were frozen at `5ca8bea` before reserved access, then executed unchanged. Final evidence includes 243 cards, two ordered top tens, temporal review and matching methodology. Detailed outputs remain private.
+4. **Remaining packaging milestone:** D6 exact dropdown mapping and upload-format checks, with ordered lists and matching methodology ready for the user's submission review. No submission is authorized by this work.
 
-The next task is development player evidence review and dossier generation using the accepted ratings, especially boundary candidates, specialists, family dependence and adverse cases. Freeze the separate final-window execution protocol before reserved access. Do not repeat the approval request or start another predictive experiment. The project is complete only when both Round 1 deliverables are ready.
+The next task is final submission packaging and name mapping. Retain the analytical ordering and its qualifications: only seven selected entries satisfy standalone 2026 rating requirements, two have no retained 2026 pressure observations, and no supported-change interval is reliable. Do not repeat the approval request, tune the method after reserved results, or start another predictive experiment. The project is complete only when both Round 1 deliverables are ready.

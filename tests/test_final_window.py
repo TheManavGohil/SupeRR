@@ -108,6 +108,48 @@ class FinalArtifactTests(unittest.TestCase):
             self.assertEqual(group.selection_ready.nunique(), 1)
         gate = json.loads((out / "evaluation_gate.json").read_text())
         self.assertFalse(gate["submission_ready"] or gate["dropdown_mapping_verified"])
+        if (out / "METHODOLOGY.md").exists():
+            text = (out / "METHODOLOGY.md").read_text().split("## Pressure and trustworthy state")[0]
+            positions = []
+            for row in top.sort_values(["role", "rank"]).itertuples():
+                token = f"| {int(row.rank)} | {row.player_id} | {row.player_name} |"
+                self.assertIn(token, text)
+                positions.append(text.index(token))
+            self.assertEqual(positions, sorted(positions))
+
+    def test_final_points_use_frozen_development_scales_and_independent_other_players(self):
+        out = ROOT / "reports/final_window_evaluation_2026-11-01"
+        if not (out / "manifest.json").exists():
+            self.skipTest("Frozen final evaluation has not run")
+        config = json.loads((ROOT / "configs/descriptive_rating_v2.json").read_text())
+        scales = json.loads((ROOT / "reports/descriptive_rating_development_2026-11-01/frozen_scales.json").read_text())["outcome_scales"]
+        context = ["family", "year", "innings", "phase", "wicket_band"]
+        for label in ["reserved_2026", "final_2023_2026"]:
+            ledger = pd.read_parquet(out / label / "event_role_ledger.parquet", filters=[("pressure_full", "==", True)])
+            results = pd.read_parquet(out / label / "ratings.parquet")
+            results = results.loc[results.variant.eq("default_60_40")]
+            base = json.loads((ROOT / "configs/supported_method_v1.json").read_text())
+            from rr_pressure.player_evidence import pressure_peer_support
+            audit = pressure_peer_support(ledger, base)
+            expected = []
+            for row in results.itertuples():
+                population = ledger.loc[ledger.role.eq(row.role)]
+                cells = audit.loc[audit.role.eq(row.role) & audit.player_id.eq(row.player_id) & audit.peer_supported, context]
+                own = population.loc[population.player_id.eq(row.player_id)].merge(cells, on=context, validate="many_to_one")
+                mass = own.weight.sum()
+                if not mass:
+                    expected.append(np.nan)
+                    continue
+                other = population.loc[population.player_id.ne(row.player_id)].groupby(context)[["weight", "weighted_runs", "weighted_wickets"]].sum()
+                actor = own.groupby(context)[["weight", "weighted_runs", "weighted_wickets"]].sum()
+                other = other.reindex(actor.index)
+                raw = 0.
+                for metric, weight in [("runs", .6), ("wickets", .4)]:
+                    delta = actor["weighted_" + metric] / actor.weight - other["weighted_" + metric] / other.weight
+                    raw += weight * config["orientation"][row.role][metric] * ((actor.weight / mass) * delta).sum() / scales[row.role][metric]
+                neff = mass ** 2 / own.weight_squared.sum()
+                expected.append(raw * neff / (neff + config["role_pseudo_events"][row.role]))
+            np.testing.assert_allclose(results.point.to_numpy(), expected, atol=1e-12, rtol=1e-11, equal_nan=True)
 
 
 if __name__ == "__main__":

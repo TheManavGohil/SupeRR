@@ -2,7 +2,7 @@
 
 The user approved the explicit primary-ordering amendment on 14 November 2026 with “yes, go ahead!” after reviewing the initial evidence and rating recommendation. [The active configuration](configs/descriptive_rating_v2.json) activates development execution of the exact formula in [RATING_METHOD_DECISION.md](RATING_METHOD_DECISION.md). The disabled proposal remains a historical record. Approval is not evidence that the implementation or development gate has passed.
 
-Development execution is now completed under implementation/specification commit `54be28b`: 62 batting / 90 bowling entries pass the primary sample, coverage and finite-draw gates. Numerical scales are frozen. All development point scores reproduce an independent grouped calculation. This is descriptive feasibility and implementation validation; no predictive model is promoted, 2026 outcomes remain unevaluated, and final selections are unfinished. See [progress.md](progress.md) for sensitivity and remaining evidence work.
+Development execution completed under implementation/specification commit `54be28b`: 62 batting / 90 bowling entries pass the primary gates. After role/counterexample review, the separate final protocol was frozen under `5ca8bea` before reserved performance access. Reserved 2026 and the combined final window are now evaluated with unchanged development scales and method: 75 batting / 104 bowling entries qualify in the combined window. All development, reserved and final point scores reproduce independent grouped calculations. Two analytical top tens, 243 final dossiers and a matching methodology exist privately; dropdown mapping and submission packaging remain outstanding. No predictive model is promoted. See [progress.md](progress.md).
 
 This amendment supersedes the residual-based primary ordering in [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md). Its opportunity definitions, original exposure/source-coverage thresholds, supported ordinary comparison rules, 730-day recency, pressure labels and 1,000 shared whole-match bootstrap remain in force except for the explicit changes below. All earlier prediction gates remain failed historical results; no predictive model is promoted.
 
@@ -19,13 +19,13 @@ The full algebra, scaling units, interpretation, bootstrap invalidation and fina
 
 ## Execution boundary
 
-The current authorization activates development implementation and execution on verified 2023–2025 evidence only. Freeze numerical development scales before score output. Preserve all raw sources, exclusions and failed model gates. No predictive fits or parameter/partition search are included.
+The original development authorization activated implementation and execution on verified 2023–2025 evidence only, with numerical scales frozen before score output. Preserve all raw sources, exclusions and failed model gates. No predictive fits or parameter/partition search are included.
 
 Before reserved evaluation, validate development feasibility (at least ten qualifying players per role), finite-draw reliability, same-cohort outcome-weight sensitivities, family-separated evidence, match/season influence and numerical/attribution contracts. Keep the declared ordering even if a sensitivity is more attractive. If a gate fails, report it without automatically changing the method.
 
 The final match-date cutoff remains 1 November 2026 inclusive; 2022 contributes no scoring evidence. Reserved outcomes remain disabled for this development implementation. A separate final-window execution stage must consume the frozen scales and unchanged accepted method. Aggregate 2026 EDA was previously seen; it is not pristine unseen data.
 
-The user subsequently requested role-based dossiers/counterexample review followed by frozen final-window evaluation. Development review is complete. [FINAL_WINDOW_PROTOCOL.md](FINAL_WINDOW_PROTOCOL.md) and [its configuration](configs/final_window_v1.json) now define that separate authorized stage, with Git/dependency checks before the first reserved outcome read. The original development command/config remain unchanged and cannot independently access reserved outcomes.
+The user subsequently requested role-based dossiers/counterexample review followed by frozen final-window evaluation. Both are complete. [FINAL_WINDOW_PROTOCOL.md](FINAL_WINDOW_PROTOCOL.md) and [its configuration](configs/final_window_v1.json) were committed before the first reserved outcome read; Git/dependency checks passed before and after execution. The original development command/config remain unchanged and cannot independently access reserved outcomes. Only seven of the final twenty meet the full standalone 2026 rating requirements; two have no retained 2026 pressure observations. No reliable supported-change intervals are available in either window. These limitations qualify interpretation without changing the accepted ordering.
 
 ## Interpretation and remaining evidence
 
