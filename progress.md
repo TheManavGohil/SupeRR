@@ -1,7 +1,7 @@
 # Project progress and agent handoff
 
-Last updated: 14 November 2026 (IST).
-Current stage: analytical dossiers/final evaluation are complete; Round 1 submission format is now verified against official metadata/client and the user's live-form screenshots. Twenty mandatory rank fields share one catalogue; report upload is mandatory PDF/PPTX, maximum 52,428,800 bytes; dashboard link is optional. Exact-name evidence is partial (one of twenty selected labels visible), with nineteen pending authenticated option evidence. Final file rendering/checking and participant review remain. No scores, thresholds, exclusions or submissions were changed.
+Last updated: 17 November 2026 (IST).
+Current stage: the user requested and authorized implementation of the [Next.js dashboard plan](DASHBOARD_PLAN.md), promoting the presentation app from its previously deferred status. Read-only export is implemented/executed: twenty exact selections and the saved alternative union (69 player-role entries), with native scores, evidence and limitations. Frontend pages are implemented locally; production build, browser/visual checks and PDF rendering are in progress. Portraits and nineteen authenticated dropdown labels remain pending; placeholders allow implementation to continue. Scoring inputs/method/ranks are unchanged; user will deploy to Vercel.
 
 ## Read this first
 
@@ -14,7 +14,7 @@ The downloaded Round 1 brief asks for a system that compares batting and bowling
 1. Two ordered top-ten lists, one for batters and one for bowlers, with unique players within each list and exact Unstop dropdown selections.
 2. A methodology document explaining pressure, ratings, fair comparisons, evidence for the selections, consistency and limitations. Its rankings must match the dropdown selections.
 
-The reproducible pipeline supports those deliverables; it is not a separate required submission component. A website, auction simulator, advanced ML model and explorer are not on the critical path. Qualification is not established by implementation progress.
+The reproducible pipeline supports those deliverables; it is not a separate required submission component. The user has now explicitly requested the dashboard as the principal interactive presentation alongside the required report upload. An auction simulator, advanced ML search and general explorer remain outside scope. Qualification is not established by implementation progress.
 
 **Present status:** historical, contextual and retrospective predictive models remain failed calibration results. The approved descriptive v2 replacement has completed development, reserved 2026 and combined-window evaluation. Two analytical top-ten lists, matching methodology and final review exist, with 75 batting / 104 bowling entries passing combined-window primary gates. Upload-format rules are verified in [SUBMISSION_FORMAT.md](SUBMISSION_FORMAT.md). Submission readiness remains false until exact dropdown mapping, final upload-file checks and participant review are complete; nothing has been submitted.
 
@@ -48,6 +48,7 @@ The approved descriptive ordering compares observed other-player outcomes and re
 | Final-window protocol — frozen and executed | [Protocol](FINAL_WINDOW_PROTOCOL.md), [configuration](configs/final_window_v1.json) and code committed as `5ca8bea` before access; dependency/source hashes pass before and after execution. Reserved evaluation precedes combined evaluation. | Prevents selection of method/scales from 2026 outcomes. |
 | Final evidence and selection review — completed analytically | 243 final cards (93 batting / 150 bowling), source-traceable cases, repeatability, alternatives, temporal evidence, two ordered top tens and matching methodology. Primary gates retain 75 / 104 entries. | Supplies both analytical deliverables; exact dropdown mapping and submission packaging remain. |
 | Submission-format verification — completed; names partial | Official Round 1 schema plus user's authenticated form confirm twenty rank fields and mandatory PDF/PPTX report, 50 MB client limit, optional dashboard/journey links. One selected label verified; nineteen pending. Current brief unchanged; revised extras agree with all final verified extra totals. | Resolves actual upload requirements without claiming unobserved option labels or changing frozen evidence. |
+| Dashboard data contract — implemented and executed | [Read-only exporter](scripts/export_dashboard.py) checks frozen hashes and emits curated data for twenty selections plus 49 existing alternative role entries. Independent Python checks reproduce IDs/ranks/values and reserved-year status. | Supplies reproducible presentation content without rerating players or publishing raw delivery data. |
 
 Latest implementation verification: **88 tests passed** after contextual revision execution, covering pre-ball target validity, forbidden predictors, training-only scaling, numerical convergence, unchanged validation gates, cohort agreement and provenance, in addition to earlier checks. The first contextual run took approximately 35 seconds locally. Inspected the comparison figure. A repeat execution of the identical frozen candidate verifies the final provenance checks; it is not a new model setting.
 
@@ -159,7 +160,7 @@ The brief does not require ML complexity. Automatic model experimentation is sto
 - Use 1,000 whole-match resamples. Historical v1 used 15 predictive fold/setting bundles, contextual v2 three and retrospective development two: **20 used of amended maximum 22**. The two predictive reserved bundles remain unused because those model gates failed. Do not repurpose them for another automatic search. V2 descriptive aggregate recomputation adds no predictive fits; its uncertainty is conditional on retained data, frozen scales, support and eligibility, with player and peer means recomputed in each draw. Keep prior fixed-model uncertainty limitations for the historical prediction reports.
 - Source data, detailed reports, player tables and review ledgers stay private and Git-ignored. Public commits contain code, configurations and documentation.
 - Organiser clarification is drafted only; sending is not authorized.
-- Explorer T10 remains deferred. Avoid adding a website or auction simulator to this round's deliverables.
+- The user explicitly requested the Next.js dashboard and authorized its implementation on 17 November. Follow [DASHBOARD_PLAN.md](DASHBOARD_PLAN.md); the user intends to deploy on Vercel. Curated submission findings may be published for that dashboard; raw/revised data packs, full event/player-match ledgers and private reports remain excluded. A general explorer, auction simulator and new model experimentation remain deferred.
 - **Commit and push when appropriate for a coherent milestone. Do not force three commits per task.** Existing authorization to push to the project repository remains in effect.
 - Shell commands use the `rtk` prefix under the workspace instructions.
 

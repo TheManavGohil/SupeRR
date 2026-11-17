@@ -1,0 +1,40 @@
+{
+  "id": "pressure-index-2026-11-01-v1",
+  "cutoff": "2026-11-01",
+  "firstYear": 2023,
+  "matches": 511,
+  "events": 121891,
+  "pressureEvents": 43029,
+  "pressureShare": 35.3012117383564,
+  "battingEligible": 75,
+  "bowlingEligible": 104,
+  "dossiers": 243,
+  "bootstrapDraws": 1000,
+  "reservedMatches": 109,
+  "reservedBattingEligible": 6,
+  "reservedBowlingEligible": 28,
+  "selectedRecentAdequate": 7,
+  "selectedRecentAbsent": 2,
+  "sourceMatches": 883,
+  "verifiedMatches": 651,
+  "developmentMatches": 402,
+  "developmentBattingEligible": 62,
+  "developmentBowlingEligible": 90,
+  "weightOverlap": {
+    "batting": [
+      10,
+      8
+    ],
+    "bowling": [
+      9,
+      9
+    ]
+  },
+  "method": "descriptive_peer_pressure_v2",
+  "protocolCommit": "5ca8bea",
+  "sourceHashes": {
+    "topTens": "2a2c5b6e24e3dc028bde23c73adaff4185379014e4ff9ab8e931b319700223a3",
+    "method": "dea1c3fa14bbde370b4343665e1f0fe402c4338c5ad403aeb5d2f1aa4e69bc10",
+    "finalManifest": "9ad47d892d8ef2390cb0b9baf877be432d0e534c04be7c7d0a8169535a4d0e7a"
+  }
+}

@@ -1,0 +1,12 @@
+6af3166e7b922_data_pack/
+data/
+reports/
+artifacts/
+.venv/
+.aws/
+.codex/
+.agents/
+.git/
+**/node_modules/
+**/test-results/
+**/playwright-report/
