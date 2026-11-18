@@ -112,6 +112,12 @@ export function checkPublication({ built = false, phase = "final" } = {}) {
       );
   }
   for (const f of walk(path.join(root, "public"))) {
+    if (f.endsWith(".pdf"))
+      assert.equal(
+        path.relative(root, f),
+        "public/reports/pressure-index-report.pdf",
+        "Unverified PDF in public assets",
+      );
     assert(
       !/\.(csv|parquet|zip|sql|env|pptx)$/i.test(f),
       `Private/retired public file: ${f}`,

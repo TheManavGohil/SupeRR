@@ -14,11 +14,12 @@
     "check:content": "node scripts/check-content.mjs",
     "test": "node --experimental-strip-types scripts/run-content-tests.mjs",
     "test:browser": "playwright test",
-    "report:pdf": "node scripts/render-report.mjs",
+    "report:pdf": "node --experimental-strip-types scripts/render-report.mjs",
     "format": "prettier --write app components lib tests scripts content/*.ts *.ts *.mjs *.md",
     "format:check": "prettier --check app components lib tests scripts content/*.ts *.ts *.mjs *.md",
     "check:copy": "node --experimental-strip-types scripts/check-copy.mjs",
-    "check:built": "node --experimental-strip-types scripts/check-built-content.mjs"
+    "check:built": "node --experimental-strip-types scripts/check-built-content.mjs",
+    "report:withdraw": "node scripts/report-state.mjs --withdraw"
   },
   "dependencies": {
     "lucide-react": "1.74.0",

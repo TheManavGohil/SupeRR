@@ -1,1 +1,7 @@
-{"available":false}
+{
+  "available": true,
+  "file": "pressure-index-report.pdf",
+  "bytes": 240277,
+  "sha256": "e1483515d451410b675c1c1a63f024ae1d49ccad1f4c86258fe7357070c81728",
+  "sourceFingerprint": "e84f0ff99725e0c47135e05dcb9d63d0ace894be31170e6013186e7aed3df0bd"
+}

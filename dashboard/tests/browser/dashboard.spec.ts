@@ -1,10 +1,37 @@
 import { copy } from "../../content/copy";
 import site from "../../content/generated/site.json" with { type: "json" };
+import report from "../../content/generated/report.json" with { type: "json" };
+import { createHash } from "node:crypto";
 import { validateDocument } from "../../scripts/check-built-content.mjs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs";
 import path from "node:path";
+
+test("report download follows the verified manifest and retired files stay absent", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/report");
+  const link = page.getByRole("link", { name: "Download PDF", exact: true });
+  await expect(link).toHaveCount(report.available ? 1 : 0);
+  const pdf = await request.get("/reports/pressure-index-report.pdf");
+  expect(pdf.status()).toBe(report.available ? 200 : 404);
+  if (report.available) {
+    expect(pdf.headers()["content-type"]).toContain("application/pdf");
+    expect(
+      createHash("sha256")
+        .update(await pdf.body())
+        .digest("hex"),
+    ).toBe(report.sha256);
+  }
+  for (const route of [
+    "/reports/pressure-index-submission.pptx",
+    "/reports/pressure-index-slides.pdf",
+    "/player_image/Tim.png",
+  ])
+    expect((await request.get(route)).status()).toBe(404);
+});
 
 test("scope, canonical links and JSON-backed values remain valid after interaction", async ({
   page,

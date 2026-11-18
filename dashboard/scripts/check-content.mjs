@@ -1,3 +1,4 @@
+import { checkReport } from "./report-state.mjs";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
@@ -39,3 +40,5 @@ assert.equal(fs.existsSync(pdf), report.available);
 console.log(
   "Content checks passed: frozen top tens, strict aggregate contract and complete recent-status counts.",
 );
+
+checkReport();

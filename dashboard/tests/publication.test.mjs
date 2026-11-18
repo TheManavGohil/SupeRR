@@ -10,6 +10,26 @@ import { duplicatedCopy, checkCopy } from "../scripts/check-copy.mjs";
 import { validateDocument } from "../scripts/check-built-content.mjs";
 import { publicText } from "../lib/public-numbers.ts";
 import { copy } from "../content/copy.ts";
+import { validateReportState, sha256 } from "../scripts/report-state.mjs";
+
+test("report gate rejects stale sources and changed PDF bytes", () => {
+  const bytes = Buffer.from("%PDF-verified-test-fixture");
+  const manifest = {
+    available: true,
+    bytes: bytes.length,
+    sha256: sha256(bytes),
+    sourceFingerprint: "current",
+  };
+  assert.doesNotThrow(() => validateReportState(manifest, bytes, "current"));
+  assert.throws(() => validateReportState(manifest, bytes, "stale"));
+  assert.throws(() =>
+    validateReportState(
+      manifest,
+      Buffer.concat([bytes, Buffer.from("match_id")]),
+      "current",
+    ),
+  );
+});
 test("public contract rejects unknown and nested match records", () => {
   const p = structuredClone(read("content/generated/players.json")[0]);
   assert.throws(() => inspectPlayer({ ...p, cases: [] }));
