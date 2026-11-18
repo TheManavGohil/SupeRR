@@ -50,11 +50,8 @@ export default function Home() {
         </div>
         <div className="hero-art">
           <span className="hero-art-label">PERFORMANCE / UNDER PRESSURE</span>
-          <span className="hero-big-type" aria-hidden="true">
-            01
-          </span>
           <div className="hero-portrait">
-            <Portrait player={batters[0]} hero />
+            <Portrait player={batters[0]} variant="hero" />
           </div>
           <Link href={playerUrl(batters[0])} className="hero-player-caption">
             <div>
@@ -68,11 +65,6 @@ export default function Home() {
             <span>CONSERVATIVE SCORE</span>
             <strong>{score(batters[0].rating.low)}</strong>
             <small>10th-percentile selection statistic</small>
-          </div>
-          <div className="hero-index" aria-hidden="true">
-            EVIDENCE
-            <br />
-            OVER INSTINCT.
           </div>
         </div>
       </section>

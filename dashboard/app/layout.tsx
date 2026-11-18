@@ -65,6 +65,10 @@ export default function RootLayout({
               <br />
               Retrospective evidence · 1 November 2026 cutoff.
             </p>
+            <p className="portrait-disclosure">
+              AI-generated RR concept portraits. Team association is
+              illustrative.
+            </p>
           </div>
           <div>
             <Link href="/methodology">

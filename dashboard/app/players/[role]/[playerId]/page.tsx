@@ -145,7 +145,7 @@ export default async function PlayerPage({
           </div>
         </div>
         <div className="profile-portrait">
-          <Portrait player={p} />
+          <Portrait player={p} variant="profile" />
         </div>
       </section>
       <div className="profile-summary">

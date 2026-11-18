@@ -338,16 +338,20 @@ svg {
 .hero-art {
   position: relative;
   min-height: 590px;
-  background: var(--panel);
-  border-left: 1px solid var(--line);
+  background: var(--canvas);
+  border: 1px solid var(--line);
+  overflow: hidden;
 }
 .hero-art-label {
   position: absolute;
-  right: 0;
-  top: 12px;
+  right: 16px;
+  top: 16px;
   letter-spacing: 0.16em;
   font-size: 8px;
   color: var(--muted);
+  z-index: 2;
+  background: var(--canvas);
+  padding: 4px 7px;
 }
 .hero-big-type {
   position: absolute;
@@ -362,16 +366,16 @@ svg {
 }
 .hero-portrait {
   position: absolute;
-  inset: 54px -30px 0 15px;
+  inset: 0;
 }
 .hero-player-caption {
   position: absolute;
-  bottom: 40px;
-  left: 30px;
+  bottom: 0;
+  left: 0;
   right: 0;
-  background: #fffffff5;
+  background: var(--canvas);
   border-top: 1px solid var(--line);
-  padding: 20px 15px;
+  padding: 20px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -390,8 +394,8 @@ svg {
 }
 .floating-score {
   position: absolute;
-  right: 0;
-  top: 165px;
+  right: 16px;
+  bottom: 130px;
   display: flex;
   flex-direction: column;
   background: var(--canvas);
@@ -513,7 +517,7 @@ svg {
   gap: 22px;
 }
 .player-card {
-  background: var(--panel);
+  background: var(--canvas);
   border: 1px solid var(--line);
   transition:
     transform 0.2s,
@@ -534,6 +538,40 @@ svg {
 .portrait.bowling {
   background: #edf2f3;
   color: #748e98;
+}
+.portrait-has-image,
+.portrait-has-image.bowling {
+  aspect-ratio: 4 / 5;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--line);
+}
+.portrait-photo-frame {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  transform: translateX(-50%);
+  overflow: hidden;
+  background: var(--canvas);
+}
+.portrait-photo {
+  position: absolute;
+  max-width: none;
+  height: auto;
+  display: block;
+}
+.portrait-has-image .portrait-number {
+  top: 16px;
+  left: 16px;
+  bottom: auto;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  background: var(--canvas);
+  color: var(--text);
+  font-size: 26px;
+  letter-spacing: 0;
+  -webkit-text-stroke: 0;
 }
 .portrait-orbit {
   position: absolute;
@@ -834,6 +872,10 @@ svg {
   font-size: 10px;
   margin-top: 12px;
 }
+.site-footer .portrait-disclosure {
+  max-width: 350px;
+  font-size: 9px;
+}
 .site-footer > div:last-child {
   display: flex;
   flex-direction: column;
@@ -1121,7 +1163,7 @@ details .table-scroll {
   width: 100%;
   justify-self: end;
 }
-.profile-hero .portrait {
+.profile-hero .portrait:not(.portrait-has-image) {
   aspect-ratio: 1.05;
 }
 .profile-decision {
@@ -1671,8 +1713,8 @@ details .table-scroll {
     min-height: 580px;
   }
   .floating-score {
-    top: 180px;
-    right: -10px;
+    bottom: 128px;
+    right: 14px;
   }
   .scope-strip > div {
     flex-direction: column;
@@ -1756,7 +1798,7 @@ details .table-scroll {
     min-height: 500px;
   }
   .hero-portrait {
-    inset: 100px -30px 50px 0;
+    inset: 0;
   }
   .hero-art-label,
   .hero-index {
@@ -1769,7 +1811,7 @@ details .table-scroll {
   }
   .hero-player-caption {
     bottom: 0;
-    left: 10px;
+    left: 0;
     padding: 18px 10px;
   }
   .hero-player-caption h2 {
@@ -1789,7 +1831,7 @@ details .table-scroll {
     padding: 14px;
   }
   .floating-score {
-    top: 65px;
+    top: auto;
     right: 0;
     padding: 10px;
   }
@@ -1950,12 +1992,11 @@ details .table-scroll {
     gap: 20px;
   }
   .hero-art {
-    min-height: 390px;
+    min-height: 440px;
     margin-top: 5px;
-    border-left: 0;
   }
   .hero-portrait {
-    inset: 20px -20px 10px 0;
+    inset: 0;
   }
   .hero-portrait .portrait-silhouette {
     height: 110%;
@@ -1974,8 +2015,8 @@ details .table-scroll {
     font-size: 35px;
   }
   .floating-score {
-    top: 40px;
-    right: 10px;
+    bottom: 110px;
+    right: 12px;
   }
   .hero-footnote {
     max-width: none;
@@ -2014,7 +2055,7 @@ details .table-scroll {
   .player-grid > .player-card:last-child:nth-child(3) {
     display: block;
   }
-  .portrait {
+  .portrait:not(.portrait-has-image) {
     aspect-ratio: 1.5;
   }
   .portrait-silhouette {
@@ -2065,7 +2106,7 @@ details .table-scroll {
   .profile-hero .profile-portrait {
     max-width: none;
   }
-  .profile-hero .portrait {
+  .profile-hero .portrait:not(.portrait-has-image) {
     aspect-ratio: 1.55;
   }
   .profile-hero h1 {

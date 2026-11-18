@@ -100,12 +100,29 @@ for (const [id, a] of Object.entries(assets)) {
     players.some((p) => p.id === id),
     `Unknown portrait ID ${id}`,
   );
-  assert(a.src.startsWith("/players/") && !a.src.includes(".."));
+  assert(/^\/(?:players|player_image)\/[\w-]+\.(?:png|webp|avif)$/.test(a.src));
   assert(a.alt && a.alt.length > 3);
   assert(
     fs.existsSync(path.join(root, "public", a.src)),
     `Missing portrait ${a.src}`,
   );
+  assert(Number.isInteger(a.width) && a.width > 0);
+  assert(Number.isInteger(a.height) && a.height > 0);
+  assert(Object.values(a.crop).every(Number.isFinite));
+  assert(a.crop.width > 0 && a.crop.height > 0);
+  assert(Math.abs(a.crop.width / a.crop.height - 0.8) < 1e-8);
+  assert(a.crop.x < a.width && a.crop.x + a.crop.width > 0);
+  assert(a.crop.y < a.height && a.crop.y + a.crop.height > 0);
+  assert.equal(a.trim.length, 4);
+  assert(a.trim.every((n) => Number.isInteger(n) && n >= 0));
+  assert(a.trim[0] + a.trim[2] < a.height);
+  assert(a.trim[1] + a.trim[3] < a.width);
+  if (a.src.endsWith(".png")) {
+    const file = fs.readFileSync(path.join(root, "public", a.src));
+    assert.equal(file.subarray(1, 4).toString(), "PNG");
+    assert.equal(file.readUInt32BE(16), a.width, a.src);
+    assert.equal(file.readUInt32BE(20), a.height, a.src);
+  }
 }
 function walk(dir) {
   return fs.existsSync(dir)

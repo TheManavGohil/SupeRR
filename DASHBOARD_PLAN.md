@@ -1,6 +1,6 @@
 # The Pressure Index — Next.js dashboard implementation plan
 
-Prepared 14 November 2026; implementation authorized 17 November; implemented and locally verified 18 November. **Status: dashboard and PDF companion implemented; user deployment and image/name inputs pending.** Read-only export, Next.js routes/components, comparisons, method/validation pages and the report view are implemented. Clean standalone install/build, numerical publication checks, browser/accessibility checks and measured loading audits are recorded in [progress.md](progress.md). Player portraits use intentional placeholders until supplied. This promotes the presentation dashboard from its earlier deferred status without reopening the frozen analytical method. Deployment instructions are in [dashboard/DEPLOYMENT.md](dashboard/DEPLOYMENT.md).
+Prepared 14 November 2026; implementation authorized 17 November; implemented and locally verified 18 November. **Status: dashboard, twenty supplied portraits and PDF companion implemented; user deployment and nineteen authenticated name labels pending.** Read-only export, Next.js routes/components, comparisons, method/validation pages and the report view are implemented. Clean standalone install/build, numerical publication checks, browser/accessibility checks and measured loading audits are recorded in [progress.md](progress.md). Selected-player portraits use individually reviewed crops; alternatives without images retain placeholders. This promotes the presentation dashboard from its earlier deferred status without reopening the frozen analytical method. Deployment instructions are in [dashboard/DEPLOYMENT.md](dashboard/DEPLOYMENT.md).
 
 ## 1. Product decision and submission contract
 
@@ -223,11 +223,11 @@ Curated findings needed to present this submission may be included in the dashbo
 Plan for **twenty selected-player portraits**, since the deliverable contains two top tens. If the user supplies ten initially, complete those cards and retain intentional placeholders for the others. Missing images do not block data/components.
 
 - Preferred input: clear portrait, roughly 800–1200 px on the long edge; transparent PNG/WebP is ideal for cutouts. A normal photograph also works with a framed crop.
-- Keep originals separately; publish only optimised derivatives. Map assets using stable player IDs, not array position or rank.
-- `player-assets.json` records ID, local path, alt text, crop/focal point and supplied attribution where present.
-- Use `next/image` with reserved dimensions and responsive `sizes`. Prioritise only the opening hero portrait; lazy-load the rest. Use CSS framing/`object-position` to keep faces visible.
+- Implementation amendment: the user supplied twenty screenshot PNGs in `public/player_image/`. Preserve them as the deployment image sources; browser delivery uses optimised `next/image` variants. Map assets using stable player IDs, not array position or rank. [PLAYER_IMAGES.md](dashboard/PLAYER_IMAGES.md) records every source dimension and framing policy.
+- `player-assets.json` records ID, exact local path, alt text, actual dimensions, a 4:5 viewport in source pixels, edge trims and attribution.
+- Use `next/image` with reserved dimensions and responsive `sizes` matched to actual rendered source width. Prioritise only the opening hero portrait; lazy-load the rest. CSS viewports preserve source proportions and add white padding around narrow screenshots.
 - Target card derivatives below 120 KB and hero derivatives below 250 KB where image quality allows. Use a neutral designed silhouette/name fallback; do not substitute an unrelated player.
-- Review every face-to-name mapping and mobile crop when images arrive. Do not fabricate jerseys, likenesses or official affiliation.
+- Review every intended name mapping and mobile crop when images arrive. Supplied AI-generated RR portraits are permitted by the user's subsequent image request; label them as illustrative concept portraits and do not claim official affiliation or independently verified likenesses.
 
 ## 9. Performance, accessibility and responsive behaviour
 
@@ -282,7 +282,7 @@ Keep analytical tests focused on exporter boundaries; do not rerun scoring or mo
 
 Available now: verified scoring outputs, all 243 private dossiers, final selected-player interpretation, alternative register, temporal review and confirmed upload format. This is sufficient to begin the export and frontend foundation.
 
-Pending inputs: player photographs, authenticated labels for nineteen selected names, and participant review of the final selection arguments. Photographs and dropdown aliases can arrive while the app is built; stable IDs and placeholders keep these independent. The user intends to deploy; this plan does not deploy or submit anything.
+All twenty supplied portraits are now integrated and locally reviewed. Pending inputs: authenticated labels for nineteen selected names and participant review of the intended image mappings and final selection arguments. Stable IDs keep image filenames and dropdown aliases independent. The user intends to deploy; this plan does not deploy or submit anything.
 
 Keep outside this release: auction-budget optimisation, squad quotas, new ratings, live cricket data, account management, chatbots, a general 243-player explorer, newly fitted ML models and unlimited threshold sliders. The requested dashboard presents the existing selection work.
 
