@@ -11,3 +11,4 @@ reports/
 !dashboard/public/reports/
 DATA_AUDIT.md
 ORGANISER_CLARIFICATION_DRAFT.md
+.~lock.*#
