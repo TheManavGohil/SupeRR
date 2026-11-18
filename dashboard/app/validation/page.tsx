@@ -1,3 +1,4 @@
+import { copy } from "@/content/copy";
 import Link from "next/link";
 import { players, release, playerUrl } from "@/lib/data";
 import {
@@ -6,7 +7,10 @@ import {
   Notice,
   SectionHeading,
 } from "@/components/ui";
-export const metadata = { title: "Validation and limitations" };
+export const metadata = {
+  title: "Validation and limitations",
+  alternates: { canonical: "/validation" },
+};
 export default function Validation() {
   const picks = players
     .filter((p) => p.selected)
@@ -17,16 +21,10 @@ export default function Validation() {
         kicker="RELIABILITY & LIMITATIONS"
         title="A selection should survive scrutiny."
       >
-        <p>
-          Keep sample adequacy, observed production and future availability
-          distinct.
-        </p>
+        <p>{copy.validationIntro}</p>
       </PageIntro>
       <Notice title="Recent evidence">
-        <p>
-          Seven pass every standalone 2026 gate; eleven are limited; two have
-          none retained.
-        </p>
+        <p>{copy.eligibility}</p>
       </Notice>
       <section className="section">
         <SectionHeading
@@ -65,10 +63,7 @@ export default function Validation() {
             </tbody>
           </table>
         </div>
-        <p>
-          Prior aggregate recent-year EDA was seen. The reserved evaluation is
-          retrospective; historical predictive models failed calibration gates.
-        </p>
+        <p>{copy.retrospective}</p>
       </section>
       <section className="section">
         <SectionHeading
@@ -112,29 +107,22 @@ export default function Validation() {
             <div className="panel" key={role}>
               <h3>{role} top-ten overlap</h3>
               <p>
-                50 / 50 runs / wickets:{" "}
+                {copy.weightEqual}:{" "}
                 {release.weightOverlap[role].runs_wickets_50_50} /{" "}
                 {release.topCount}
               </p>
               <p>
-                70 / 30 runs / wickets:{" "}
+                {copy.weightRuns}:{" "}
                 {release.weightOverlap[role].runs_wickets_70_30} /{" "}
                 {release.topCount}
               </p>
             </div>
           ))}
         </div>
-        <p>
-          The level/change companions remain withheld because their change
-          component is unreliable.
-        </p>
+        <p>{copy.companions}</p>
       </section>
       <Notice title="Interpretation limits">
-        <p>
-          Source gaps, broad context definitions and incomplete venue/opposition
-          adjustment qualify the ordering. Match-sampling uncertainty cannot
-          account for missing-source bias.
-        </p>
+        <p>{copy.sourceGaps}</p>
       </Notice>
     </div>
   );

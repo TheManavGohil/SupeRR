@@ -1,3 +1,5 @@
+import { copy } from "@/content/copy";
+import site from "@/content/generated/site.json";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
@@ -35,8 +37,8 @@ export const metadata: Metadata = {
     default: "The Pressure Index — Evidence behind every pick",
     template: "%s · The Pressure Index",
   },
-  description:
-    "Ten batters. Ten bowlers. A transparent, evidence-backed analysis of performance under pressure for SupeRR Selector Season 2.",
+  description: copy.metadataDescription,
+  metadataBase: new URL(site.publicBaseUrl),
   robots: { index: false, follow: false },
 };
 export default function RootLayout({
@@ -60,11 +62,8 @@ export default function RootLayout({
             <Link className="footer-title" href="/">
               THE PRESSURE INDEX<span>↗</span>
             </Link>
-            <p>
-              An independent SupeRR Selector Season 2 submission.
-              <br />
-              Retrospective evidence · 1 November 2026 cutoff.
-            </p>
+            <p>{copy.footer}</p>
+            <p>{copy.authorship}</p>
           </div>
           <div>
             <Link href="/methodology">
@@ -73,10 +72,7 @@ export default function RootLayout({
             <Link href="/report">
               Read the complete report <ArrowUpRight size={14} />
             </Link>
-            <small>
-              Observed performance. Context, counterexamples and uncertainty
-              included.
-            </small>
+            <small>{copy.footerScope}</small>
           </div>
         </footer>
       </body>

@@ -1,4 +1,6 @@
 "use client";
+import { copy } from "@/content/copy";
+import site from "@/content/generated/site.json";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -16,7 +18,9 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
   const rawIds = [
     ...new Set((query.get("players") ?? "").split(",").filter(Boolean)),
   ];
-  const ids = rawIds.filter((id) => list.some((p) => p.id === id)).slice(0, 3);
+  const ids = rawIds
+    .filter((id) => list.some((p) => p.id === id))
+    .slice(0, site.compareLimit);
   const effectiveIds = query.has("players")
     ? ids
     : list.slice(0, 2).map((p) => p.id);
@@ -33,18 +37,17 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
     label: string;
     value: (p: ComparePlayer) => React.ReactNode;
   }[] = [
-    { label: "Conservative score", value: (p) => score(p.rating.low) },
-    { label: "Retained matches", value: (p) => p.exposure.pressureMatches },
+    { label: copy.scoreLabel, value: (p) => score(p.rating.low) },
+    { label: copy.retainedMatches, value: (p) => p.exposure.pressureMatches },
     {
-      label: "Pressure opportunities",
+      label: copy.pressureOpportunities,
       value: (p) => p.exposure.pressureEvents,
     },
     { label: "Observed task", value: (p) => p.task },
     { label: "Recent evidence", value: (p) => recentLabel(p) },
     {
       label: "Eligibility",
-      value: (p) =>
-        p.eligibility.primary ? "Meets primary rules" : "Unavailable",
+      value: (p) => (p.eligibility.primary ? copy.eligible : copy.ineligible),
     },
   ];
   return (
@@ -124,10 +127,7 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
                 <p>{p.task}</p>
                 <strong className="score-big">{score(p.rating.low)}</strong>
                 <RecentBadge player={p} />
-                <p>
-                  Compare this candidate on the same frozen evidence and sample
-                  rules.
-                </p>
+                <p>{copy.comparisonCandidate}</p>
                 <Link className="text-link" href={playerUrl(p)}>
                   Full evidence <ArrowUpRight size={15} />
                 </Link>
@@ -162,11 +162,7 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
             </div>
           </section>
           <Notice title="Read the tradeoff, preserve the ordering">
-            <p>
-              Compare retained aggregates alongside the observed task and
-              recent-evidence status. Context and source gaps qualify every
-              recommendation.
-            </p>
+            <p>{copy.comparisonScope}</p>
           </Notice>
         </>
       ) : (

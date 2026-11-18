@@ -1,4 +1,6 @@
 "use client";
+import { copy } from "@/content/copy";
+import site from "@/content/generated/site.json";
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Search, LayoutGrid, List, ArrowUpRight, X } from "lucide-react";
@@ -35,7 +37,7 @@ export function RankingsExplorer({
     setIds(
       ids.includes(id)
         ? ids.filter((x) => x !== id)
-        : ids.length < 3
+        : ids.length < site.compareLimit
           ? [...ids, id]
           : ids,
     );
@@ -46,7 +48,7 @@ export function RankingsExplorer({
         <input
           type="checkbox"
           checked={ids.includes(p.id)}
-          disabled={ids.length === 3 && !ids.includes(p.id)}
+          disabled={ids.length === site.compareLimit && !ids.includes(p.id)}
           onChange={() => toggle(p.id)}
         />
         Compare {p.name}
@@ -86,7 +88,7 @@ export function RankingsExplorer({
             checked={recent}
             onChange={(e) => setRecent(e.target.checked)}
           />
-          Adequate 2026 sample
+          {copy.recentFilter}
         </label>
         <div className="view-switch" role="group" aria-label="Ranking layout">
           <button
@@ -106,10 +108,10 @@ export function RankingsExplorer({
         </div>
       </div>
       <p className="filter-caption" aria-live="polite">
-        Showing {filtered.length} of 10 selections. Original ranks are retained.
-        {ids.length === 3
-          ? " Compare limit reached: remove a player to add another."
-          : " Select up to three to compare."}
+        Showing {filtered.length} of {players.length} {copy.rankingFilterSuffix}
+        {ids.length === site.compareLimit
+          ? copy.compareLimitReached
+          : copy.compareHint}
       </p>
       {filtered.length === 0 ? (
         <div className="empty-state">
@@ -139,8 +141,8 @@ export function RankingsExplorer({
                 <th>Rank</th>
                 <th>Player / observed task</th>
                 <th>Score</th>
-                <th>Pressure matches</th>
-                <th>2026 evidence</th>
+                <th>{copy.retainedMatches}</th>
+                <th>{copy.recentColumn}</th>
                 <th>Compare</th>
               </tr>
             </thead>
@@ -158,7 +160,15 @@ export function RankingsExplorer({
                     <small>{p.task}</small>
                   </th>
                   <td>{score(p.rating.low)}</td>
-                  <td>{p.exposure.pressureMatches}</td>
+                  <td>
+                    {p.exposure.pressureMatches}
+                    {p.exposure.peerSupportedMatches !==
+                      p.exposure.pressureMatches && (
+                      <small>
+                        {p.exposure.peerSupportedMatches} {copy.peerSupported}
+                      </small>
+                    )}
+                  </td>
                   <td>
                     <RecentBadge player={p} />
                   </td>
@@ -167,7 +177,9 @@ export function RankingsExplorer({
                       aria-label={`Compare ${p.name}`}
                       type="checkbox"
                       checked={ids.includes(p.id)}
-                      disabled={ids.length === 3 && !ids.includes(p.id)}
+                      disabled={
+                        ids.length === site.compareLimit && !ids.includes(p.id)
+                      }
                       onChange={() => toggle(p.id)}
                     />
                   </td>
@@ -183,7 +195,9 @@ export function RankingsExplorer({
           aria-label="Selected comparison players"
         >
           <div>
-            <strong>{ids.length} / 3 players</strong>
+            <strong>
+              {ids.length} / {site.compareLimit} players
+            </strong>
             <span>
               {players
                 .filter((p) => ids.includes(p.id))

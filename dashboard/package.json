@@ -7,16 +7,17 @@
   },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "npm run check:content && next build && node scripts/check-publication.mjs --built",
+    "build": "npm run check:content && npm run check:copy && next build && node scripts/check-publication.mjs --built",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "check:content": "node scripts/check-content.mjs",
-    "test": "node tests/content.test.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "test:browser": "playwright test",
     "report:pdf": "node scripts/render-report.mjs",
-    "format": "prettier --write app components lib tests scripts content/method.ts *.ts *.mjs *.md",
-    "format:check": "prettier --check app components lib tests scripts content/method.ts *.ts *.mjs *.md"
+    "format": "prettier --write app components lib tests scripts content/*.ts *.ts *.mjs *.md",
+    "format:check": "prettier --check app components lib tests scripts content/*.ts *.ts *.mjs *.md",
+    "check:copy": "node --experimental-strip-types scripts/check-copy.mjs"
   },
   "dependencies": {
     "lucide-react": "1.74.0",

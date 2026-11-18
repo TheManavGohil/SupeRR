@@ -1,3 +1,4 @@
+import { copy } from "@/content/copy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { selected, roles, roleLabel } from "@/lib/data";
@@ -15,7 +16,10 @@ export async function generateMetadata({
   params: Promise<{ role: string }>;
 }) {
   const { role } = await params;
-  return { title: role === "bowling" ? "Top ten bowlers" : "Top ten batters" };
+  return {
+    title: role === "bowling" ? "Top ten bowlers" : "Top ten batters",
+    alternates: { canonical: `/rankings/${role}` },
+  };
 }
 export default async function Rankings({
   params,
@@ -33,13 +37,13 @@ export default async function Rankings({
         intro={
           <PageIntro
             kicker="THE FINAL SELECTIONS"
-            title={`Ten ${roleLabel(role).toLowerCase()}. Every pick explained.`}
+            title={
+              role === "batting"
+                ? copy.rankingTitleBatting
+                : copy.rankingTitleBowling
+            }
           >
-            <p>
-              Ranked by the conservative 10th percentile of observed
-              peer-relative pressure performance. Read the evidence, compare the
-              tradeoffs, inspect the aggregate evidence.
-            </p>
+            <p>{copy.scoreDescription}</p>
           </PageIntro>
         }
         tabs={
@@ -51,7 +55,7 @@ export default async function Rankings({
                 aria-current={r === role ? "page" : undefined}
               >
                 {roleLabel(r)}
-                <span>10</span>
+                <span>{selected(r).length}</span>
               </Link>
             ))}
           </nav>

@@ -1,3 +1,5 @@
+import { copy } from "../content/copy.ts";
+import site from "../content/generated/site.json" with { type: "json" };
 import { chromium } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
@@ -25,7 +27,7 @@ try {
         else a.removeAttribute("href");
       }
     }
-  }, process.env.PUBLIC_DASHBOARD_URL ?? null);
+  }, site.publicBaseUrl);
   fs.mkdirSync(path.dirname(output), { recursive: true });
   await page.pdf({
     path: output,
@@ -34,14 +36,13 @@ try {
     preferCSSPageSize: true,
     displayHeaderFooter: true,
     headerTemplate: "<span></span>",
-    footerTemplate:
-      '<div style="font-size:8px;width:100%;padding:0 45px;color:#536071;font-family:Arial;display:flex;justify-content:space-between"><span>The Pressure Index · 1 Nov 2026 cutoff</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>',
+    footerTemplate: `<div style="font-size:8px;width:100%;padding:0 45px;color:#536071;font-family:Arial;display:flex;justify-content:space-between"><span>${copy.footer}</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
   });
   const size = fs.statSync(output).size;
-  if (size > 50 * 1024 * 1024)
+  if (size > site.document.maxBytes)
     throw new Error("Report exceeds official upload limit");
   console.log(
-    `PDF rendered: ${output}; ${size.toLocaleString()} bytes. ${process.env.PUBLIC_DASHBOARD_URL ? "Public deep links included." : "No localhost links embedded; regenerate with PUBLIC_DASHBOARD_URL after deployment for public deep links."}`,
+    `PDF rendered: ${output}; ${size.toLocaleString()} bytes. Public deep links included.`,
   );
 } finally {
   await browser.close();

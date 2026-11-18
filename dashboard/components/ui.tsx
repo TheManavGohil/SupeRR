@@ -1,3 +1,4 @@
+import { copy } from "@/content/copy";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { playerUrl, recentLabel, score } from "@/lib/format";
@@ -88,11 +89,14 @@ export function PlayerCard({ player }: { player: CardPlayer }) {
             <h3>{player.name}</h3>
             <p className="task-label">{player.task}</p>
             <div className="card-stat">
-              <span>Conservative score</span>
+              <span>{copy.scoreLabel}</span>
               <strong>{score(player.rating.low)}</strong>
             </div>
             <div className="card-meta">
-              <span>{player.exposure.pressureMatches} pressure matches</span>
+              <span>
+                {player.exposure.pressureMatches}{" "}
+                {copy.retainedMatches.toLowerCase()}
+              </span>
               <span>{player.exposure.pressureEvents} opportunities</span>
             </div>
           </div>

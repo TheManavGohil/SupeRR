@@ -1,3 +1,4 @@
+import { copy } from "../../content/copy";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs";
@@ -184,7 +185,7 @@ test("report includes both exact ordered lists and required method sections", as
   await expect(page.locator(".report-player")).toHaveCount(20);
   await expect(
     page.getByRole("heading", {
-      name: "5. Reliability, limitations and reproduction",
+      name: copy.reportReliability,
     }),
   ).toBeVisible();
 });

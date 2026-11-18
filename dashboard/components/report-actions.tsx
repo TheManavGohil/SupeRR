@@ -1,4 +1,5 @@
 "use client";
+import { copy } from "@/content/copy";
 import report from "@/content/generated/report.json";
 import { Printer, Download } from "lucide-react";
 export function ReportActions() {
@@ -21,9 +22,7 @@ export function ReportActions() {
         <Printer size={16} />
         Print / save this report
       </button>
-      <p className="filter-caption">
-        Same frozen rankings and evidence as the dashboard.
-      </p>
+      <p className="filter-caption">{copy.reportSameRelease}</p>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { copy, contribution } from "@/content/copy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { players, findPlayer, playerUrl, score } from "@/lib/data";
@@ -41,11 +42,7 @@ export default async function Profile({
           </p>
           <h1>{p.name}</h1>
           <p className="task-label">{p.task}</p>
-          <p className="profile-lede">
-            The frozen ordering balances scoring and wicket outcomes against
-            supported peers. Read the observed task and evidence status
-            alongside the rank.
-          </p>
+          <p className="profile-lede">{copy.profileLead}</p>
           <RecentBadge player={p} />
         </div>
         <div className="profile-portrait">
@@ -54,59 +51,49 @@ export default async function Profile({
       </section>
       <div className="profile-summary">
         <div className="metric">
-          <span>Conservative score</span>
+          <span>{copy.scoreLabel}</span>
           <strong>{score(p.rating.low)}</strong>
         </div>
         <div className="metric">
-          <span>Retained matches</span>
+          <span>{copy.retainedMatches}</span>
           <strong>{p.exposure.pressureMatches}</strong>
           <small>
             {p.exposure.peerSupportedMatches !== p.exposure.pressureMatches
-              ? `${p.exposure.peerSupportedMatches} peer-supported`
+              ? `${p.exposure.peerSupportedMatches} ${copy.peerSupported}`
               : null}
           </small>
         </div>
         <div className="metric">
-          <span>Pressure opportunities</span>
+          <span>{copy.pressureOpportunities}</span>
           <strong>{p.exposure.pressureEvents}</strong>
         </div>
       </div>
       <section className="evidence-section" id="task">
         <SectionHeading index="TASK" title="Read the task before the rank." />
-        <p>
-          {p.task}. This is an observed workload label; squad fit and
-          availability need separate review.
-        </p>
+        <p>{contribution(p.task)}</p>
       </section>
       <section className="evidence-section" id="performance">
         <SectionHeading
           index="EVIDENCE"
           title="Aggregate evidence, with a clear boundary."
         />
-        <p>
-          The score describes retained production relative to supported peers.
-          Sample size and the recent-evidence label qualify its interpretation.
-        </p>
-        <p>Examples are available on request.</p>
+        <p>{copy.aggregateEvidence}</p>
+        <p>{copy.examples}</p>
       </section>
       <section className="evidence-section" id="usual">
         <SectionHeading
           index="SCOPE"
           title="The usual-performance comparison."
         />
-        <Notice title="Reliable change estimate: unavailable.">
-          <p>
-            Ordinary and pressure contexts do not provide reliable matched
-            comparisons for the final selections. Missing change is not a
-            negative performance score.
-          </p>
+        <Notice title={copy.unavailableChange}>
+          <p>{copy.missingChange}</p>
         </Notice>
       </section>
       <section className="evidence-section" id="alternatives">
         <SectionHeading
           index="COMPARE"
           title="Read the neighbouring decisions."
-          detail="Adjacent frozen ranks are navigation aids, rather than claims of tactical similarity."
+          detail={copy.neighbourDetail}
         />
         <div className="two-col">
           {alternatives.map((q) => (
