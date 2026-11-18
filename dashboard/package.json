@@ -7,11 +7,11 @@
   },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "npm run check:content && next build",
+    "build": "npm run check:content && next build && node scripts/check-publication.mjs --built --phase-a",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "check:content": "node scripts/check-content.mjs",
+    "check:content": "node scripts/check-content.mjs --phase-a",
     "test": "node tests/content.test.mjs",
     "test:browser": "playwright test",
     "report:pdf": "node scripts/render-report.mjs",

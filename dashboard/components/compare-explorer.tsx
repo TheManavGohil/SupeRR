@@ -3,15 +3,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { ComparePlayer, Role } from "@/lib/types";
-import {
-  compareUrl,
-  num,
-  score,
-  playerUrl,
-  recentLabel,
-  phaseName,
-} from "@/lib/format";
-import { IntervalChart } from "./charts";
+import { compareUrl, score, playerUrl, recentLabel } from "@/lib/format";
 import { Notice, RecentBadge } from "./ui";
 
 export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
@@ -42,48 +34,17 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
     value: (p: ComparePlayer) => React.ReactNode;
   }[] = [
     { label: "Conservative score", value: (p) => score(p.rating.low) },
+    { label: "Retained matches", value: (p) => p.exposure.pressureMatches },
     {
-      label: "10th–90th interval",
-      value: (p) => `${score(p.rating.low)} to ${score(p.rating.high)}`,
+      label: "Pressure opportunities",
+      value: (p) => p.exposure.pressureEvents,
     },
+    { label: "Observed task", value: (p) => p.task },
+    { label: "Recent evidence", value: (p) => recentLabel(p) },
     {
-      label: "Pressure matches / opportunities",
+      label: "Eligibility",
       value: (p) =>
-        `${p.exposure.pressureMatches} / ${p.exposure.pressureEvents}`,
-    },
-    {
-      label: role === "batting" ? "Batter runs / 100" : "Concessions / 100",
-      value: (p) => num(p.pressure.runs_per_100),
-    },
-    {
-      label:
-        role === "batting" ? "Attributed dismissals / 100" : "Wickets / 100",
-      value: (p) => num(p.pressure.wickets_per_100),
-    },
-    {
-      label: "Source retention",
-      value: (p) => `${num(p.exposure.sourceRetention * 100)}%`,
-    },
-    {
-      label: "Dominant pressure phase",
-      value: (p) =>
-        phaseName(
-          [...p.pressurePhases].sort((a, b) => b.share - a.share)[0]?.phase ??
-            "Unavailable",
-        ),
-    },
-    { label: "2026 status", value: (p) => recentLabel(p) },
-    { label: "2026 pressure opportunities", value: (p) => p.recent.events },
-    { label: "Reliable usual-performance change", value: () => "Unavailable" },
-    {
-      label: "Inadequate season-deletion samples",
-      value: (p) => p.repeatability.seasonsInadequate,
-    },
-    {
-      label: "Strongest qualification",
-      value: (p) =>
-        p.editorial?.caution ??
-        "Inspect sample, source retention and context evidence; no selected-player narrative is attached.",
+        p.eligibility.primary ? "Meets primary rules" : "Unavailable",
     },
   ];
   return (
@@ -164,8 +125,8 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
                 <strong className="score-big">{score(p.rating.low)}</strong>
                 <RecentBadge player={p} />
                 <p>
-                  {p.editorial?.why ??
-                    "Compare this candidate on the same frozen evidence and sample rules."}
+                  Compare this candidate on the same frozen evidence and sample
+                  rules.
                 </p>
                 <Link className="text-link" href={playerUrl(p)}>
                   Full evidence <ArrowUpRight size={15} />
@@ -200,14 +161,11 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
               </table>
             </div>
           </section>
-          <IntervalChart players={chosen} />
           <Notice title="Read the tradeoff, preserve the ordering">
             <p>
-              Raw rates reflect different observed workloads. The primary index
-              compares broad measured contexts, with incomplete venue/opposition
-              adjustment. These intervals are not paired superiority tests. The
-              frozen rank follows the conservative statistic, even when the
-              uncertainty overlaps.
+              Compare retained aggregates alongside the observed task and
+              recent-evidence status. Context and source gaps qualify every
+              recommendation.
             </p>
           </Notice>
         </>

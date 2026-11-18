@@ -11,48 +11,12 @@ export default function ComparePage() {
         title="Close calls deserve a closer look."
       >
         <p>
-          Compare up to three players in the same role. Scoring, wicket
-          outcomes, repeatability and the evidence that challenges each case.
+          Compare up to three players in the same role. Observed roles, retained
+          exposure and standalone evidence status.
         </p>
       </PageIntro>
       <Suspense fallback={<p>Loading comparison controls…</p>}>
-        <CompareExplorer
-          players={players.map(
-            ({
-              id,
-              role,
-              name,
-              rank,
-              task,
-              rating,
-              exposure,
-              recent,
-              selected,
-              pressure,
-              pressurePhases,
-              editorial,
-              repeatability,
-            }) => ({
-              id,
-              role,
-              name,
-              rank,
-              task,
-              rating,
-              exposure,
-              recent,
-              selected,
-              pressure,
-              pressurePhases,
-              editorial: editorial
-                ? { why: editorial.why, caution: editorial.caution }
-                : null,
-              repeatability: {
-                seasonsInadequate: repeatability.seasonsInadequate,
-              },
-            }),
-          )}
-        />
+        <CompareExplorer players={players} />
       </Suspense>
     </div>
   );

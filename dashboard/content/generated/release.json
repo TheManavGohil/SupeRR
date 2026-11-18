@@ -1,5 +1,6 @@
 {
   "id": "pressure-index-2026-11-01-v1",
+  "publicationSchemaVersion": 2,
   "cutoff": "2026-11-01",
   "firstYear": 2023,
   "matches": 511,
@@ -21,15 +22,27 @@
   "developmentBattingEligible": 62,
   "developmentBowlingEligible": 90,
   "weightOverlap": {
-    "batting": [
-      10,
-      8
-    ],
-    "bowling": [
-      9,
-      9
-    ]
+    "batting": {
+      "runs_wickets_50_50": 10,
+      "runs_wickets_70_30": 8
+    },
+    "bowling": {
+      "runs_wickets_50_50": 9,
+      "runs_wickets_70_30": 9
+    }
   },
+  "verifiedEvents": 155799,
+  "verifiedPressureEvents": 54721,
+  "verifiedPressureShare": 35.122818503328006,
+  "selectedTotal": 20,
+  "selectedRecentLimited": 11,
+  "topCount": 10,
+  "profileCount": 69,
+  "developmentLastYear": 2025,
+  "recentYear": 2026,
+  "auctionYear": 2027,
+  "season": 2,
+  "round": 1,
   "method": "descriptive_peer_pressure_v2",
   "protocolCommit": "5ca8bea",
   "sourceHashes": {

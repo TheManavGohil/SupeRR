@@ -1,0 +1,18 @@
+{
+  "player": [
+    "id",
+    "role",
+    "name",
+    "rank",
+    "selected",
+    "task",
+    "rating",
+    "exposure",
+    "recent",
+    "eligibility"
+  ],
+  "rating": ["low"],
+  "exposure": ["pressureMatches", "pressureEvents", "peerSupportedMatches"],
+  "recent": ["status"],
+  "eligibility": ["primary"]
+}

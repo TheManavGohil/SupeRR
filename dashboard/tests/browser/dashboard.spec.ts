@@ -71,14 +71,7 @@ test("all 69 direct profiles render and selected dossiers retain essential evide
   await expect(
     page.getByText("No retained 2026 pressure evidence", { exact: true }),
   ).toBeVisible();
-  for (const id of [
-    "task",
-    "performance",
-    "repeatability",
-    "cases",
-    "usual",
-    "alternatives",
-  ])
+  for (const id of ["task", "performance", "usual", "alternatives"])
     await expect(page.locator(`#${id}`)).toBeAttached();
   await expect(
     page.getByText("Reliable change estimate: unavailable.", { exact: true }),
@@ -198,14 +191,15 @@ test("report includes both exact ordered lists and required method sections", as
 
 test("rankings and dossiers remain readable without JavaScript", async ({
   browser,
+  baseURL,
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto("http://127.0.0.1:3000/rankings/batting");
+  await page.goto(`${baseURL}/rankings/batting`);
   await expect(
     page.getByRole("heading", { name: "Tim David", exact: true }),
   ).toBeVisible();
-  await page.goto("http://127.0.0.1:3000/players/bowling/2933");
+  await page.goto(`${baseURL}/players/bowling/2933`);
   await expect(
     page.getByRole("heading", { name: "Jasprit Bumrah", exact: true }),
   ).toBeVisible();

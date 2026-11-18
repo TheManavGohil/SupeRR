@@ -2,9 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { selected, roles, roleLabel } from "@/lib/data";
 import type { Role } from "@/lib/types";
-import { PageIntro, Notice, SectionHeading } from "@/components/ui";
+import { PageIntro } from "@/components/ui";
 import { RankingsExplorer } from "@/components/rankings-explorer";
-import { IntervalChart } from "@/components/charts";
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -39,7 +38,7 @@ export default async function Rankings({
             <p>
               Ranked by the conservative 10th percentile of observed
               peer-relative pressure performance. Read the evidence, compare the
-              tradeoffs, inspect the counterexamples.
+              tradeoffs, inspect the aggregate evidence.
             </p>
           </PageIntro>
         }
@@ -57,35 +56,9 @@ export default async function Rankings({
             ))}
           </nav>
         }
-        players={list.map(
-          ({ id, role, name, rank, task, rating, exposure, recent }) => ({
-            id,
-            role,
-            name,
-            rank,
-            task,
-            rating,
-            exposure,
-            recent,
-          }),
-        )}
+        players={list}
         role={role}
       />
-      <section className="section">
-        <SectionHeading
-          index="THE ORDER"
-          title="See the room for uncertainty."
-          detail="Intervals can overlap even when the declared statistic gives a clear order."
-        />
-        <IntervalChart players={list} />
-        <Notice title="Native units, transparent interpretation">
-          <p>
-            The score combines standardised runs and wickets, shrunk for
-            effective sample size. It is not a probability or a score out of
-            100. Filters preserve the frozen list order.
-          </p>
-        </Notice>
-      </section>
     </div>
   );
 }

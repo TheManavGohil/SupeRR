@@ -30,7 +30,7 @@ export const methodSections = [
     points: [
       "Batting opportunities exclude wides and include no-balls. Outcomes are batter runs and bowler-attributable striker dismissals; run-outs and other excluded dismissals are not credited to this metric.",
       "Bowling uses every attempt. Concessions include batter runs, wides and no-balls, excluding byes, leg-byes and penalties. Wickets are bowler-credited.",
-      "Displayed rates per 100 analytical opportunities are not official strike rate/economy. Phase workload and the pressure subset are shown separately; tactical assignments are not invented.",
+      "Displayed rates per 100 analytical opportunities are not official strike rate/economy. Analytical opportunities follow the frozen attribution rules.",
     ],
   },
   {
@@ -88,7 +88,7 @@ export const methodSections = [
       "Development review preceded the committed final-window protocol. Reserved 2026 was evaluated separately before the combined 2023–2026 window, using the same method and scales.",
     points: [
       "Prior aggregate 2026 EDA is disclosed: the reserved check is retrospective, not a pristine unseen forecast test.",
-      "Registered 50/50 and 70/30 runs/wickets variants use identical cohorts. Match/season deletion, family diagnostics and frozen supporting/adverse case selection qualify each recommendation.",
+      "Registered 50/50 and 70/30 runs/wickets variants use identical cohorts. Match/season deletion, private diagnostic review qualify each recommendation.",
       "Only seven selected entries meet all standalone 2026 rating requirements; two have no retained 2026 pressure observations. No inactivity, availability or price filter was added after seeing the ranks.",
       "Historical predictive baselines were fitted and failed their calibration gates. The final method is a descriptive peer-relative index; it does not establish future IPL ability or a causal response to pressure.",
     ],

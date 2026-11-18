@@ -1,7 +1,7 @@
 # Project progress and agent handoff
 
 Last updated: 18 November 2026 (IST).
-Current stage: the [Next.js dashboard](dashboard/DEPLOYMENT.md), detailed PDF report and requested [25-slide PPTX](dashboard/public/reports/pressure-index-submission.pptx) are implemented. The white/RR-pink deck contains all twenty portraits, frozen top tens, method, role options, counterexamples, stability and material limitations; a [matching PDF slide proof](dashboard/public/reports/pressure-index-slides.pdf) has been rendered and checked. The PPTX is native/editable, but has not been rendered by PowerPoint/LibreOffice. The user requested a dummy URL pending deployment: `https://your-dashboard.vercel.app` is visibly labelled as a placeholder. The dashboard's independent install/build previously passed. Remaining work: replace the placeholder, check the PPTX in the intended presentation app, verify nineteen dropdown labels, deploy/check public access and complete participant review. Scoring inputs/method/ranks are unchanged; no deployment or submission was made.
+Current stage: approved publication cleanup is in progress. Phase A restricts all 69 public player-role entries to the explicit aggregate allowlist, preserves frozen ordering/P10/exposure values, removes case-based pages and retires the old downloads/generator. The originals are hash-verified outside the repository. Portrait removal, shared copy, numeric provenance, report regeneration and documentation migration follow in B–G.
 
 ## Read this first
 
@@ -50,6 +50,11 @@ The approved descriptive ordering compares observed other-player outcomes and re
 | Submission-format verification — completed; names partial | Official Round 1 schema plus user's authenticated form confirm twenty rank fields and mandatory PDF/PPTX report, 50 MB client limit, optional dashboard/journey links. One selected label verified; nineteen pending. Current brief unchanged; revised extras agree with all final verified extra totals. | Resolves actual upload requirements without claiming unobserved option labels or changing frozen evidence. |
 | Dashboard data contract — implemented and executed | [Read-only exporter](scripts/export_dashboard.py) checks frozen hashes and emits curated data for twenty selections plus 49 existing alternative role entries. Independent Python checks reproduce IDs/ranks/values and reserved-year status. | Supplies reproducible presentation content without rerating players or publishing raw delivery data. |
 | Dashboard application and PDF — implemented and locally verified | Next.js 16.4.6 / React 19.3.1 / Node 22, static player routes, ranking filters, same-role comparisons, method/validation pages and a report/PDF generated from shared content. All twenty supplied concept portraits are integrated; alternatives without images retain placeholders. | Gives judges an interactive selection argument and the required upload document; user deployment and review remain. |
+
+## Publication cleanup — 18 November 2026
+
+- Phase A: implemented the strict aggregate export and all consumer changes. Export parity: four Python checks pass against frozen artifacts; four Node content tests pass. Production build, TypeScript, ESLint and publication scans pass. All 76 application routes return 200 locally; phone/desktop screenshots for overview, both rankings and a profile saved privately under `reports/publication_cleanup_2026-11-18/a/`. Existing browser regression/accessibility suite passes. The old detailed PDF, deck and slide proof are withdrawn; report download stays hidden until regeneration. Archived originals are outside the repository. Portrait/disclosure removal is explicitly deferred to B; final copy/numeric gates follow in C–D.
+- No scoring/configuration changes or analytical rerun. Every next phase must retain frozen ranks, P10 values and retained counts. Production verification follows each push; manual dropdown/rule/participant gates remain open.
 
 ## GitHub synchronization — 18 November 2026
 

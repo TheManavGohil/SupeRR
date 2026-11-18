@@ -17,7 +17,19 @@ class DashboardExportTests(unittest.TestCase):
         for row in top.itertuples():
             p=next(p for p in self.players if p['role']==row.role and p['id']==row.player_id)
             self.assertTrue(p['selected']);self.assertEqual(p['rank'],int(row.rank));self.assertEqual(p['name'],row.player_name)
-            np.testing.assert_allclose([p['rating']['low'],p['rating']['point'],p['rating']['high']],[row.selection_score,row.point,row.p90],atol=1e-10,rtol=0)
+            np.testing.assert_allclose(p['rating']['low'],row.selection_score,atol=1e-10,rtol=0)
+
+    def test_counts_and_public_keys_match_frozen_sources(self):
+        e=pd.read_parquet(self.final/'final_2023_2026/eligibility.parquet')
+        r=pd.read_parquet(self.final/'final_2023_2026/ratings.parquet')
+        for p in self.players:
+            self.assertEqual(set(p),{'id','role','name','rank','selected','task','rating','exposure','recent','eligibility'})
+            row=e.loc[e.role.eq(p['role']) & e.player_id.astype(str).eq(p['id'])].iloc[0]
+            rating=r.loc[r.role.eq(p['role']) & r.player_id.astype(str).eq(p['id']) & r.variant.eq('default_60_40')].iloc[0]
+            self.assertEqual(p['exposure']['pressureMatches'],int(row.pressure_matches))
+            self.assertEqual(p['exposure']['pressureEvents'],int(row.pressure_events))
+            self.assertEqual(p['exposure']['peerSupportedMatches'],int(rating.peer_pressure_matches))
+            self.assertEqual(p['eligibility']['primary'],bool(rating.selection_ready))
 
     def test_publication_is_the_existing_selected_alternative_union(self):
         a=pd.read_csv(self.final/'final_2023_2026/player_dossiers/alternatives.csv',dtype={'alternative_id':str})
