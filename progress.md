@@ -1,7 +1,7 @@
 # Project progress and agent handoff
 
 Last updated: 18 November 2026 (IST).
-Current stage: approved publication cleanup is in progress. Phase A restricts all 69 public player-role entries to the explicit aggregate allowlist, preserves frozen ordering/P10/exposure values, removes case-based pages and retires the old downloads/generator. The originals are hash-verified outside the repository. Portrait removal, shared copy, numeric provenance, report regeneration and documentation migration follow in B–G.
+Current stage: approved publication cleanup is in progress. Phase A restricts all 69 public player-role entries to the explicit aggregate allowlist, preserves frozen ordering/P10/exposure values, removes case-based pages and retires the old downloads/generator. The originals are hash-verified outside the repository. Phase B also removes every supplied player photo and manifest, using one neutral initials component driven only by display name. Shared copy, numeric provenance, report regeneration and documentation migration follow in C–G.
 
 ## Read this first
 
@@ -54,6 +54,7 @@ The approved descriptive ordering compares observed other-player outcomes and re
 ## Publication cleanup — 18 November 2026
 
 - Phase A: implemented the strict aggregate export and all consumer changes. Export parity: four Python checks pass against frozen artifacts; four Node content tests pass. Production build, TypeScript, ESLint and publication scans pass. All 76 application routes return 200 locally; phone/desktop screenshots for overview, both rankings and a profile saved privately under `reports/publication_cleanup_2026-11-18/a/`. Existing browser regression/accessibility suite passes. The old detailed PDF, deck and slide proof are withdrawn; report download stays hidden until regeneration. Archived originals are outside the repository. Portrait/disclosure removal is explicitly deferred to B; final copy/numeric gates follow in C–D.
+- Phase B: all twenty archived PNGs, the image manifest and legacy portrait component are removed. A shared name-only initials tile is used on the homepage, both rankings and all profiles. Image-specific CSS and disclosure copy are retired. Final compact layout, four Node checks, production build/publication scan, ESLint and all seven browser tests pass. All 76 local routes pass; refreshed 390/1440 screenshots are under `reports/publication_cleanup_2026-11-18/b/`. Phase A production deployment and its 76-route scan also pass.
 - No scoring/configuration changes or analytical rerun. Every next phase must retain frozen ranks, P10 values and retained counts. Production verification follows each push; manual dropdown/rule/participant gates remain open.
 
 ## GitHub synchronization — 18 November 2026

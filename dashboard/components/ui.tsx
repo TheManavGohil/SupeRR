@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { playerUrl, recentLabel, score } from "@/lib/format";
-import { Portrait } from "./portrait";
+import { PlayerInitials } from "./player-initials";
 import type { Player, CardPlayer } from "@/lib/types";
 
 export function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -78,7 +78,7 @@ export function PlayerCard({ player }: { player: CardPlayer }) {
   return (
     <article className="player-card">
       <Link href={playerUrl(player)}>
-        <Portrait player={player} />
+        <PlayerInitials name={player.name} />
         <div className="player-card-details">
           <div className="player-card-content">
             <div className="card-kicker">

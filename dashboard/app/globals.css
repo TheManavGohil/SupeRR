@@ -475,6 +475,7 @@ svg {
   align-items: flex-start;
 }
 .section-index {
+  flex-shrink: 0;
   color: var(--pink);
   border-top: 1px solid var(--pink);
   font-size: 9px;
@@ -537,131 +538,6 @@ svg {
 .player-card-details {
   min-width: 0;
   background: var(--panel);
-}
-.portrait {
-  position: relative;
-  aspect-ratio: 1.32;
-  overflow: hidden;
-  background: #f2edf0;
-  color: #927486;
-}
-.portrait.bowling {
-  background: #edf2f3;
-  color: #748e98;
-}
-.portrait-has-image,
-.portrait-has-image.bowling {
-  aspect-ratio: 4 / 5;
-  background: var(--canvas);
-  border-bottom: 1px solid var(--line);
-}
-.portrait-photo-frame {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  height: 100%;
-  aspect-ratio: 4 / 5;
-  transform: translateX(-50%);
-  overflow: hidden;
-  background: var(--canvas);
-}
-.portrait-photo {
-  position: absolute;
-  max-width: none;
-  height: auto;
-  display: block;
-}
-.portrait-has-image .portrait-number {
-  top: 16px;
-  left: 16px;
-  bottom: auto;
-  padding: 7px 10px;
-  border: 1px solid var(--pink-line);
-  background: var(--pink-soft);
-  color: var(--pink);
-  font-size: 26px;
-  letter-spacing: 0;
-  -webkit-text-stroke: 0;
-}
-.portrait-orbit {
-  position: absolute;
-  inset: 20px 16%;
-  border: 1px solid #09142612;
-  border-radius: 50%;
-  transform: rotate(-30deg);
-}
-.portrait-orbit:after {
-  content: "";
-  position: absolute;
-  inset: 15px -55px;
-  border: 1px solid #0914260d;
-  border-radius: 50%;
-  transform: rotate(60deg);
-}
-.portrait-silhouette {
-  position: absolute;
-  height: 108%;
-  width: 100%;
-  bottom: -16%;
-  left: 0;
-}
-.portrait-number {
-  position: absolute;
-  bottom: -13px;
-  left: 18px;
-  font-family: var(--display);
-  font-size: 116px;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px #52617555;
-  letter-spacing: -0.05em;
-}
-.portrait-initials {
-  position: absolute;
-  right: 24px;
-  bottom: 21px;
-  font-family: var(--display);
-  font-size: 42px;
-  color: #526175;
-  letter-spacing: 0.04em;
-}
-.portrait-caption {
-  position: absolute;
-  top: 18px;
-  left: 20px;
-  font-size: 8px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #526175;
-}
-.portrait-hero {
-  aspect-ratio: auto;
-  height: 100%;
-  background: none !important;
-}
-.portrait-hero .portrait-silhouette {
-  height: 106%;
-  bottom: -8%;
-  color: #927486;
-}
-.portrait-hero .portrait-number {
-  display: none;
-}
-.portrait-hero .portrait-initials {
-  right: 35px;
-  bottom: 150px;
-  font-size: 92px;
-  color: #526175;
-}
-.portrait-hero .portrait-caption {
-  top: auto;
-  bottom: 150px;
-  left: 22px;
-  font-size: 7px;
-}
-.portrait-hero .portrait-orbit {
-  inset: 50px 5%;
-  transform: rotate(-15deg);
 }
 .player-card-content {
   padding: 20px 23px 17px;
@@ -883,10 +759,6 @@ svg {
   font-size: 10px;
   margin-top: 12px;
 }
-.site-footer .portrait-disclosure {
-  max-width: 350px;
-  font-size: 9px;
-}
 .site-footer > div:last-child {
   display: flex;
   flex-direction: column;
@@ -947,9 +819,6 @@ svg {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
   align-items: center;
-}
-.rankings-featured .portrait {
-  border-bottom: 0;
 }
 .rankings-featured .player-card-details {
   align-self: stretch;
@@ -1237,9 +1106,6 @@ details .table-scroll {
   max-width: 450px;
   width: 100%;
   justify-self: end;
-}
-.profile-hero .portrait:not(.portrait-has-image) {
-  aspect-ratio: 1.05;
 }
 .profile-decision {
   font-size: 14px;
@@ -2104,10 +1970,6 @@ details .table-scroll {
   .hero-portrait {
     inset: 0;
   }
-  .hero-portrait .portrait-silhouette {
-    height: 110%;
-    bottom: -12%;
-  }
   .hero-big-type {
     font-size: 320px;
     top: -35px;
@@ -2161,13 +2023,6 @@ details .table-scroll {
   .player-grid > .player-card:last-child:nth-child(3) {
     display: block;
   }
-  .portrait:not(.portrait-has-image) {
-    aspect-ratio: 1.5;
-  }
-  .portrait-silhouette {
-    height: 115%;
-    bottom: -23%;
-  }
   .player-card h3 {
     font-size: 34px;
   }
@@ -2211,9 +2066,6 @@ details .table-scroll {
   }
   .profile-hero .profile-portrait {
     max-width: none;
-  }
-  .profile-hero .portrait:not(.portrait-has-image) {
-    aspect-ratio: 1.55;
   }
   .profile-hero h1 {
     font-size: 62px;
@@ -2433,5 +2285,40 @@ details .table-scroll {
   * {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+}
+
+/* One neutral identity tile, shared by every player. */
+.player-initials {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 150px;
+  aspect-ratio: 1.6;
+  background: #fff0f6;
+  color: #8c184c;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.player-initials span {
+  font-family: var(--display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 600;
+  line-height: 1;
+}
+.hero-portrait .player-initials {
+  height: 100%;
+  min-height: 0;
+}
+.rankings-featured .player-initials {
+  min-height: 0;
+  height: 100%;
+}
+.profile-portrait .player-initials {
+  max-height: 480px;
+}
+@media (max-width: 600px) {
+  .profile-portrait .player-initials {
+    max-height: 300px;
   }
 }

@@ -7,7 +7,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { selected, release, score, playerUrl } from "@/lib/data";
-import { Portrait } from "@/components/portrait";
+import { PlayerInitials } from "@/components/player-initials";
 import {
   ActionLink,
   Eyebrow,
@@ -51,7 +51,7 @@ export default function Home() {
         <div className="hero-art">
           <span className="hero-art-label">PERFORMANCE / UNDER PRESSURE</span>
           <div className="hero-portrait">
-            <Portrait player={batters[0]} variant="hero" />
+            <PlayerInitials name={batters[0].name} />
           </div>
           <Link href={playerUrl(batters[0])} className="hero-player-caption">
             <div>

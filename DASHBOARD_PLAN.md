@@ -1,3 +1,5 @@
+Current publication amendment: all player images have been removed; one neutral initials tile driven by display name replaces image slots. Historical visual proposals below are superseded where inconsistent.
+
 # The Pressure Index — Next.js dashboard implementation plan
 
 Prepared 14 November 2026; implementation authorized 17 November; implemented and locally verified 18 November. **Status: dashboard, twenty supplied portraits and PDF companion implemented; user deployment and nineteen authenticated name labels pending.** Read-only export, Next.js routes/components, comparisons, method/validation pages and the report view are implemented. Clean standalone install/build, numerical publication checks, browser/accessibility checks and measured loading audits are recorded in [progress.md](progress.md). Selected-player portraits use individually reviewed crops; alternatives without images retain placeholders. This promotes the presentation dashboard from its earlier deferred status without reopening the frozen analytical method. Deployment instructions are in [dashboard/DEPLOYMENT.md](dashboard/DEPLOYMENT.md).

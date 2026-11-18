@@ -28,32 +28,9 @@ The original data pack, full ledgers and private reports are excluded from Git/d
 
 Dependency audit, 18 November 2026: `npm audit --omit=dev` reports zero production advisories. The full development tree reports 14 high findings propagated from the unpatched [picomatch advisory](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) in lint/glob tooling. The affected tooling processes trusted repository patterns and is not used by a dashboard route or runtime API. There is no published patched release in the checked advisory; no speculative override or forced framework downgrade is applied. Recheck the development tooling when a fix is published. These findings are recorded separately from production exposure.
 
-## Player portraits
+## Player tiles
 
-All twenty selected players now use the supplied PNGs in `public/player_image/`. Their exact, case-sensitive filenames are mapped to analytical IDs in `content/player-assets.json`. Original screenshots are preserved. See [PLAYER_IMAGES.md](PLAYER_IMAGES.md) for the full size inventory and framing notes.
-
-Each entry records source dimensions, a 4:5 crop viewport in source pixels, and edge trims in `[top, right, bottom, left]` order. Negative viewport origins add white space rather than stretching a narrow screenshot. The shared portrait component uses that framing for cards, profile pages and the homepage, with responsive `next/image` optimisation. The page footer identifies these as AI-generated RR concept portraits; team association is illustrative.
-
-To replace a portrait:
-
-1. Add the new source to `public/player_image/` or `public/players/`.
-2. Update its manifest entry, including its actual source dimensions and reviewed framing:
-
-```json
-{
-  "6396": {
-    "src": "/player_image/Tim.png",
-    "alt": "AI-generated concept portrait of Tim David in a Rajasthan Royals jersey",
-    "width": 641,
-    "height": 800,
-    "crop": { "x": 8, "y": -18, "width": 624, "height": 780 },
-    "trim": [3, 2, 3, 2],
-    "attribution": "User-supplied AI-generated RR concept portrait; illustrative team association."
-  }
-}
-```
-
-3. Review the intended name mapping and crop on desktop and phone; run `npm run check:content` and rebuild. This validates asset paths, dimensions, trim bounds and the 4:5 viewport. Missing alternative-player images continue to use labelled silhouettes. The licensed font subsets and licences are in `public/fonts/`; `next/font/local` preloads them with adjusted fallback metrics and makes no external font requests.
+Every player uses the shared `PlayerInitials` component driven only by the display name. Original photos and the retired slide artifacts are archived outside the repository. Do not add player-image assets or an image manifest.
 
 ## PDF companion
 
@@ -93,9 +70,8 @@ The read-only data export can be reproduced from the private workspace via `.ven
 
 ## Submission checks still requiring the participant
 
-- Review the twenty integrated concept portraits and confirm the intended player/name mappings.
 - Verify the remaining nineteen exact Unstop option labels. The original source labels remain in the app; no speculative aliases are substituted.
 - Review and own the final analytical argument. The competition permits AI assistance but requires the participant's own final insights and recommendations.
 - Recheck current deadline/form, populate the exact two lists, upload the PDF and enter the stable URL. Deployment and Unstop submission are performed by the user.
 
-The code, twenty portraits and generated PDF are implemented; final dropdown evidence, production URL and participant review are tracked separately in `progress.md`.
+The aggregate-only dashboard and shared initials tiles are implemented; final dropdown evidence, production URL and participant review are tracked separately in `progress.md`.

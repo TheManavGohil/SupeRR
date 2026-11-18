@@ -1,1 +1,0 @@
-Place user-supplied, optimised player portraits here, then register their stable IDs in `content/player-assets.json`. See `DEPLOYMENT.md` for the manifest format. Missing portraits intentionally use labelled silhouettes.

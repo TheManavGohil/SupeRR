@@ -100,6 +100,17 @@ export function checkPublication({ built = false, phase = "final" } = {}) {
     "site.json",
   ]);
   for (const f of generated) inspectText(fs.readFileSync(f, "utf8"), f, phase);
+  if (phase !== "a") {
+    assert(
+      !fs.existsSync(path.join(root, "content/player-assets.json")),
+      "Retired image manifest",
+    );
+    for (const f of walk(path.join(root, "public")))
+      assert(
+        !/\.(png|jpe?g|webp|avif)$/i.test(f),
+        `Player raster asset forbidden: ${f}`,
+      );
+  }
   for (const f of walk(path.join(root, "public"))) {
     assert(
       !/\.(csv|parquet|zip|sql|env|pptx)$/i.test(f),
