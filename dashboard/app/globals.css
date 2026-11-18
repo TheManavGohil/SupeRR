@@ -4,15 +4,17 @@
   color-scheme: light;
   --canvas: #ffffff;
   --ink: #091426;
-  --panel: #f8fafc;
-  --panel-light: #eef2f6;
-  --pink: #a82461;
-  --pink-bright: #a82461;
+  --panel: #fff6fa;
+  --panel-light: #fce7f1;
+  --pink: #bb1d64;
+  --pink-bright: #e63b87;
+  --pink-soft: #fff0f6;
+  --pink-line: #f3c1d6;
   --gold: #8a651f;
   --paper: #f6f3ee;
   --text: #152238;
   --muted: #526175;
-  --line: #dce2e9;
+  --line: #ead9e2;
   --green: #176345;
   --amber: #86520d;
   --display: var(--font-heading), Impact, "Arial Narrow", sans-serif;
@@ -148,7 +150,8 @@ svg {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: #fffffff5;
+  background: #fff6faf5;
+  box-shadow: inset 0 3px 0 var(--pink-bright);
   backdrop-filter: blur(12px);
 }
 .brand {
@@ -173,6 +176,8 @@ svg {
   display: grid;
   place-items: center;
   position: relative;
+  background: var(--pink-soft);
+  color: var(--pink);
 }
 .brand-mark span {
   position: absolute;
@@ -196,7 +201,7 @@ svg {
 }
 .navigation a:hover,
 .navigation a[aria-current] {
-  color: var(--text);
+  color: var(--pink);
 }
 .navigation a[aria-current]:after {
   content: "";
@@ -206,8 +211,9 @@ svg {
   margin-top: 4px;
 }
 .navigation .header-report {
-  border: 1px solid var(--line);
-  color: var(--text);
+  border: 1px solid var(--pink-line);
+  background: var(--pink-soft);
+  color: var(--pink);
   padding: 11px 16px;
   display: flex;
   align-items: center;
@@ -260,7 +266,7 @@ svg {
     transform 0.2s;
 }
 .button:hover {
-  background: #88194d;
+  background: #9d1452;
   transform: translateY(-2px);
 }
 .button-secondary {
@@ -518,7 +524,7 @@ svg {
 }
 .player-card {
   background: var(--canvas);
-  border: 1px solid var(--line);
+  border: 1px solid var(--pink-line);
   transition:
     transform 0.2s,
     border-color 0.2s;
@@ -530,6 +536,7 @@ svg {
 }
 .player-card-details {
   min-width: 0;
+  background: var(--panel);
 }
 .portrait {
   position: relative;
@@ -569,9 +576,9 @@ svg {
   left: 16px;
   bottom: auto;
   padding: 7px 10px;
-  border: 1px solid var(--line);
-  background: var(--canvas);
-  color: var(--text);
+  border: 1px solid var(--pink-line);
+  background: var(--pink-soft);
+  color: var(--pink);
   font-size: 26px;
   letter-spacing: 0;
   -webkit-text-stroke: 0;
@@ -837,7 +844,7 @@ svg {
 .closing-cta {
   text-align: center;
   padding: 75px 24px 90px;
-  background: var(--canvas);
+  background: var(--pink-soft);
   border-top: 1px solid var(--line);
 }
 .closing-cta .eyebrow {
@@ -858,6 +865,7 @@ svg {
   flex-wrap: wrap;
 }
 .site-footer {
+  background: var(--panel);
   padding: 45px max(4vw, 24px);
   border-top: 1px solid var(--line);
   display: flex;
@@ -988,13 +996,17 @@ svg {
 }
 .role-tabs a[aria-current] {
   border-bottom: 2px solid var(--pink);
-  color: var(--text);
+  color: var(--pink);
 }
 .role-tabs a > span {
   background: var(--panel);
   padding: 0 8px;
   font-size: 10px;
   align-self: center;
+}
+.role-tabs a[aria-current] > span {
+  background: var(--panel-light);
+  color: var(--pink);
 }
 .rankings-toolbar {
   display: flex;
@@ -1332,7 +1344,7 @@ details .table-scroll {
 }
 .bar-track {
   height: 7px;
-  background: #e1e7ee;
+  background: #f2dce7;
   overflow: hidden;
 }
 .bar-track > span {
@@ -1357,7 +1369,7 @@ details .table-scroll {
 }
 .season-track {
   height: 130px;
-  background: #e1e7ee;
+  background: #f2dce7;
   width: 45%;
   display: flex;
   align-items: flex-end;

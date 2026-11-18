@@ -1,7 +1,7 @@
 # Project progress and agent handoff
 
 Last updated: 18 November 2026 (IST).
-Current stage: the [Next.js dashboard](dashboard/DEPLOYMENT.md) and PDF companion are implemented and locally verified. The white dashboard now includes all twenty supplied RR concept portraits, individually framed for cards, profiles and the homepage. The app contains both frozen top tens, twenty complete evidence profiles, 49 saved alternative profiles, comparisons, methodology, validation and a printable report. The independent dashboard-only install/build succeeds. Nineteen exact dropdown labels and participant review remain pending. The user will deploy to Vercel with root directory `dashboard`. Scoring inputs/method/ranks are unchanged; no deployment or submission was made.
+Current stage: the [Next.js dashboard](dashboard/DEPLOYMENT.md) and PDF companion are implemented and locally verified. The white dashboard now has RR-inspired pink accents and blush panels, with all twenty supplied RR concept portraits individually framed for cards, profiles and the homepage. The app contains both frozen top tens, twenty complete evidence profiles, 49 saved alternative profiles, comparisons, methodology, validation and a printable report. The independent dashboard-only install/build succeeds. Nineteen exact dropdown labels and participant review remain pending. The user will deploy to Vercel with root directory `dashboard`. Scoring inputs/method/ranks are unchanged; no deployment or submission was made.
 
 ## Read this first
 
@@ -50,6 +50,12 @@ The approved descriptive ordering compares observed other-player outcomes and re
 | Submission-format verification — completed; names partial | Official Round 1 schema plus user's authenticated form confirm twenty rank fields and mandatory PDF/PPTX report, 50 MB client limit, optional dashboard/journey links. One selected label verified; nineteen pending. Current brief unchanged; revised extras agree with all final verified extra totals. | Resolves actual upload requirements without claiming unobserved option labels or changing frozen evidence. |
 | Dashboard data contract — implemented and executed | [Read-only exporter](scripts/export_dashboard.py) checks frozen hashes and emits curated data for twenty selections plus 49 existing alternative role entries. Independent Python checks reproduce IDs/ranks/values and reserved-year status. | Supplies reproducible presentation content without rerating players or publishing raw delivery data. |
 | Dashboard application and PDF — implemented and locally verified | Next.js 16.4.6 / React 19.3.1 / Node 22, static player routes, ranking filters, same-role comparisons, method/validation pages and a report/PDF generated from shared content. All twenty supplied concept portraits are integrated; alternatives without images retain placeholders. | Gives judges an interactive selection argument and the required upload document; user deployment and review remain. |
+
+## RR pink theme amendment — 18 November 2026
+
+- Applied the user's request for a slightly pinker RR-inspired theme. The main canvas remains white; panels/card details/footer use pale blush, with pink card borders and rank badges, a brighter header rule, pink navigation/button accents and matching chart tracks. Dark navy text and distinct green/amber evidence statuses are retained. No gradients or coloured glows were added. The active palette is recorded in [DASHBOARD_PLAN.md](DASHBOARD_PLAN.md).
+- Production build/content validation, CSS formatting, `git diff --check` and all seven existing production browser tests pass. The suite includes automated WCAG A/AA checks across seven main routes, keyboard/no-JavaScript operation, all 69 profile routes, comparison/filter behaviour, report parity and overflow checks at five widths. Inspected overview, rankings, profile and phone navigation screenshots. Private preview captures and browser results are under `reports/dashboard_rr_pink_2026-11-18/`.
+- The compact ranking header, nine-card grid, original white portrait sources/framing, analytical data and report/PDF content remain unchanged. No new performance audit or analytical computation was run. Local preview remains `http://localhost:3000`; user deployment and previously recorded submission review items remain pending.
 
 ## Compact featured-card spacing — 18 November 2026
 

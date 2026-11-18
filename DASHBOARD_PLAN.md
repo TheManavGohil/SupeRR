@@ -27,13 +27,13 @@ Working title: **THE PRESSURE INDEX**. Descriptor: *An independent SupeRR Select
 
 | Element | Concrete direction |
 | --- | --- |
-| Main canvas | White `#FFFFFF`, dark navy text `#152238`, pale grey panels `#F8FAFC` and subtle grey borders `#DCE2E9`. User-requested light-theme amendment, 18 November 2026. The printable report retains warm ivory `#F6F3EE`. |
-| Accent | Restrained dark pink `#A82461` for active controls and emphasis; muted gold `#8A651F` where needed. Check every foreground/background pairing for contrast. |
+| Main canvas | White `#FFFFFF`, dark navy text `#152238`, blush panels `#FFF6FA`, pale pink highlights `#FFF0F6` and subtle pink-grey borders `#EAD9E2`. User-requested RR pink amendment, 18 November 2026. The printable report retains warm ivory `#F6F3EE`. |
+| Accent | Readable pink `#BB1D64` for text/buttons, brighter `#E63B87` for the header rule and checkbox accent, and soft pink card borders `#F3C1D6`. Muted gold `#8A651F` where needed. Check every foreground/background pairing for contrast. |
 | Typography | Condensed display type for large headlines/rank numerals; a readable sans-serif for explanations; tabular numerals for statistics. Self-host licensed font files using `next/font/local`; provide system fallbacks. |
 | Composition | Large player portraits, oversized rank numbers, asymmetric hero composition, thin scoreboard-like rules, generous whitespace and aligned numeric columns. |
 | Data colours | Consistent role-specific series; label and pattern differences accompany colour. Amber means limited evidence, never automatically poor performance. |
 | Motion | Short 160–240 ms transitions, one restrained hero entrance, gentle image hover on pointer devices. Honour reduced motion; use CSS transform/opacity. |
-| Surface detail | Flat, neutral surfaces with thin borders and minimal shadows. No coloured glows or gradient panels. Reading surfaces stay plain and high contrast. |
+| Surface detail | Flat white and blush surfaces with thin borders and minimal shadows. No coloured glows or gradient panels. Reading surfaces stay plain and high contrast. |
 
 The dramatic element is photography, typography and composition. The page must remain easy to scan. Avoid continuous animation, autoplay video, scroll locking, custom cursors, heavy WebGL scenes and an endless carousel. They add loading and interaction costs without explaining a selection.
 
