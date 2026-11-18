@@ -1,6 +1,6 @@
 # The Pressure Index — Next.js dashboard implementation plan
 
-Prepared 14 November 2026; implementation authorized 17 November. **Status: implementation in progress; no deployment yet.** Read-only export is executed and independently checked; Next.js pages/components are implemented locally and release verification is in progress. The user will supply player photographs and intends to deploy on Vercel. This promotes the presentation dashboard from its earlier deferred status. It does not reopen the frozen analytical method. Use [progress.md](progress.md) for checks actually completed.
+Prepared 14 November 2026; implementation authorized 17 November; implemented and locally verified 18 November. **Status: dashboard and PDF companion implemented; user deployment and image/name inputs pending.** Read-only export, Next.js routes/components, comparisons, method/validation pages and the report view are implemented. Clean standalone install/build, numerical publication checks, browser/accessibility checks and measured loading audits are recorded in [progress.md](progress.md). Player portraits use intentional placeholders until supplied. This promotes the presentation dashboard from its earlier deferred status without reopening the frozen analytical method. Deployment instructions are in [dashboard/DEPLOYMENT.md](dashboard/DEPLOYMENT.md).
 
 ## 1. Product decision and submission contract
 

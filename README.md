@@ -2,7 +2,9 @@
 
 Start with [progress.md](progress.md) for the current stage, completed work, unresolved risks and the next task. Agents should read [AGENTS.md](AGENTS.md) and keep the progress record current.
 
-Private implementation for SupeRR Selector Season 2. The first milestone is complete: typed ingestion, score-independent pre-delivery states, EDA tables, player sample coverage, whole-match descriptive uncertainty, and an eight-page chart pack.
+The presentation dashboard is in [`dashboard/`](dashboard/DEPLOYMENT.md): Next.js, twenty ranked selections, evidence profiles, comparisons, methodology, validation and a printable PDF companion. It builds independently from curated frozen aggregates; raw competition files and full analytical reports remain private. Use Node 22.x, run `npm ci` and `npm run build` in `dashboard/`, then `npm start`. Vercel's project root is `dashboard`.
+
+Analytical pipeline and presentation app for SupeRR Selector Season 2. The frozen final descriptive evaluation, role-based evidence dossiers, counterexample review and interactive dashboard are implemented. Detailed analytical inputs/reports remain private; the dashboard publishes curated submission findings. See the handoff for remaining user images, dropdown-name verification and deployment/review work.
 
 Read the [implementation plan](IMPLEMENTATION_PLAN.md). The EDA report, chart pack, detailed tables, and scoring reconciliation are generated locally and excluded from the public repository because they contain competition-derived results.
 
