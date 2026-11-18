@@ -79,26 +79,28 @@ export function PlayerCard({ player }: { player: CardPlayer }) {
     <article className="player-card">
       <Link href={playerUrl(player)}>
         <Portrait player={player} />
-        <div className="player-card-content">
-          <div className="card-kicker">
-            <span>RANK {String(player.rank).padStart(2, "0")}</span>
-            <ArrowUpRight size={20} />
+        <div className="player-card-details">
+          <div className="player-card-content">
+            <div className="card-kicker">
+              <span>RANK {String(player.rank).padStart(2, "0")}</span>
+              <ArrowUpRight size={20} />
+            </div>
+            <h3>{player.name}</h3>
+            <p className="task-label">{player.task}</p>
+            <div className="card-stat">
+              <span>Conservative score</span>
+              <strong>{score(player.rating.low)}</strong>
+            </div>
+            <div className="card-meta">
+              <span>{player.exposure.pressureMatches} pressure matches</span>
+              <span>{player.exposure.pressureEvents} opportunities</span>
+            </div>
           </div>
-          <h3>{player.name}</h3>
-          <p className="task-label">{player.task}</p>
-          <div className="card-stat">
-            <span>Conservative score</span>
-            <strong>{score(player.rating.low)}</strong>
-          </div>
-          <div className="card-meta">
-            <span>{player.exposure.pressureMatches} pressure matches</span>
-            <span>{player.exposure.pressureEvents} opportunities</span>
+          <div className="card-badge">
+            <RecentBadge player={player} />
           </div>
         </div>
       </Link>
-      <div className="card-badge">
-        <RecentBadge player={player} />
-      </div>
     </article>
   );
 }
