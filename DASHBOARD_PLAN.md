@@ -60,7 +60,7 @@ The overview should disclose the scope immediately. It must not resemble a live 
 | Route | Purpose | Main content and interactions |
 | --- | --- | --- |
 | `/` | Fast editorial overview | Portrait hero, links to both top tens, scope, three-step method summary, selected evidence and limitations, report download. |
-| `/rankings/batting` and `/rankings/bowling` | Answer “who and in what order?” | Ten ranked portrait cards, compact accessible table view, pressure exposure, interval, evidence tags, compare selection, boundary alternatives. |
+| `/rankings/batting` and `/rankings/bowling` | Answer “who and in what order?” | Rank one featured beside the heading, with nine cards in a 3×3 desktop/tablet grid; stacked phone layout. Shared filters/comparison controls and a compact table view retain all ten original ranks. Pressure exposure, intervals, evidence tags and boundary alternatives remain available. |
 | `/players/[role]/[playerId]` | Explain one recommendation | Full selected-player dossier; a compact comparison-candidate variant for the 49 alternatives. Stable-ID routes prevent alias collisions. |
 | `/compare?role=batting&players=...` | Inspect a close decision | Two or three players from the same role, aligned metrics, intervals, phase mix, recent evidence, weaknesses and the reason for the frozen ordering. |
 | `/methodology` | Explain the complete approach | Pressure definition, reconciliation, opportunity definitions, peers, scaling/shrinkage, bootstrap/order, usual-performance limitations and registered sensitivities. |

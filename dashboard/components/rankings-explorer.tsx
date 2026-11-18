@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Search, LayoutGrid, List, ArrowUpRight, X } from "lucide-react";
 import type { CardPlayer, Role } from "@/lib/types";
@@ -9,9 +9,13 @@ import { PlayerCard, RecentBadge } from "./ui";
 export function RankingsExplorer({
   players,
   role,
+  intro,
+  tabs,
 }: {
   players: CardPlayer[];
   role: Role;
+  intro: ReactNode;
+  tabs: ReactNode;
 }) {
   const [search, setSearch] = useState("");
   const [recent, setRecent] = useState(false);
@@ -22,6 +26,11 @@ export function RankingsExplorer({
       p.name.toLowerCase().includes(search.toLowerCase()) &&
       (!recent || p.recent.status === "adequate"),
   );
+  const featured =
+    view === "cards" && filtered.some((p) => p.id === players[0]?.id)
+      ? players[0]
+      : null;
+  const gridPlayers = filtered.filter((p) => p.id !== featured?.id);
   const toggle = (id: string) =>
     setIds(
       ids.includes(id)
@@ -30,8 +39,36 @@ export function RankingsExplorer({
           ? [...ids, id]
           : ids,
     );
+  const selectableCard = (p: CardPlayer) => (
+    <div className="selectable-card" key={p.id}>
+      <PlayerCard player={p} />
+      <label className="compare-checkbox">
+        <input
+          type="checkbox"
+          checked={ids.includes(p.id)}
+          disabled={ids.length === 3 && !ids.includes(p.id)}
+          onChange={() => toggle(p.id)}
+        />
+        Compare {p.name}
+      </label>
+    </div>
+  );
   return (
     <>
+      <div className={`rankings-lead ${featured ? "has-featured" : ""}`}>
+        {intro}
+        {featured && (
+          <section
+            className="rankings-featured"
+            aria-label="Top-ranked selection"
+          >
+            <h2 className="sr-only">Rank one</h2>
+            {selectableCard(featured)}
+          </section>
+        )}
+      </div>
+      {tabs}
+      <h2 className="sr-only">Ranked player evidence</h2>
       <div className="rankings-toolbar">
         <label className="search-control">
           <Search size={18} />
@@ -89,22 +126,11 @@ export function RankingsExplorer({
           </button>
         </div>
       ) : view === "cards" ? (
-        <div className="player-grid">
-          {filtered.map((p) => (
-            <div className="selectable-card" key={p.id}>
-              <PlayerCard player={p} />
-              <label className="compare-checkbox">
-                <input
-                  type="checkbox"
-                  checked={ids.includes(p.id)}
-                  disabled={ids.length === 3 && !ids.includes(p.id)}
-                  onChange={() => toggle(p.id)}
-                />
-                Compare {p.name}
-              </label>
-            </div>
-          ))}
-        </div>
+        gridPlayers.length > 0 && (
+          <div className="player-grid rankings-grid">
+            {gridPlayers.map(selectableCard)}
+          </div>
+        )
       ) : (
         <div className="table-scroll">
           <table className="rankings-table">

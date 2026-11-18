@@ -910,6 +910,32 @@ svg {
   max-width: 710px;
   font-size: 13px;
 }
+.rankings-lead {
+  padding: 55px 0 40px;
+}
+.rankings-lead .page-intro {
+  max-width: 900px;
+  padding: 0;
+}
+.rankings-lead.has-featured {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 22px;
+}
+.rankings-lead.has-featured .page-intro {
+  grid-column: span 2;
+  padding-right: 60px;
+}
+.rankings-featured {
+  min-width: 0;
+}
+.rankings-featured .player-card:hover {
+  transform: none;
+}
+.player-grid.rankings-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
 .role-tabs {
   display: flex;
   gap: 35px;
@@ -1753,6 +1779,17 @@ details .table-scroll {
   }
 }
 @media (max-width: 800px) {
+  .rankings-lead.has-featured {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .rankings-lead.has-featured .page-intro {
+    grid-column: auto;
+    padding-right: 0;
+  }
+  .rankings-lead.has-featured h1 {
+    font-size: 58px;
+  }
   .site-header {
     height: 76px;
   }
@@ -1969,6 +2006,16 @@ details .table-scroll {
   }
 }
 @media (max-width: 550px) {
+  .rankings-lead {
+    padding: 40px 0 28px;
+  }
+  .rankings-lead.has-featured {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .player-grid.rankings-grid {
+    grid-template-columns: 1fr;
+  }
   .hero {
     display: flex;
     flex-direction: column;

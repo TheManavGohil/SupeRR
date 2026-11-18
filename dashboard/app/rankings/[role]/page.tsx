@@ -29,30 +29,34 @@ export default async function Rankings({
   const list = selected(role);
   return (
     <div className="page-wrap">
-      <PageIntro
-        kicker="THE FINAL SELECTIONS"
-        title={`Ten ${roleLabel(role).toLowerCase()}. Every pick explained.`}
-      >
-        <p>
-          Ranked by the conservative 10th percentile of observed peer-relative
-          pressure performance. Read the evidence, compare the tradeoffs,
-          inspect the counterexamples.
-        </p>
-      </PageIntro>
-      <nav className="role-tabs" aria-label="Player category">
-        {roles.map((r) => (
-          <Link
-            key={r}
-            href={`/rankings/${r}`}
-            aria-current={r === role ? "page" : undefined}
-          >
-            {roleLabel(r)}
-            <span>10</span>
-          </Link>
-        ))}
-      </nav>
-      <h2 className="sr-only">Ranked player evidence</h2>
       <RankingsExplorer
+        key={role}
+        intro={
+          <PageIntro
+            kicker="THE FINAL SELECTIONS"
+            title={`Ten ${roleLabel(role).toLowerCase()}. Every pick explained.`}
+          >
+            <p>
+              Ranked by the conservative 10th percentile of observed
+              peer-relative pressure performance. Read the evidence, compare the
+              tradeoffs, inspect the counterexamples.
+            </p>
+          </PageIntro>
+        }
+        tabs={
+          <nav className="role-tabs" aria-label="Player category">
+            {roles.map((r) => (
+              <Link
+                key={r}
+                href={`/rankings/${r}`}
+                aria-current={r === role ? "page" : undefined}
+              >
+                {roleLabel(r)}
+                <span>10</span>
+              </Link>
+            ))}
+          </nav>
+        }
         players={list.map(
           ({ id, role, name, rank, task, rating, exposure, recent }) => ({
             id,
