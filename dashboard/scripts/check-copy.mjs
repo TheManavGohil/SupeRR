@@ -8,7 +8,7 @@ import { root, walk } from "./check-publication.mjs";
 const normalize = (s) => s.replace(/\s+/g, " ").trim();
 const phrases = new Set(
   [...Object.values(copy), ...Object.values(roleContribution)]
-    .filter((s) => s.length >= 24)
+    .filter((s) => s.length > 0)
     .map(normalize),
 );
 export function duplicatedCopy(source, name = "candidate.tsx") {

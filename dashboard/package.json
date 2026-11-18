@@ -7,17 +7,18 @@
   },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
-    "build": "npm run check:content && npm run check:copy && next build && node scripts/check-publication.mjs --built",
+    "build": "npm run check:content && npm run check:copy && next build && node scripts/check-publication.mjs --built && npm run check:built",
     "start": "next start --hostname 0.0.0.0",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "check:content": "node scripts/check-content.mjs",
-    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "test": "node --experimental-strip-types scripts/run-content-tests.mjs",
     "test:browser": "playwright test",
     "report:pdf": "node scripts/render-report.mjs",
     "format": "prettier --write app components lib tests scripts content/*.ts *.ts *.mjs *.md",
     "format:check": "prettier --check app components lib tests scripts content/*.ts *.ts *.mjs *.md",
-    "check:copy": "node --experimental-strip-types scripts/check-copy.mjs"
+    "check:copy": "node --experimental-strip-types scripts/check-copy.mjs",
+    "check:built": "node --experimental-strip-types scripts/check-built-content.mjs"
   },
   "dependencies": {
     "lucide-react": "1.74.0",
@@ -35,8 +36,10 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.6",
     "lighthouse": "13.6.0",
+    "parse5": "8.0.0",
     "prettier": "3.10.1",
     "tailwindcss": "4.3.5",
     "typescript": "6.0.3"
-  }
+  },
+  "type": "module"
 }

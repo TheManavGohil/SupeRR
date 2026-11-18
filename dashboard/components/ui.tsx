@@ -1,7 +1,8 @@
+import { DataValue, CopyText, KnownText } from "@/components/data-value";
 import { copy } from "@/content/copy";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { playerUrl, recentLabel, score } from "@/lib/format";
+import { playerUrl, recentLabel } from "@/lib/format";
 import { PlayerInitials } from "./player-initials";
 import type { Player, CardPlayer } from "@/lib/types";
 
@@ -25,7 +26,9 @@ export function PageIntro({
   return (
     <section className="page-intro">
       <Eyebrow>{kicker}</Eyebrow>
-      <h1>{title}</h1>
+      <h1>
+        <KnownText value={title} />
+      </h1>
       <div className="intro-copy">{children}</div>
     </section>
   );
@@ -43,8 +46,14 @@ export function SectionHeading({
     <div className="section-heading">
       <span className="section-index">{index}</span>
       <div>
-        <h2>{title}</h2>
-        {detail && <p>{detail}</p>}
+        <h2>
+          <KnownText value={title} />
+        </h2>
+        {detail && (
+          <p>
+            <KnownText value={detail} />
+          </p>
+        )}
       </div>
     </div>
   );
@@ -71,7 +80,7 @@ export function RecentBadge({ player }: { player: Pick<Player, "recent"> }) {
       className={`status ${player.recent.status === "adequate" ? "status-good" : "status-limited"}`}
     >
       <span />
-      {recentLabel(player)}
+      <KnownText value={recentLabel(player)} />
     </span>
   );
 }
@@ -83,21 +92,53 @@ export function PlayerCard({ player }: { player: CardPlayer }) {
         <div className="player-card-details">
           <div className="player-card-content">
             <div className="card-kicker">
-              <span>RANK {String(player.rank).padStart(2, "0")}</span>
+              <span>
+                RANK{" "}
+                <DataValue
+                  source={`players.${player.role}.${player.id}.rank`}
+                  format="rank"
+                />
+              </span>
               <ArrowUpRight size={20} />
             </div>
-            <h3>{player.name}</h3>
-            <p className="task-label">{player.task}</p>
+            <h3>
+              <DataValue
+                source={`players.${player.role}.${player.id}.name`}
+                format="text"
+              />
+            </h3>
+            <p className="task-label">
+              <DataValue
+                source={`players.${player.role}.${player.id}.task`}
+                format="text"
+              />
+            </p>
             <div className="card-stat">
-              <span>{copy.scoreLabel}</span>
-              <strong>{score(player.rating.low)}</strong>
+              <span>
+                <CopyText name="scoreLabel" />
+              </span>
+              <strong>
+                <DataValue
+                  source={`players.${player.role}.${player.id}.rating.low`}
+                  format="score"
+                />
+              </strong>
             </div>
             <div className="card-meta">
               <span>
-                {player.exposure.pressureMatches}{" "}
+                <DataValue
+                  source={`players.${player.role}.${player.id}.exposure.pressureMatches`}
+                  format="text"
+                />{" "}
                 {copy.retainedMatches.toLowerCase()}
               </span>
-              <span>{player.exposure.pressureEvents} opportunities</span>
+              <span>
+                <DataValue
+                  source={`players.${player.role}.${player.id}.exposure.pressureEvents`}
+                  format="text"
+                />{" "}
+                opportunities
+              </span>
             </div>
           </div>
           <div className="card-badge">
@@ -121,7 +162,9 @@ export function Notice({
         i
       </span>
       <div>
-        <strong>{title}</strong>
+        <strong>
+          <KnownText value={title} />
+        </strong>
         <div>{children}</div>
       </div>
     </aside>

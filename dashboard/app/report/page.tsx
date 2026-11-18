@@ -1,6 +1,8 @@
+import { ScoreScope } from "@/components/score-scope";
+import { DataValue, CopyText, KnownText } from "@/components/data-value";
 import { copy, contribution } from "@/content/copy";
 import Link from "next/link";
-import { selected, release, score, playerUrl } from "@/lib/data";
+import { selected, playerUrl } from "@/lib/data";
 import { methodSections } from "@/content/method";
 import { PageIntro, RecentBadge } from "@/components/ui";
 import { ReportActions } from "@/components/report-actions";
@@ -16,22 +18,48 @@ function RankTable({ picks }: { picks: Player[] }) {
         <tr>
           <th>Rank</th>
           <th>Player</th>
-          <th>{copy.scoreLabel}</th>
-          <th>{copy.retainedMatches}</th>
+          <th>
+            <CopyText name="scoreLabel" />
+          </th>
+          <th>
+            <CopyText name="retainedMatches" />
+          </th>
         </tr>
       </thead>
       <tbody>
         {picks.map((p) => (
           <tr key={p.id}>
-            <td>{p.rank}</td>
-            <th>{p.name}</th>
-            <td>{score(p.rating.low)}</td>
             <td>
-              {p.exposure.pressureMatches}
+              <DataValue
+                source={`players.${p.role}.${p.id}.rank`}
+                format="text"
+              />
+            </td>
+            <th>
+              <DataValue
+                source={`players.${p.role}.${p.id}.name`}
+                format="text"
+              />
+            </th>
+            <td>
+              <DataValue
+                source={`players.${p.role}.${p.id}.rating.low`}
+                format="score"
+              />
+            </td>
+            <td>
+              <DataValue
+                source={`players.${p.role}.${p.id}.exposure.pressureMatches`}
+                format="text"
+              />
               {p.exposure.peerSupportedMatches !==
                 p.exposure.pressureMatches && (
                 <small>
-                  {p.exposure.peerSupportedMatches} {copy.peerSupported}
+                  <DataValue
+                    source={`players.${p.role}.${p.id}.exposure.peerSupportedMatches`}
+                    format="text"
+                  />{" "}
+                  <CopyText name="peerSupported" />
                 </small>
               )}
             </td>
@@ -45,36 +73,53 @@ export default function Report() {
   return (
     <div className="page-wrap">
       <PageIntro kicker="THE SUBMISSION DOCUMENT" title={copy.reportTitle}>
-        <p>{copy.reportIntro}</p>
+        <p>
+          <CopyText name="reportIntro" />
+        </p>
       </PageIntro>
       <ReportActions />
       <article className="report-document">
-        <p className="report-kicker">{copy.reportKicker}</p>
+        <p className="report-kicker">
+          <CopyText name="reportKicker" />
+        </p>
         <h1>
           The Pressure Index.
           <br />
           Evidence behind every pick.
         </h1>
         <p className="report-meta">
-          {copy.reportMeta} Release: {release.id}.
+          <CopyText name="reportMeta" /> Release:{" "}
+          <DataValue source="release.id" format="text" />.
         </p>
         <h2>Final ordered lists</h2>
-        <h3>Top ten batters</h3>
+        <h3>
+          <CopyText name="battingListTitle" />
+        </h3>
         <RankTable picks={selected("batting")} />
-        <h3>Top ten bowlers</h3>
+        <h3>
+          <CopyText name="bowlingListTitle" />
+        </h3>
         <RankTable picks={selected("bowling")} />
         <div className="report-limits">
-          <p>{copy.eligibility}</p>
-          <p>{copy.scoreScopeProduction}</p>
+          <p>
+            <CopyText name="eligibility" />
+          </p>
         </div>
+        <ScoreScope />
         <h2 className="report-new-page">How the ratings were constructed</h2>
         {methodSections.map((s) => (
           <section key={s.id}>
-            <h3>{s.title}</h3>
-            <p>{s.intro}</p>
+            <h3>
+              <KnownText value={s.title} />
+            </h3>
+            <p>
+              <KnownText value={s.intro} />
+            </p>
             <ul>
               {s.points.map((t) => (
-                <li key={t}>{t}</li>
+                <li key={t}>
+                  <KnownText value={t} />
+                </li>
               ))}
             </ul>
           </section>
@@ -87,10 +132,14 @@ export default function Report() {
         {selected("bowling").map((p) => (
           <Selection key={p.id} player={p} />
         ))}
-        <h2 className="report-new-page">{copy.reportReliability}</h2>
-        <p>{copy.reportMethod}</p>
+        <h2 className="report-new-page">
+          <CopyText name="reportReliability" />
+        </h2>
         <p>
-          {copy.scoreScopeAdjustment} {copy.examples}
+          <CopyText name="reportMethod" />
+        </p>
+        <p>
+          <CopyText name="scoreScopeAdjustment" /> <CopyText name="examples" />
         </p>
         <h3>Sources and analytical scope</h3>
         <p>
@@ -102,7 +151,9 @@ export default function Report() {
           </a>
           . This publication contains approved aggregates.
         </p>
-        <p>{copy.authorship}</p>
+        <p className="print-only">
+          <CopyText name="authorship" />
+        </p>
         <p>
           Read the <Link href="/methodology">methodology</Link> and{" "}
           <Link href="/validation">validation overview</Link>.
@@ -115,13 +166,31 @@ function Selection({ player: p }: { player: Player }) {
   return (
     <section className="report-player">
       <h3>
-        {p.rank}. {p.name} — {p.task}
+        <DataValue source={`players.${p.role}.${p.id}.rank`} format="text" />.{" "}
+        <DataValue source={`players.${p.role}.${p.id}.name`} format="text" /> —{" "}
+        <DataValue source={`players.${p.role}.${p.id}.task`} format="text" />
       </h3>
       <p>
-        {copy.scoreLabel} {score(p.rating.low)} · {p.exposure.pressureMatches}{" "}
-        retained matches · {p.exposure.pressureEvents} pressure opportunities.
+        <CopyText name="scoreLabel" />{" "}
+        <DataValue
+          source={`players.${p.role}.${p.id}.rating.low`}
+          format="score"
+        />{" "}
+        ·{" "}
+        <DataValue
+          source={`players.${p.role}.${p.id}.exposure.pressureMatches`}
+          format="text"
+        />{" "}
+        retained matches ·{" "}
+        <DataValue
+          source={`players.${p.role}.${p.id}.exposure.pressureEvents`}
+          format="text"
+        />{" "}
+        pressure opportunities.
       </p>
-      <p>{contribution(p.task)}</p>
+      <p>
+        <KnownText value={contribution(p.task)} />
+      </p>
       <p>
         {p.eligibility.primary ? copy.eligible : copy.ineligible}{" "}
         <RecentBadge player={p} />

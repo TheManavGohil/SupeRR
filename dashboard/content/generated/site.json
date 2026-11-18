@@ -3,6 +3,7 @@
   "heroPreviewCount": 3,
   "compareLimit": 3,
   "scoreDigits": 4,
+  "notFoundStatus": 404,
   "uiCounts": [
     0,
     1,

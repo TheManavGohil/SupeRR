@@ -1,3 +1,4 @@
+import { CopyText } from "@/components/data-value";
 import { copy } from "@/content/copy";
 import site from "@/content/generated/site.json";
 import type { Metadata } from "next";
@@ -62,8 +63,12 @@ export default function RootLayout({
             <Link className="footer-title" href="/">
               THE PRESSURE INDEX<span>↗</span>
             </Link>
-            <p>{copy.footer}</p>
-            <p>{copy.authorship}</p>
+            <p>
+              <CopyText name="footer" />
+            </p>
+            <p>
+              <CopyText name="authorship" />
+            </p>
           </div>
           <div>
             <Link href="/methodology">
@@ -72,7 +77,9 @@ export default function RootLayout({
             <Link href="/report">
               Read the complete report <ArrowUpRight size={14} />
             </Link>
-            <small>{copy.footerScope}</small>
+            <small>
+              <CopyText name="footerScope" />
+            </small>
           </div>
         </footer>
       </body>

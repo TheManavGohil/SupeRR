@@ -2322,3 +2322,36 @@ details .table-scroll {
     max-height: 300px;
   }
 }
+
+.score-scope {
+  border-block: 1px solid var(--line);
+  margin-block: 30px;
+  padding: 36px 0;
+}
+.score-scope h2 {
+  font-size: clamp(30px, 4vw, 48px);
+  margin-bottom: 22px;
+}
+.score-scope ul {
+  padding-left: 22px;
+  max-width: 950px;
+  line-height: 1.85;
+  font-size: 14px;
+}
+.score-scope li + li {
+  margin-top: 12px;
+}
+.print-only {
+  display: none;
+}
+/* Provenance wrappers preserve the surrounding typography and layout. */
+span[data-copy-key],
+span[data-json-source] {
+  all: unset;
+  display: contents;
+}
+@media print {
+  .print-only {
+    display: block;
+  }
+}

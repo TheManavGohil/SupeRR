@@ -1,3 +1,4 @@
+import { DataValue, CopyText } from "@/components/data-value";
 import { copy } from "@/content/copy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,7 +18,7 @@ export async function generateMetadata({
 }) {
   const { role } = await params;
   return {
-    title: role === "bowling" ? "Top ten bowlers" : "Top ten batters",
+    title: role === "bowling" ? copy.bowlingListTitle : copy.battingListTitle,
     alternates: { canonical: `/rankings/${role}` },
   };
 }
@@ -43,7 +44,9 @@ export default async function Rankings({
                 : copy.rankingTitleBowling
             }
           >
-            <p>{copy.scoreDescription}</p>
+            <p>
+              <CopyText name="scoreDescription" />
+            </p>
           </PageIntro>
         }
         tabs={
@@ -55,7 +58,9 @@ export default async function Rankings({
                 aria-current={r === role ? "page" : undefined}
               >
                 {roleLabel(r)}
-                <span>{selected(r).length}</span>
+                <span>
+                  <DataValue source="release.topCount" />
+                </span>
               </Link>
             ))}
           </nav>

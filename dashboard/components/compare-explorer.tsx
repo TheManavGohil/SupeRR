@@ -1,4 +1,6 @@
 "use client";
+import { publicText } from "@/lib/public-numbers";
+import { DataValue, CopyText, KnownText } from "@/components/data-value";
 import { copy } from "@/content/copy";
 import site from "@/content/generated/site.json";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -83,9 +85,9 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
       <div className="compare-controls">
         {[0, 1, 2].map((i) => (
           <label key={i}>
-            Player {i + 1}
+            Player <DataValue source={`site.uiCounts.${i + 1}`} />
             <select
-              aria-label={`Comparison player ${i + 1}`}
+              aria-label={`Comparison player ${(site.numberWords as Record<string, string>)[String(i + 1)]}`}
               value={effectiveIds[i] ?? ""}
               onChange={(e) => update(i, e.target.value)}
             >
@@ -97,9 +99,10 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
                   disabled={
                     effectiveIds.includes(p.id) && effectiveIds[i] !== p.id
                   }
+                  data-json-source={`players.${p.role}.${p.id}`}
+                  data-json-format="player-option"
                 >
-                  #{p.rank} {p.name}
-                  {p.selected ? " · selected" : ""}
+                  {publicText(`players.${p.role}.${p.id}`, "player-option")}
                 </option>
               ))}
             </select>
@@ -121,13 +124,33 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
               <article className="compare-card" key={p.id}>
                 <span className="compare-card-rank">
                   {p.selected ? "SELECTED" : "COMPARISON CANDIDATE"} · RANK{" "}
-                  {p.rank}
+                  <DataValue
+                    source={`players.${p.role}.${p.id}.rank`}
+                    format="text"
+                  />
                 </span>
-                <h2>{p.name}</h2>
-                <p>{p.task}</p>
-                <strong className="score-big">{score(p.rating.low)}</strong>
+                <h2>
+                  <DataValue
+                    source={`players.${p.role}.${p.id}.name`}
+                    format="text"
+                  />
+                </h2>
+                <p>
+                  <DataValue
+                    source={`players.${p.role}.${p.id}.task`}
+                    format="text"
+                  />
+                </p>
+                <strong className="score-big">
+                  <DataValue
+                    source={`players.${p.role}.${p.id}.rating.low`}
+                    format="score"
+                  />
+                </strong>
                 <RecentBadge player={p} />
-                <p>{copy.comparisonCandidate}</p>
+                <p>
+                  <CopyText name="comparisonCandidate" />
+                </p>
                 <Link className="text-link" href={playerUrl(p)}>
                   Full evidence <ArrowUpRight size={15} />
                 </Link>
@@ -144,16 +167,44 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
                   <tr>
                     <th>Evidence</th>
                     {chosen.map((p) => (
-                      <th key={p.id}>{p.name}</th>
+                      <th key={p.id}>
+                        <DataValue
+                          source={`players.${p.role}.${p.id}.name`}
+                          format="text"
+                        />
+                      </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {rows.map((row) => (
                     <tr key={row.label}>
-                      <th>{row.label}</th>
+                      <th>
+                        <KnownText value={row.label} />
+                      </th>
                       {chosen.map((p) => (
-                        <td key={p.id}>{row.value(p)}</td>
+                        <td key={p.id}>
+                          {row.label === copy.scoreLabel ? (
+                            <DataValue
+                              source={`players.${p.role}.${p.id}.rating.low`}
+                              format="score"
+                            />
+                          ) : row.label === copy.retainedMatches ? (
+                            <DataValue
+                              source={`players.${p.role}.${p.id}.exposure.pressureMatches`}
+                            />
+                          ) : row.label === copy.pressureOpportunities ? (
+                            <DataValue
+                              source={`players.${p.role}.${p.id}.exposure.pressureEvents`}
+                            />
+                          ) : row.label === "Observed task" ? (
+                            <DataValue
+                              source={`players.${p.role}.${p.id}.task`}
+                            />
+                          ) : (
+                            <KnownText value={String(row.value(p))} />
+                          )}
+                        </td>
                       ))}
                     </tr>
                   ))}
@@ -162,15 +213,16 @@ export function CompareExplorer({ players }: { players: ComparePlayer[] }) {
             </div>
           </section>
           <Notice title="Read the tradeoff, preserve the ordering">
-            <p>{copy.comparisonScope}</p>
+            <p>
+              <CopyText name="comparisonScope" />
+            </p>
           </Notice>
         </>
       ) : (
         <div className="empty-state">
           <h2>Choose players to compare</h2>
           <p>
-            Select up to three players from one role. Missing or invalid URL
-            values do not become zero-performance comparisons.
+            <CopyText name="comparisonIntro" />
           </p>
         </div>
       )}

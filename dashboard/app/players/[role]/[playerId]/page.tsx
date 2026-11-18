@@ -1,7 +1,8 @@
+import { DataValue, CopyText, KnownText } from "@/components/data-value";
 import { copy, contribution } from "@/content/copy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { players, findPlayer, playerUrl, score } from "@/lib/data";
+import { players, findPlayer, playerUrl } from "@/lib/data";
 import { PlayerInitials } from "@/components/player-initials";
 import { Notice, RecentBadge, SectionHeading } from "@/components/ui";
 export const dynamicParams = false;
@@ -38,11 +39,26 @@ export default async function Profile({
         <div>
           <p className="eyebrow">
             {p.selected ? "FINAL SELECTION" : "COMPARISON CANDIDATE"} · RANK{" "}
-            {p.rank}
+            <DataValue
+              source={`players.${p.role}.${p.id}.rank`}
+              format="text"
+            />
           </p>
-          <h1>{p.name}</h1>
-          <p className="task-label">{p.task}</p>
-          <p className="profile-lede">{copy.profileLead}</p>
+          <h1>
+            <DataValue
+              source={`players.${p.role}.${p.id}.name`}
+              format="text"
+            />
+          </h1>
+          <p className="task-label">
+            <DataValue
+              source={`players.${p.role}.${p.id}.task`}
+              format="text"
+            />
+          </p>
+          <p className="profile-lede">
+            <CopyText name="profileLead" />
+          </p>
           <RecentBadge player={p} />
         </div>
         <div className="profile-portrait">
@@ -51,34 +67,69 @@ export default async function Profile({
       </section>
       <div className="profile-summary">
         <div className="metric">
-          <span>{copy.scoreLabel}</span>
-          <strong>{score(p.rating.low)}</strong>
+          <span>
+            <CopyText name="scoreLabel" />
+          </span>
+          <strong>
+            <DataValue
+              source={`players.${p.role}.${p.id}.rating.low`}
+              format="score"
+            />
+          </strong>
         </div>
         <div className="metric">
-          <span>{copy.retainedMatches}</span>
-          <strong>{p.exposure.pressureMatches}</strong>
+          <span>
+            <CopyText name="retainedMatches" />
+          </span>
+          <strong>
+            <DataValue
+              source={`players.${p.role}.${p.id}.exposure.pressureMatches`}
+              format="text"
+            />
+          </strong>
           <small>
-            {p.exposure.peerSupportedMatches !== p.exposure.pressureMatches
-              ? `${p.exposure.peerSupportedMatches} ${copy.peerSupported}`
-              : null}
+            <>
+              {p.exposure.peerSupportedMatches !==
+                p.exposure.pressureMatches && (
+                <>
+                  <DataValue
+                    source={`players.${p.role}.${p.id}.exposure.peerSupportedMatches`}
+                  />{" "}
+                  <CopyText name="peerSupported" />
+                </>
+              )}
+            </>
           </small>
         </div>
         <div className="metric">
-          <span>{copy.pressureOpportunities}</span>
-          <strong>{p.exposure.pressureEvents}</strong>
+          <span>
+            <CopyText name="pressureOpportunities" />
+          </span>
+          <strong>
+            <DataValue
+              source={`players.${p.role}.${p.id}.exposure.pressureEvents`}
+              format="text"
+            />
+          </strong>
         </div>
       </div>
       <section className="evidence-section" id="task">
         <SectionHeading index="TASK" title="Read the task before the rank." />
-        <p>{contribution(p.task)}</p>
+        <p>
+          <KnownText value={contribution(p.task)} />
+        </p>
       </section>
       <section className="evidence-section" id="performance">
         <SectionHeading
           index="EVIDENCE"
           title="Aggregate evidence, with a clear boundary."
         />
-        <p>{copy.aggregateEvidence}</p>
-        <p>{copy.examples}</p>
+        <p>
+          <CopyText name="aggregateEvidence" />
+        </p>
+        <p>
+          <CopyText name="examples" />
+        </p>
       </section>
       <section className="evidence-section" id="usual">
         <SectionHeading
@@ -86,7 +137,9 @@ export default async function Profile({
           title="The usual-performance comparison."
         />
         <Notice title={copy.unavailableChange}>
-          <p>{copy.missingChange}</p>
+          <p>
+            <CopyText name="missingChange" />
+          </p>
         </Notice>
       </section>
       <section className="evidence-section" id="alternatives">
@@ -98,7 +151,20 @@ export default async function Profile({
         <div className="two-col">
           {alternatives.map((q) => (
             <Link key={q.id} className="panel" href={playerUrl(q)}>
-              #{q.rank} {q.name} · {q.task}
+              #
+              <DataValue
+                source={`players.${q.role}.${q.id}.rank`}
+                format="text"
+              />{" "}
+              <DataValue
+                source={`players.${q.role}.${q.id}.name`}
+                format="text"
+              />{" "}
+              ·{" "}
+              <DataValue
+                source={`players.${q.role}.${q.id}.task`}
+                format="text"
+              />
             </Link>
           ))}
         </div>

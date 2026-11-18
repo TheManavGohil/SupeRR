@@ -1,4 +1,5 @@
-import { copy } from "@/content/copy";
+import { CopyText } from "@/components/data-value";
+
 import { Suspense } from "react";
 import { players } from "@/lib/data";
 import { CompareExplorer } from "@/components/compare-explorer";
@@ -14,7 +15,9 @@ export default function ComparePage() {
         kicker="SIDE BY SIDE"
         title="Close calls deserve a closer look."
       >
-        <p>{copy.comparisonIntro}</p>
+        <p>
+          <CopyText name="comparisonIntro" />
+        </p>
       </PageIntro>
       <Suspense fallback={<p>Loading comparison controls…</p>}>
         <CompareExplorer players={players} />

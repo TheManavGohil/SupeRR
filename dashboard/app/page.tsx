@@ -1,3 +1,5 @@
+import { ScoreScope } from "@/components/score-scope";
+import { DataValue, CopyText } from "@/components/data-value";
 import Link from "next/link";
 import {
   ArrowDown,
@@ -6,7 +8,7 @@ import {
   Layers3,
   ShieldCheck,
 } from "lucide-react";
-import { selected, release, score, playerUrl } from "@/lib/data";
+import { selected, playerUrl } from "@/lib/data";
 import site from "@/content/generated/site.json";
 import { copy } from "@/content/copy";
 import { PlayerInitials } from "@/components/player-initials";
@@ -26,7 +28,9 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="hero-copy">
-          <Eyebrow>{copy.homeKicker}</Eyebrow>
+          <Eyebrow>
+            <CopyText name="homeKicker" />
+          </Eyebrow>
           <h1>
             WHEN THE
             <br />
@@ -35,9 +39,11 @@ export default function Home() {
             <span>TIGHT.</span>
           </h1>
           <p className="hero-deck">
-            {copy.homeDeck}
+            <CopyText name="homeDeck" />
             <br />
-            <strong>{copy.homeProof}</strong>
+            <strong>
+              <CopyText name="homeProof" />
+            </strong>
           </p>
           <div className="hero-actions">
             <ActionLink href="/rankings/batting">
@@ -47,7 +53,7 @@ export default function Home() {
           </div>
           <div className="hero-footnote">
             <span className="live-dot" />
-            {copy.frozen}
+            <CopyText name="frozen" />
           </div>
         </div>
         <div className="hero-art">
@@ -58,39 +64,81 @@ export default function Home() {
           <Link href={playerUrl(batters[0])} className="hero-player-caption">
             <div>
               <span>
-                {copy.heroRank} {String(batters[0].rank).padStart(2, "0")}
+                <CopyText name="heroRank" />{" "}
+                <DataValue
+                  source={`players.${batters[0].role}.${batters[0].id}.rank`}
+                  format="rank"
+                />
               </span>
-              <h2>{batters[0].name}</h2>
+              <h2>
+                <DataValue
+                  source={`players.${batters[0].role}.${batters[0].id}.name`}
+                  format="text"
+                />
+              </h2>
               <p>
-                {batters[0].task} · {batters[0].exposure.pressureMatches}{" "}
+                <DataValue
+                  source={`players.${batters[0].role}.${batters[0].id}.task`}
+                  format="text"
+                />{" "}
+                ·{" "}
+                <DataValue
+                  source={`players.${batters[0].role}.${batters[0].id}.exposure.pressureMatches`}
+                  format="text"
+                />{" "}
                 {copy.retainedMatches.toLowerCase()}
               </p>
             </div>
             <ArrowUpRight />
           </Link>
           <div className="floating-score">
-            <span>{copy.scoreLabel}</span>
-            <strong>{score(batters[0].rating.low)}</strong>
-            <small>{copy.heroMetric}</small>
+            <span>
+              <CopyText name="scoreLabel" />
+            </span>
+            <strong>
+              <DataValue
+                source={`players.${batters[0].role}.${batters[0].id}.rating.low`}
+                format="score"
+              />
+            </strong>
+            <small>
+              <CopyText name="heroMetric" />
+            </small>
           </div>
         </div>
       </section>
       <div className="scope-strip">
         <div>
-          <strong>{release.matches}</strong>
-          <span>{copy.scopeMatches}</span>
+          <strong>
+            <DataValue source="release.matches" format="text" />
+          </strong>
+          <span>
+            <CopyText name="scopeMatches" />
+          </span>
         </div>
         <div>
-          <strong>{release.events.toLocaleString("en-GB")}</strong>
-          <span>{copy.scopeEvents}</span>
+          <strong>
+            <DataValue source="release.events" format="integer" />
+          </strong>
+          <span>
+            <CopyText name="scopeEvents" />
+          </span>
         </div>
         <div>
-          <strong>{release.selectedTotal}</strong>
-          <span>{copy.scopeSelections}</span>
+          <strong>
+            <DataValue source="release.selectedTotal" format="text" />
+          </strong>
+          <span>
+            <CopyText name="scopeSelections" />
+          </span>
         </div>
         <div>
-          <strong>{release.bootstrapDraws.toLocaleString("en-GB")}</strong>
-          <span>{copy.scopeResamples}</span>
+          <strong>
+            <DataValue source="release.bootstrapDraws" format="integer" />
+          </strong>
+          <span>
+            <CopyText name="scopeResamples" />
+          </span>
         </div>
         <a href="#selections" aria-label="Scroll to selections">
           <ArrowDown />
@@ -115,7 +163,8 @@ export default function Home() {
               <h3>
                 {label}
                 <span>
-                  TOP {site.heroPreviewCount} / {release.topCount}
+                  TOP <DataValue source="site.heroPreviewCount" format="text" />{" "}
+                  / <DataValue source="release.topCount" format="text" />
                 </span>
               </h3>
               <TextLink href={`/rankings/${role}`}>See all selections</TextLink>
@@ -128,6 +177,7 @@ export default function Home() {
           </div>
         ))}
       </section>
+      <ScoreScope />
       <section className="method-preview section">
         <div>
           <Eyebrow>THE SELECTION LOGIC</Eyebrow>
@@ -136,7 +186,9 @@ export default function Home() {
             <br />
             need <em>strong evidence.</em>
           </h2>
-          <p>{copy.methodPreview}</p>
+          <p>
+            <CopyText name="methodPreview" />
+          </p>
           <ActionLink href="/methodology" subtle>
             Follow the complete approach
           </ActionLink>
@@ -175,17 +227,25 @@ export default function Home() {
         />
         <div className="reality-grid">
           <div className="reality-number">
-            {release.selectedRecentAdequate}
-            <span>/ {release.selectedTotal}</span>
+            <DataValue source="release.selectedRecentAdequate" format="text" />
+            <span>
+              / <DataValue source="release.selectedTotal" format="text" />
+            </span>
           </div>
           <div>
-            <h3>{copy.eligibility}</h3>
-            <p>{copy.scoreScopeFuture}</p>
+            <h3>
+              <CopyText name="eligibility" />
+            </h3>
+            <p>
+              <CopyText name="scoreScopeFuture" />
+            </p>
             <TextLink href="/validation">Inspect temporal evidence</TextLink>
           </div>
         </div>
         <Notice title="A transparent pressure index">
-          <p>{copy.sourceGaps}</p>
+          <p>
+            <CopyText name="sourceGaps" />
+          </p>
         </Notice>
       </section>
       <section className="closing-cta">

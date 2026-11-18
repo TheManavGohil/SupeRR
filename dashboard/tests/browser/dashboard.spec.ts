@@ -1,8 +1,44 @@
 import { copy } from "../../content/copy";
+import site from "../../content/generated/site.json" with { type: "json" };
+import { validateDocument } from "../../scripts/check-built-content.mjs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs";
 import path from "node:path";
+
+test("scope, canonical links and JSON-backed values remain valid after interaction", async ({
+  page,
+}) => {
+  for (const route of [
+    "/",
+    "/methodology",
+    "/validation",
+    "/report",
+    "/rankings/batting",
+    "/compare",
+  ]) {
+    await page.goto(route);
+    validateDocument(await page.content(), route);
+    const canonical = await page
+      .locator('link[rel="canonical"]')
+      .getAttribute("href");
+    expect(new URL(canonical!).href).toBe(
+      new URL(route, site.publicBaseUrl).href,
+    );
+    if (route === "/" || route === "/methodology") {
+      const scope = page.getByRole("region", { name: copy.scoreScopeTitle });
+      await expect(scope).toContainText(copy.scoreScopeProduction);
+      await expect(scope).toContainText(copy.scoreScopeRole);
+    }
+  }
+  await page.goto("/rankings/batting");
+  await page
+    .getByRole("checkbox", { name: copy.recentFilter, exact: true })
+    .check();
+  validateDocument(await page.content(), "filtered rankings");
+  await page.goto("/compare?role=bowling&players=781,2933,23");
+  validateDocument(await page.content(), "bowling comparison");
+});
 
 test("overview, fixed ranking filters, layout switch and comparison selection", async ({
   page,

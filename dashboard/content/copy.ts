@@ -52,6 +52,8 @@ export const copy = {
     "Source gaps, broad context definitions and incomplete adjustment qualify the ordering. Match-sampling uncertainty cannot account for missing-source bias.",
   roleScope:
     "This is an observed workload label; squad fit and availability need separate review.",
+  battingListTitle: `${cap(words(release.topCount))} batters`,
+  bowlingListTitle: `${cap(words(release.topCount))} bowlers`,
   rankingTitleBatting: `${cap(words(release.topCount))} batters. Every pick explained.`,
   rankingTitleBowling: `${cap(words(release.topCount))} bowlers. Every pick explained.`,
   homeKicker: `SUPERR SELECTOR SEASON ${release.season} · ROUND ${release.round}`,

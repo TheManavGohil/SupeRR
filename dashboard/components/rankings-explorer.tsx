@@ -1,11 +1,12 @@
 "use client";
+import { DataValue, CopyText } from "@/components/data-value";
 import { copy } from "@/content/copy";
 import site from "@/content/generated/site.json";
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Search, LayoutGrid, List, ArrowUpRight, X } from "lucide-react";
 import type { CardPlayer, Role } from "@/lib/types";
-import { compareUrl, playerUrl, score } from "@/lib/format";
+import { compareUrl, playerUrl } from "@/lib/format";
 import { PlayerCard, RecentBadge } from "./ui";
 
 export function RankingsExplorer({
@@ -51,7 +52,8 @@ export function RankingsExplorer({
           disabled={ids.length === site.compareLimit && !ids.includes(p.id)}
           onChange={() => toggle(p.id)}
         />
-        Compare {p.name}
+        Compare{" "}
+        <DataValue source={`players.${p.role}.${p.id}.name`} format="text" />
       </label>
     </div>
   );
@@ -64,7 +66,7 @@ export function RankingsExplorer({
             className="rankings-featured"
             aria-label="Top-ranked selection"
           >
-            <h2 className="sr-only">Rank one</h2>
+            <h2 className="sr-only">Leading selection</h2>
             {selectableCard(featured)}
           </section>
         )}
@@ -88,7 +90,7 @@ export function RankingsExplorer({
             checked={recent}
             onChange={(e) => setRecent(e.target.checked)}
           />
-          {copy.recentFilter}
+          <CopyText name="recentFilter" />
         </label>
         <div className="view-switch" role="group" aria-label="Ranking layout">
           <button
@@ -108,7 +110,9 @@ export function RankingsExplorer({
         </div>
       </div>
       <p className="filter-caption" aria-live="polite">
-        Showing {filtered.length} of {players.length} {copy.rankingFilterSuffix}
+        Showing <DataValue source={`site.uiCounts.${filtered.length}`} /> of{" "}
+        <DataValue source={`site.uiCounts.${players.length}`} />{" "}
+        <CopyText name="rankingFilterSuffix" />
         {ids.length === site.compareLimit
           ? copy.compareLimitReached
           : copy.compareHint}
@@ -141,8 +145,12 @@ export function RankingsExplorer({
                 <th>Rank</th>
                 <th>Player / observed task</th>
                 <th>Score</th>
-                <th>{copy.retainedMatches}</th>
-                <th>{copy.recentColumn}</th>
+                <th>
+                  <CopyText name="retainedMatches" />
+                </th>
+                <th>
+                  <CopyText name="recentColumn" />
+                </th>
                 <th>Compare</th>
               </tr>
             </thead>
@@ -150,22 +158,45 @@ export function RankingsExplorer({
               {filtered.map((p) => (
                 <tr key={p.id}>
                   <td className="rank-cell">
-                    {String(p.rank).padStart(2, "0")}
+                    <DataValue
+                      source={`players.${p.role}.${p.id}.rank`}
+                      format="rank"
+                    />
                   </td>
                   <th>
                     <Link href={playerUrl(p)}>
-                      {p.name}
+                      <DataValue
+                        source={`players.${p.role}.${p.id}.name`}
+                        format="text"
+                      />
                       <ArrowUpRight size={14} />
                     </Link>
-                    <small>{p.task}</small>
+                    <small>
+                      <DataValue
+                        source={`players.${p.role}.${p.id}.task`}
+                        format="text"
+                      />
+                    </small>
                   </th>
-                  <td>{score(p.rating.low)}</td>
                   <td>
-                    {p.exposure.pressureMatches}
+                    <DataValue
+                      source={`players.${p.role}.${p.id}.rating.low`}
+                      format="score"
+                    />
+                  </td>
+                  <td>
+                    <DataValue
+                      source={`players.${p.role}.${p.id}.exposure.pressureMatches`}
+                      format="text"
+                    />
                     {p.exposure.peerSupportedMatches !==
                       p.exposure.pressureMatches && (
                       <small>
-                        {p.exposure.peerSupportedMatches} {copy.peerSupported}
+                        <DataValue
+                          source={`players.${p.role}.${p.id}.exposure.peerSupportedMatches`}
+                          format="text"
+                        />{" "}
+                        <CopyText name="peerSupported" />
                       </small>
                     )}
                   </td>
@@ -196,7 +227,8 @@ export function RankingsExplorer({
         >
           <div>
             <strong>
-              {ids.length} / {site.compareLimit} players
+              <DataValue source={`site.uiCounts.${ids.length}`} /> /{" "}
+              <DataValue source="site.compareLimit" format="text" /> players
             </strong>
             <span>
               {players

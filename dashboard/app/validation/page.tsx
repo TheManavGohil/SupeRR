@@ -1,6 +1,7 @@
-import { copy } from "@/content/copy";
+import { DataValue, CopyText } from "@/components/data-value";
+
 import Link from "next/link";
-import { players, release, playerUrl } from "@/lib/data";
+import { players, playerUrl } from "@/lib/data";
 import {
   PageIntro,
   RecentBadge,
@@ -21,10 +22,14 @@ export default function Validation() {
         kicker="RELIABILITY & LIMITATIONS"
         title="A selection should survive scrutiny."
       >
-        <p>{copy.validationIntro}</p>
+        <p>
+          <CopyText name="validationIntro" />
+        </p>
       </PageIntro>
       <Notice title="Recent evidence">
-        <p>{copy.eligibility}</p>
+        <p>
+          <CopyText name="eligibility" />
+        </p>
       </Notice>
       <section className="section">
         <SectionHeading
@@ -44,26 +49,61 @@ export default function Validation() {
             <tbody>
               <tr>
                 <th>Development</th>
-                <td>{release.developmentMatches}</td>
-                <td>{release.developmentBattingEligible}</td>
-                <td>{release.developmentBowlingEligible}</td>
+                <td>
+                  <DataValue
+                    source="release.developmentMatches"
+                    format="text"
+                  />
+                </td>
+                <td>
+                  <DataValue
+                    source="release.developmentBattingEligible"
+                    format="text"
+                  />
+                </td>
+                <td>
+                  <DataValue
+                    source="release.developmentBowlingEligible"
+                    format="text"
+                  />
+                </td>
               </tr>
               <tr>
                 <th>Reserved</th>
-                <td>{release.reservedMatches}</td>
-                <td>{release.reservedBattingEligible}</td>
-                <td>{release.reservedBowlingEligible}</td>
+                <td>
+                  <DataValue source="release.reservedMatches" format="text" />
+                </td>
+                <td>
+                  <DataValue
+                    source="release.reservedBattingEligible"
+                    format="text"
+                  />
+                </td>
+                <td>
+                  <DataValue
+                    source="release.reservedBowlingEligible"
+                    format="text"
+                  />
+                </td>
               </tr>
               <tr>
                 <th>Final</th>
-                <td>{release.matches}</td>
-                <td>{release.battingEligible}</td>
-                <td>{release.bowlingEligible}</td>
+                <td>
+                  <DataValue source="release.matches" format="text" />
+                </td>
+                <td>
+                  <DataValue source="release.battingEligible" format="text" />
+                </td>
+                <td>
+                  <DataValue source="release.bowlingEligible" format="text" />
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p>{copy.retrospective}</p>
+        <p>
+          <CopyText name="retrospective" />
+        </p>
       </section>
       <section className="section">
         <SectionHeading
@@ -83,10 +123,19 @@ export default function Validation() {
               {picks.map((p) => (
                 <tr key={p.id}>
                   <th>
-                    <Link href={playerUrl(p)}>{p.name}</Link>
+                    <Link href={playerUrl(p)}>
+                      <DataValue
+                        source={`players.${p.role}.${p.id}.name`}
+                        format="text"
+                      />
+                    </Link>
                   </th>
                   <td>
-                    {p.role} / {p.rank}
+                    {p.role} /{" "}
+                    <DataValue
+                      source={`players.${p.role}.${p.id}.rank`}
+                      format="text"
+                    />
                   </td>
                   <td>
                     <RecentBadge player={p} />
@@ -107,22 +156,30 @@ export default function Validation() {
             <div className="panel" key={role}>
               <h3>{role} top-ten overlap</h3>
               <p>
-                {copy.weightEqual}:{" "}
-                {release.weightOverlap[role].runs_wickets_50_50} /{" "}
-                {release.topCount}
+                <CopyText name="weightEqual" />:{" "}
+                <DataValue
+                  source={`release.weightOverlap.${role}.runs_wickets_50_50`}
+                />{" "}
+                / <DataValue source="release.topCount" format="text" />
               </p>
               <p>
-                {copy.weightRuns}:{" "}
-                {release.weightOverlap[role].runs_wickets_70_30} /{" "}
-                {release.topCount}
+                <CopyText name="weightRuns" />:{" "}
+                <DataValue
+                  source={`release.weightOverlap.${role}.runs_wickets_70_30`}
+                />{" "}
+                / <DataValue source="release.topCount" format="text" />
               </p>
             </div>
           ))}
         </div>
-        <p>{copy.companions}</p>
+        <p>
+          <CopyText name="companions" />
+        </p>
       </section>
       <Notice title="Interpretation limits">
-        <p>{copy.sourceGaps}</p>
+        <p>
+          <CopyText name="sourceGaps" />
+        </p>
       </Notice>
     </div>
   );
