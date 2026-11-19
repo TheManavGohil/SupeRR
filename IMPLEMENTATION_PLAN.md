@@ -1,6 +1,6 @@
 # SupeRR Selector Season 2 — architecture and implementation plan
 
-Prepared: 11 November 2026 (IST); updated 13 November. Status: reconciliation, EDA, comparison checks, method preflight, historical peer baseline and one contextual revision are implemented. The revision improves run predictions and reduces calibration alerts, but fails promotion; reserved evaluation and player rankings remain gated. Next is the rating-reference decision described in [progress.md](progress.md), the current handoff record. [Supported method v1](SUPPORTED_METHOD.md) supersedes the original global player-change model below.
+Prepared: 11 November 2026 (IST); updated 13 November. Status: reconciliation, EDA, comparison checks, method preflight, historical peer baseline and one contextual revision are implemented. The revision improves run predictions and reduces calibration alerts, but fails promotion; reserved evaluation and player rankings remain gated. Next is the rating-reference decision described in [progress.md](docs/process/progress.md), the current handoff record. [Supported method v1](SUPPORTED_METHOD.md) supersedes the original global player-change model below.
 
 Completed milestone: [EDA report](reports/eda_2026-11-01/REPORT.md), [eight-page chart pack](reports/eda_2026-11-01/EDA_CHARTS.pdf), and [reproduction instructions](README.md). The processed proxy cohort reproduces the earlier audit's 160,186 events and 50,737 pressure flags. Exact score-dependent states remain gated on repair. This completes the usable part of T01/T02/T04 and exploratory analysis; T03 and the Mode A portion of T04 remain open.
 
@@ -8,7 +8,7 @@ The [private pilot report](reports/reconciliation_pilot_2026-11-01/REPORT.md) se
 
 New completed milestones: [full reconciliation and coverage](reports/full_reconciliation_2026-11-01/REPORT.md), [pressure comparison validation](reports/pressure_validation_2026-11-01/REPORT.md), and [standalone validation figures](reports/pressure_validation_2026-11-01/VALIDATION_CHARTS.pdf). Every supplied match is accounted for. Private review ledgers retain original values and evidence; unreviewed discrepancies remain excluded. This extends T03/T04 and completes the pre-model support diagnostic, without promoting unsupported rankings.
 
-Approved constraints are recorded in [configs/analysis_preregistration.json](configs/analysis_preregistration.json). Audit results are in [the reconciliation report](artifacts/reconciliation_2026-11-01/REPORT.md); [the organiser clarification](ORGANISER_CLARIFICATION_DRAFT.md) is drafted and has not been sent.
+Approved constraints are recorded in [configs/analysis_preregistration.json](configs/analysis_preregistration.json). Audit results are in the private reconciliation report at `artifacts/reconciliation_2026-11-01/REPORT.md`. Internal draft status is maintained only in [process records](docs/process/progress.md#artifacts-and-privacy).
 
 Frozen data cutoff: **1 November 2026 inclusive**, applied to `matches.match_date`. Keep whole-match bootstrap resampling. Do not tune pressure thresholds to favour particular players.
 
@@ -293,7 +293,7 @@ Retaining the rule labels does not waive the comparison-support gate. Diagnostic
 
 Both appear in every player card. A player can be excellent under pressure without improving relative to an already exceptional baseline.
 
-**Current implementation gate:** do not execute global 70/30 or 50/50 ranking blends. The completed diagnostic demonstrates structural absence of late-phase ordinary observations. [Supported method v1](SUPPORTED_METHOD.md) and [its frozen configuration](configs/supported_method_v1.json) now specify all-pressure level separately from same-player, same-year supported-context change. The weights remain unchanged, with missing change blocking both blends. The `prepare-method` command exports allowlisted features, separate targets/identities, strictly chronological match folds, and outcome-independent support/eligibility checks. No model or player score is fitted. Do not silently extrapolate ordinary performance into unsupported late-phase cells.
+**Current implementation gate:** do not execute global level 70 : change 30 or level 50 : change 50 ranking blends (withheld, not executed). The completed diagnostic demonstrates structural absence of late-phase ordinary observations. [Supported method v1](SUPPORTED_METHOD.md) and [its frozen configuration](configs/supported_method_v1.json) now specify all-pressure level separately from same-player, same-year supported-context change. The weights remain unchanged, with missing change blocking both blends. The `prepare-method` command exports allowlisted features, separate targets/identities, strictly chronological match folds, and outcome-independent support/eligibility checks. No model or player score is fitted. Do not silently extrapolate ordinary performance into unsupported late-phase cells.
 
 The full-cohort diagnostic reports raw differences, raw differences on the same supported cells, and context-standardized differences. These are development-only descriptive associations with 1,000 whole-match resamples, not trained models or causal effects. The 2026 partition is shown for coverage/support only and remains reserved from method selection.
 
@@ -337,7 +337,7 @@ Mode B substitutes verified bat runs for conceded runs and changes the metric la
 
 For each evaluation run, establish the residual scales from its training reference and freeze them before evaluating later matches. In the final retrospective ranking, put all cross-fitted residuals on one frozen pre-2026 reference scale so fold-specific scaling cannot change the meaning of a contribution point. Report drift by season; this retrospective rescaling is distinct from the strictly historical calculations used in the forecasting evaluation.
 
-The 60/40 split is an explicit starting preference for run production/control with substantial wicket value. It is not a learned fact. Pre-register alternatives of 50/50 and 70/30; if the top ten depend heavily on this choice, show that instability. Explain rankings using the underlying cricket metrics as well as the composite.
+The runs 60 : wickets 40 split is an explicit starting preference for run production/control with substantial wicket value. It is not a learned fact. Pre-register alternatives of runs 50 : wickets 50 and runs 70 : wickets 30; if the top ten depend heavily on this choice, show that instability. Explain rankings using the underlying cricket metrics as well as the composite.
 
 ### 9.5 Player baseline, pressure change, and shrinkage
 
@@ -370,7 +370,7 @@ point_score = 0.70 * pressure_level + 0.30 * pressure_change
 selection_score = 10th percentile of the match-bootstrap point_score distribution
 ```
 
-Pre-registered level/change variant: `0.50 * pressure_level + 0.50 * pressure_change`. Evaluate it alongside the 70/30 default using the same cohort, pressure definition, resamples, eligibility and uncertainty calculation. Report rank changes and overlap; do not select the variant based on which players it favours. These weights are distinct from the 60/40 run/wicket contribution weights above.
+Pre-registered level/change variant: `0.50 * pressure_level + 0.50 * pressure_change`. Evaluate it alongside the level 70 : change 30 default (withheld, not executed) using the same cohort, pressure definition, resamples, eligibility and uncertainty calculation. Report rank changes and overlap; do not select the variant based on which players it favours. These weights are distinct from the runs 60 : wickets 40 contribution weights above.
 
 Rank by `selection_score`. This favours supported performance and penalises uncertainty without a separate arbitrary consistency bonus. Use the posterior/pooled point score, then pressure-match count, then player ID as deterministic tie-breakers for exactly equal numerical scores. Do not break ties on rounded display values.
 
@@ -432,7 +432,7 @@ Compare out-of-time rank association and realised pressure contribution; report 
 - Use cached player-match sufficient statistics for rating resamples; this interval is conditional on fitted pressure/expectation models and must be labelled that way.
 - Target approximately **20** more expensive model-refit or rolling-fold variants to assess upstream-model uncertainty separately. Keep the 1,000 final whole-match rating bootstraps; the reduced refit count does not replace them. Do not claim conditional intervals cover every modelling assumption, and state the limited precision of the smaller upstream-model sensitivity sample.
 - Leave out each leading player's best match; then run leave-one-season-out sensitivity.
-- Test pressure threshold, 60/40 metric mix, **70/30 default versus pre-registered 50/50 level/change mix**, recency, eligibility, dataset mode, competition scope and corrected-data coverage. Pressure variants are registered diagnostic comparisons, not player-targeted threshold optimisation.
+- Test pressure threshold, runs 60 : wickets 40 metric mix, **level 70 : change 30 default versus pre-registered level 50 : change 50 mix (withheld, not executed)**, recency, eligibility, dataset mode, competition scope and corrected-data coverage. Pressure variants are registered diagnostic comparisons, not player-targeted threshold optimisation.
 - Report match contribution concentration, positive-contribution match share, IPL/T20I differences, and pressure sample size.
 
 Large movement is a finding to explain. If a player moves more than five ranks or regularly drops out of the ten under reasonable variants, flag them as sensitive. Do not choose whichever variant creates a cleaner-looking leaderboard.
@@ -506,7 +506,7 @@ Effort estimates are focused working time, not promises. Critical path is T01 �
 | T04: State engine | Pre-ball table, scoring/state tests, chronological fold manifest | T02/T03 | 4–6 h | Cricket invariants and leakage tests pass. |
 | T05: Baseline analysis | Rule pressure, peer expectations, first anonymous ranking diagnostics | T04 | 3–5 h | End-to-end baseline runs and every metric is explainable. |
 | T06: Advanced candidate | Calibrated leverage and context models; promotion decision | T05, Mode A | 4–7 h | Development gates pass, or baseline retained with explanation. |
-| T07: Ratings and uncertainty | Pooling, eligibility, recency, 1,000 match bootstraps, about 20 upstream-model variants; 70/30 and 50/50 comparison | T05; optional T06 | 5–7 h | Both lists have traceable evidence and uncertainty. |
+| T07: Ratings and uncertainty | Pooling, eligibility, recency, 1,000 match bootstraps, about 20 upstream-model variants; level 70 : change 30 and level 50 : change 50 comparison (withheld, not executed) | T05; optional T06 | 5–7 h | Both lists have traceable evidence and uncertainty. |
 | T08: Freeze and evaluation | Frozen config, reserved 2026 model evaluation, final all-data run | T07 | 3–5 h | Evaluation and final recommendation artifacts clearly separated; prior aggregate EDA exposure disclosed. |
 | T09: Submission package | PDF, figures, player cards, exact dropdown checklist | T08 | 5–7 h | All required brief items covered; report values match selections. |
 | T10: Optional explorer — deferred | Local interactive views only if explicitly revisited after submission readiness | T09 | 0 h in core schedule | Not a qualification deliverable or a dependency of the report. |

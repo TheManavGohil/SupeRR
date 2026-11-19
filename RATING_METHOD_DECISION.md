@@ -1,6 +1,6 @@
 # Rating decision after the first validated evidence tables
 
-14 November 2026. Status: **user-approved amendment**. The user accepted this exact primary-ordering change with “yes, go ahead!” after the concrete recommendation was presented. [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and [the activated development configuration](configs/descriptive_rating_v2.json) govern implementation. Approval does not imply that development validation has passed; see [progress.md](progress.md) for current execution status. The rationale and proposed algebra below are retained as the pre-execution specification.
+14 November 2026. Status: **user-approved amendment**. The user accepted this exact primary-ordering change with “yes, go ahead!” after the concrete recommendation was presented. [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and [the activated development configuration](configs/descriptive_rating_v2.json) govern implementation. Approval does not imply that development validation has passed; see [progress.md](docs/process/progress.md) for current execution status. The rationale and proposed algebra below are retained as the pre-execution specification.
 
 ## Decision and cricket question
 
@@ -84,7 +84,7 @@ k_batting = 75; k_bowling = 60
 
 Positive contribution means more favourable observed outcomes than the corresponding retained peer means under the declared run/wicket tradeoff. A weighted average over the player's own workload is intentional: the method measures performance in their observed task, not performance under an invented common role assignment. It does not prove that dominance over a weaker T20I opposition transfers to IPL. Report IPL and T20I results separately alongside the combined number.
 
-Keep the registered 50/50 and 70/30 **run/wicket** mixes as sensitivity checks on the identical eligible cohort and shared draws. They are distinct from the level/change weight variants. No new mix is selected after viewing rankings.
+Keep the registered **runs 50 : wickets 50** and **runs 70 : wickets 30** mixes as sensitivity checks on the identical eligible cohort and shared draws. They are distinct from the level/change weight variants. No new mix is selected after viewing rankings.
 
 ### Eligibility and coverage
 
@@ -104,15 +104,15 @@ Require at least 95% finite draws. Otherwise withhold a primary selection score.
 
 Recomputing descriptive aggregates in each bootstrap includes peer-benchmark sampling variation. It is not another setting/partition search or an assertion that the previous prediction models now pass validation. The original 20 predictive fit bundles and every failed gate remain unchanged.
 
-## Usual performance and the 70/30–50/50 issue
+## Usual performance and conditional level/change weights
 
 Continue reporting the three existing views: all-pressure observed performance, all-ordinary observed performance as background, and supported same-player/year context comparisons. Preserve the original support minima, cell weighting, sample requirements and missing-group bootstrap rule. Change is never filled with zero.
 
-For an optional descriptive companion index, orient and scale the supported observed run/wicket differences using the same declared outcome scales and 60/40 mix, then apply the original paired-effective-count shrinkage. Use each difference per opportunity (divide the initial-table differences per 100 by 100). If `D_runs` and `D_wickets` are the pressure-cell-weighted same-player pressure-minus-ordinary differences, use `0.60*D_runs/s_runs - 0.40*D_wickets/s_wickets` for batting, and its opposite for bowling. Multiply by `n_pair/(n_pair+k_role)`, with the original `n_pair = 1/sum_c(q_c²*(1/n_eff_pressure_c + 1/n_eff_ordinary_c))`. Call this `C_descriptive`; it is **not** the original residual-based change statistic. Recompute the cell weights and paired count in every draw, retaining the original missing-group invalidation rule. It remains unavailable for decision use below 95% finite draws.
+For an optional descriptive companion index, orient and scale the supported observed run/wicket differences using the same declared outcome scales and runs 60 : wickets 40 mix, then apply the original paired-effective-count shrinkage. Use each difference per opportunity (divide the initial-table differences per 100 by 100). If `D_runs` and `D_wickets` are the pressure-cell-weighted same-player pressure-minus-ordinary differences, use `0.60*D_runs/s_runs - 0.40*D_wickets/s_wickets` for batting, and its opposite for bowling. Multiply by `n_pair/(n_pair+k_role)`, with the original `n_pair = 1/sum_c(q_c²*(1/n_eff_pressure_c + 1/n_eff_ordinary_c))`. Call this `C_descriptive`; it is **not** the original residual-based change statistic. Recompute the cell weights and paired count in every draw, retaining the original missing-group invalidation rule. It remains unavailable for decision use below 95% finite draws.
 
 Where both components and uncertainty are adequate, report `0.70*L + 0.30*C_descriptive` and `0.50*L + 0.50*C_descriptive` on the identical comparison-eligible cohort and shared draws. Do not order the broad primary list by either companion and do not compare its shortlist with a different eligibility cohort as a weight effect. In the current development evidence, none qualifies for a reliable supported-change interval, so no such companion ordering can be claimed.
 
-**This amendment changes the original mandatory 70/30 level/change primary ranking into a pressure primary ranking plus conditional companion comparisons.** It also replaces predictive residual scales/expectations with an explicitly descriptive empirical comparison. The user's subsequent explicit approval activates these changes under version 2; the earlier timing instruction alone did not authorize them. [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md), its original weights and all failed gates remain in the historical audit record.
+**This amendment changes the original mandatory level 70 : change 30 primary ranking into a pressure primary ranking plus conditional companion comparisons.** It also replaces predictive residual scales/expectations with an explicitly descriptive empirical comparison. The user's subsequent explicit approval activates these changes under version 2; the earlier timing instruction alone did not authorize them. [SUPPORTED_METHOD.md](SUPPORTED_METHOD.md), its original weights and all failed gates remain in the historical audit record.
 
 ## What remains before any score or reserved evaluation
 

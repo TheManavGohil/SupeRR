@@ -53,7 +53,7 @@ Match exclusion does not exclude the player's other matches. The benchmark measu
 
 The method still separates all-pressure level from supported same-player pressure-versus-ordinary change. The new reference does not supply ordinary death-over controls or enlarge the supported-change cohort by itself. Keep strong specialists visible in level-only evidence; do not fill missing change with zero or claim the narrower blended list identifies the ten best players overall without the specialist review.
 
-Pressure labels, 730-day rating recency, warm-up exclusion, source-retention requirements, contribution weights, 70/30 and 50/50 level/change variants, eligibility, whole-match bootstrap and finite-draw gates remain unchanged. Bootstrap uncertainty is conditional on the fitted references and support; cross-fold training creates dependence not represented by treating delivery residuals as independent. No new bootstrap refitting is authorized here.
+Pressure labels, 730-day rating recency, warm-up exclusion, source-retention requirements, contribution weights, level 70 : change 30 and level 50 : change 50 variants (now withheld, not executed), eligibility, whole-match bootstrap and finite-draw gates remain unchanged. Bootstrap uncertainty is conditional on the fitted references and support; cross-fold training creates dependence not represented by treating delivery residuals as independent. No new bootstrap refitting is authorized here.
 
 ## Next implementation milestone
 

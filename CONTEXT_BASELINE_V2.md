@@ -1,6 +1,6 @@
 # One focused amendment to historical expectations
 
-This amendment implements the next task in [progress.md](progress.md). It changes the expectation model described in [supported method v1](SUPPORTED_METHOD.md), leaving its pressure definition, attribution, eligible populations, level/change weights and match-level uncertainty policy intact. The original configuration and failed baseline remain preserved.
+This amendment implements the next task in [progress.md](docs/process/progress.md). It changes the expectation model described in [supported method v1](SUPPORTED_METHOD.md), leaving its pressure definition, attribution, eligible populations, level/change weights and match-level uncertainty policy intact. The original configuration and failed baseline remain preserved.
 
 ## Cricket question
 

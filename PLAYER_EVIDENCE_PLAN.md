@@ -1,6 +1,6 @@
 # Player evidence dossiers: implementation plan
 
-Status: updated 14 November 2026. D0–D5 are implemented, executed and validated: 195 development dossiers, priority counterexample review before reserved access, frozen final evaluation, 243 final dossiers and two analytical top-ten lists. The active [descriptive method](DESCRIPTIVE_METHOD_V2.md), scales and ordering remain unchanged. Combined-window primary gates pass for 75 batting / 104 bowling entries. A matching private methodology and final selection review exist; D6 still requires exact dropdown mapping and submission packaging. See [progress.md](progress.md) for current results and artifact links; the package contracts below retain their original development scope.
+Status: updated 14 November 2026. D0–D5 are implemented, executed and validated: 195 development dossiers, priority counterexample review before reserved access, frozen final evaluation, 243 final dossiers and two analytical top-ten lists. The active [descriptive method](DESCRIPTIVE_METHOD_V2.md), scales and ordering remain unchanged. Combined-window primary gates pass for 75 batting / 104 bowling entries. A matching private methodology and final selection review exist; D6 still requires exact dropdown mapping and submission packaging. See [progress.md](docs/process/progress.md) for current results and artifact links; the package contracts below retain their original development scope.
 
 ## Purpose and immediate decision
 
@@ -17,7 +17,7 @@ Build observed development evidence while preparing one explicit rating-method d
 - Development dossiers use verified **2023–2025** events only, referenced to 31 December 2025. The final cutoff remains **1 November 2026 inclusive**; 2022 contributes no player-selection evidence.
 - Reuse frozen pressure flags, opportunity definitions, source exclusions, support rules and the 730-day recency half-life. Display ordinary and pressure denominators separately.
 - Keep 1,000 whole-match bootstrap draws, stratified by competition family/year and shared across players and roles. Do not resample deliveries independently.
-- [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and [its approved configuration](configs/descriptive_rating_v2.json) govern the primary pressure ordering. The user explicitly approved moving 70/30 and 50/50 level/change blends to conditional companion comparisons. Original support/exposure rules remain inherited where specified; no failed expectation reference is promoted.
+- [DESCRIPTIVE_METHOD_V2.md](DESCRIPTIVE_METHOD_V2.md) and [its approved configuration](configs/descriptive_rating_v2.json) govern the primary pressure ordering. The user explicitly approved moving level 70 : change 30 and level 50 : change 50 blends to conditional companion comparisons (withheld, not executed). Original support/exposure rules remain inherited where specified; no failed expectation reference is promoted.
 - Dossier rates and intervals are descriptive. They are not contextual residuals, a causal pressure effect, forecasts of IPL 2027 performance, or selection scores. Failed-reference exposure is an uncertainty annotation, not a performance deduction.
 - Keep detailed player outputs private under `reports/`. Commit code, tests, specifications and aggregate progress at coherent milestones.
 
@@ -84,7 +84,7 @@ Report integer totals, opportunities, matches and rates together, both unweighte
 | Batting | Batter runs per 100 non-wide striker opportunities; bowler-attributable striker dismissals per 100 of those opportunities. | Runs, attributed dismissals, boundaries and zero-batter-run opportunities; interpret scoring tempo alongside dismissal risk. No-balls remain in the analytical opportunity denominator. |
 | Bowling | Batter runs + wides + no-balls conceded per 100 delivery attempts; bowler-credited wickets per 100 attempts. | Concessions, wickets, wide/no-ball runs and zero-concession attempts; interpret control alongside wicket-taking. Byes, leg-byes and penalties are excluded from concession. |
 
-Do not call these official strike rate, batting average or economy. Derive boundaries from verified batter runs and cross-check supplied four/six flags; label any unresolved discrepancy. Keep run-outs, retirements and other excluded dismissals in a separate event annotation so the main wicket definition is not mistaken for all dismissals. Show runs and wickets separately; do not apply the registered 60/40 contribution mix to raw quantities with incompatible units.
+Do not call these official strike rate, batting average or economy. Derive boundaries from verified batter runs and cross-check supplied four/six flags; label any unresolved discrepancy. Keep run-outs, retirements and other excluded dismissals in a separate event annotation so the main wicket definition is not mistaken for all dismissals. Show runs and wickets separately; do not apply the registered runs 60 : wickets 40 contribution mix to raw quantities with incompatible units.
 
 Break out pressure performance by family, season, innings and role context. Use opponent/venue labels to describe where evidence occurred. Do not infer opponent difficulty, pitch quality, injury, availability or future franchise role from those labels.
 
@@ -138,15 +138,15 @@ Complete this decision immediately after the first validated aggregate tables, *
 
 Prepare one decision note comparing these two paths against the actual evidence:
 
-1. **Retain the active residual-based method.** The 70/30 default, 50/50 variant and current eligibility continue to apply. The failed reference gate blocks execution; dossier completion cannot remove that block. Document the unresolved reference and specialist-exclusion issues without requesting another automatic experiment.
+1. **Retain the active residual-based method.** The level 70 : change 30 default, level 50 : change 50 variant and current eligibility continue to apply. The failed reference gate blocks execution; dossier completion cannot remove that block. Document the unresolved reference and specialist-exclusion issues without requesting another automatic experiment.
 2. **Explicitly amend to a transparent descriptive selection method.** Recommended for consideration because it can use the verified outcomes directly. A possible structure is a common pressure-performance ordering, with supported usual-performance differences reported separately so specialists remain visible. This would change the registered blend and must be an explicit user-approved amendment, not an implementation shortcut. Raw rates alone do not solve cross-context comparability; the proposed specification must explain how role/family/year mix and unequal coverage affect ordering and what remains unadjusted.
 
-This plan does not select a replacement formula or approve dropping the 70/30 and 50/50 variants. Until an amendment is accepted, both remain registered and final scoring remains blocked. The decision note must give a concrete recommended formula or ordering rule, rather than offer "selector judgement" as an unspecified algorithm.
+This plan does not select a replacement formula or approve dropping the level 70 : change 30 and level 50 : change 50 variants. Until an amendment is accepted, both remain registered and final scoring remains blocked. The decision note must give a concrete recommended formula or ordering rule, rather than offer "selector judgement" as an unspecified algorithm.
 
 Before D5, record all of the following in the accepted version:
 
 - What is being estimated and why it answers the Round 1 pressure/usual-performance question.
-- Exact metric orientation, scale/normalization, weighting and tie-breaks; any departure from the 60/40 outcome mix or registered level/change variants.
+- Exact metric orientation, scale/normalization, weighting and tie-breaks; any departure from the runs 60 : wickets 40 outcome mix or registered level/change variants.
 - Which cohort can enter a common list; treatment of level-only specialists, unsupported change, low retention and sparse evidence.
 - How context comparability is handled without reusing failed expectations as validated player adjustments.
 - Match-bootstrap use, finite-draw requirements, repeatability checks and whether the lower quantile remains the ordering rule.

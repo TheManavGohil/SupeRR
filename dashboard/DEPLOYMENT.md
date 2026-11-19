@@ -1,77 +1,64 @@
 # Run and deploy The Pressure Index
 
-The app is implemented in `dashboard/` and builds independently of the private Python workspace. It presents the frozen 2023–1 November 2026 analysis; it does not fetch live cricket data or recompute scores.
+The Next.js app in `dashboard/` builds from frozen player aggregates without the private Python workspace. It does not fetch live cricket data or recompute scores. The stable public base for canonicals and PDF links is `https://supe-rr-manav.vercel.app` in `content/generated/site.json`.
 
 ## Local production preview
 
-Use Node **22.x** (the repository was built on 22.23.2):
+Use Node **22.x**. Run these commands from `dashboard/`:
 
 ```sh
-cd dashboard
-npm ci
-npm run build
-npm start
+rtk proxy npm ci
+rtk proxy npm test
+rtk proxy npm run lint
+rtk proxy npm run build
+rtk proxy npm run start -- --port 3100
 ```
 
-Open `http://localhost:3000`. For development use `npm run dev`. Local workspace shell instructions add `rtk proxy` before these commands.
+In another terminal, also in `dashboard/`:
+
+```sh
+rtk proxy env DASHBOARD_URL=http://127.0.0.1:3100 npm run test:browser
+```
+
+The build checks strict public keys, shared copy, PDF freshness and privacy, then validates numeric/copy provenance in static files and by serving every required route on a temporary local port. It does not assume a hosting adapter retains a particular number of HTML files.
 
 ## Vercel
 
-1. Import the GitHub repository into Vercel.
-2. Set **Root Directory** to `dashboard` and framework to **Next.js**.
-3. Install command: `npm ci`. Build command: `npm run build`. Keep the standard Next.js output configuration.
-4. Use Node 22.x. No application secrets, Python runtime, database or external API keys are required.
-5. Deploy, then check `/`, both `/rankings/` pages, a player deep link, `/compare`, `/methodology`, `/validation`, `/report` and the PDF download.
-6. Ensure the production URL opens for a logged-out judge without a Vercel authentication challenge. Use the stable production URL in Unstop's optional dashboard field (500 characters).
+1. Import the GitHub repository, using **Root Directory: `dashboard`**, **Framework: Next.js**, and **Node 22.x**.
+2. Use install command `npm ci`, build command `npm run build` and the standard Next.js output configuration. No application secrets, Python runtime, database or API keys are needed.
+3. Push an ordinary commit to `main` and check the Vercel status for that exact commit. A response from the stable URL alone can be an older deployment.
+4. Verify all routes and download hashes against the committed aggregates. Test the production URL while logged out; judge access must not require Vercel login.
 
-The original data pack, full ledgers and private reports are excluded from Git/deployment. Curated generated data contains only aggregate findings required for this presentation. All browser-delivered content is public. Root `.vercelignore` also excludes private workspace material if a CLI deployment is used from the repository root; the recommended Vercel project root is still `dashboard/`.
+The recommended Git integration deploys only `dashboard/`. Root `.vercelignore` also excludes private workspace material and process notes for a root CLI upload. All browser-delivered content is public. `noindex` remains enabled; it is not access control.
 
-Dependency audit, 18 November 2026: `npm audit --omit=dev` reports zero production advisories. The full development tree reports 14 high findings propagated from the unpatched [picomatch advisory](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) in lint/glob tooling. The affected tooling processes trusted repository patterns and is not used by a dashboard route or runtime API. There is no published patched release in the checked advisory; no speculative override or forced framework downgrade is applied. Recheck the development tooling when a fix is published. These findings are recorded separately from production exposure.
+## Publication boundaries
 
-## Player tiles
+Only the strict aggregate contract in `content/public-contract.json` is exported. Match-level cases, source pointers, raw ledgers and event data are excluded. One shared `PlayerInitials` tile receives only the display name. No player raster assets or image manifest are allowed. The original images and retired report/slide files were archived outside the repository before deletion.
 
-Every player uses the shared `PlayerInitials` component driven only by the display name. Original photos and the retired slide artifacts are archived outside the repository. Do not add player-image assets or an image manifest.
+The old PPTX and slide PDF must remain absent. Rebuilding the presentation is outside this cleanup. Previous Git history and deployments have not been erased.
 
 ## PDF companion
 
-The checked report is `public/reports/pressure-index-report.pdf`; its source is `/report`. Unstop requires the file upload even when a dashboard link is provided.
+The approved upload artifact is `public/reports/pressure-index-report.pdf`, generated from `/report` and shared `content/copy.ts`. The report manifest records its byte hash and a fingerprint of the source files and fonts. A build fails if the report differs or its sources change. Report links use the stable public base.
 
-With the local production server running:
-
-```sh
-npm run report:pdf
-```
-
-This uses the installed Chrome browser or Playwright Chromium. Set `CHROME_PATH` if needed, or install the browser with `npx playwright install chromium`.
-
-After the public URL exists, regenerate from the same local report with public deep links:
+After changing report inputs, withdraw the previous PDF before building a preview:
 
 ```sh
-PUBLIC_DASHBOARD_URL=https://your-project.vercel.app npm run report:pdf
+rtk proxy npm run report:withdraw
+rtk proxy npm run build
+rtk proxy npm run start -- --port 3100
 ```
 
-The default renderer removes local navigation links so the PDF never embeds localhost as a judge-facing destination. External source-attribution links remain. Update the PDF asset in Git and redeploy if it changes. Keep the frozen ranks and release ID identical.
-
-## Checks
+With that matching production preview running, render from a second terminal:
 
 ```sh
-npm run check:content
-npm test
-npm run typecheck
-npm run lint
-npm run build
-# Start production server in another terminal before browser checks:
-npm run test:browser
+rtk proxy env DASHBOARD_URL=http://127.0.0.1:3100 npm run report:pdf
 ```
 
-Browser tests use installed Chrome when available, otherwise Playwright Chromium. They cover all 69 profile routes, filters, fixed ranks, compare input handling, mobile overflow, keyboard navigation, report parity and automated accessibility. `npm test` checks the curated publication contracts independently of the UI. The Python workspace additionally tests export parity against the private frozen artifacts.
+Chrome is required locally; set `CHROME_PATH` for an installed browser if needed. The renderer validates the report page, creates a private candidate and publishes the PDF plus manifest. Inspect every PDF page, text, links, ordering and file size before committing. Rebuild to include the enabled download, restart the preview and rerun browser checks. Vercel builds verify the committed PDF; they do not need a browser to generate it.
 
-The read-only data export can be reproduced from the private workspace via `.venv/bin/python scripts/export_dashboard.py`. This verifies source hashes and writes `content/generated/`; Vercel never runs it and needs no access to private artifacts. Changes to editorial text must retain factual denominators and do not authorize rerating players.
+When withdrawn, the download link is hidden. Do not copy an old PDF back or bypass fingerprint checks. Do not rerun the frozen analytical evaluation to change presentation content.
 
-## Submission checks still requiring the participant
+## Participant gates
 
-- Verify the remaining nineteen exact Unstop option labels. The original source labels remain in the app; no speculative aliases are substituted.
-- Review and own the final analytical argument. The competition permits AI assistance but requires the participant's own final insights and recommendations.
-- Recheck current deadline/form, populate the exact two lists, upload the PDF and enter the stable URL. Deployment and Unstop submission are performed by the user.
-
-The aggregate-only dashboard and shared initials tiles are implemented; final dropdown evidence, production URL and participant review are tracked separately in `progress.md`.
+Technical verification does not complete the participant's responsibilities. The single [submission checklist](../docs/SUBMISSION_CHECKLIST.md) contains all twenty exact site names with blank confirmation cells, the publication-rule decision, authorship review and final report/form checks. Current handoff and implementation history are under [docs/process](../docs/process/progress.md).

@@ -1,144 +1,60 @@
-# RR pressure analysis
+# The Pressure Index
 
-Start with [progress.md](progress.md) for the current stage, completed work, unresolved risks and the next task. Agents should read [AGENTS.md](AGENTS.md) and keep the progress record current.
+A Next.js dashboard and reproducible analytical pipeline for SupeRR Selector Season 2, Round 1. The deliverable is two ranked top-ten lists with an evidence-backed methodology for performance under pressure.
 
-The presentation dashboard is in [`dashboard/`](dashboard/DEPLOYMENT.md): Next.js, twenty ranked selections, evidence profiles, comparisons, methodology, validation and a printable PDF companion. It builds independently from curated frozen aggregates; raw competition files and full analytical reports remain private. Use Node 22.x, run `npm ci` and `npm run build` in `dashboard/`, then `npm start`. Vercel's project root is `dashboard`.
+[Dashboard](https://supe-rr-manav.vercel.app) · [Submission checklist](docs/SUBMISSION_CHECKLIST.md) · [Run and deploy](dashboard/DEPLOYMENT.md)
 
-Analytical pipeline and presentation app for SupeRR Selector Season 2. The frozen final descriptive evaluation, role-based evidence dossiers, counterexample review and interactive dashboard are implemented. Detailed analytical inputs/reports remain private; the dashboard publishes curated submission findings. See the handoff for remaining user images, dropdown-name verification and deployment/review work.
+## Method and scope
 
-Read the [implementation plan](IMPLEMENTATION_PLAN.md). The EDA report, chart pack, detailed tables, and scoring reconciliation are generated locally and excluded from the public repository because they contain competition-derived results.
+The approved [descriptive method](DESCRIPTIVE_METHOD_V2.md) orders observed pressure production against supported other-player outcomes, using frozen development scales and 1,000 whole-match bootstrap resamples. The scoring window ends on **1 November 2026**. The [final evaluation protocol](FINAL_WINDOW_PROTOCOL.md) was committed before reserved performance access; ranks, scores, counts and analytical configurations remain frozen.
 
-## Reproduce
+The primary outcome mix is **runs 60 : wickets 40**. Executed sensitivities are **runs 50 : wickets 50** and **runs 70 : wickets 30**. Conditional **level 70 : change 30 (withheld, not executed)** and **level 50 : change 50 (withheld, not executed)** require reliable usual-performance comparisons, which are absent. Failed predictive reference models remain documented and are not used for selection.
 
-Python 3.12 is used; exact dependencies are in `uv.lock`. In this workspace every shell command uses RTK.
+The index is descriptive. It does not establish improvement over usual performance, fully adjusted ability, auction availability or an IPL 2027 forecast. Every late-over delivery is pressure by rule; role context and uncertainty matter alongside rank. Seven selections pass every standalone 2026 gate; eleven are limited; two have none retained.
 
-```sh
-rtk proxy uv --cache-dir /tmp/rr-uv-cache sync --frozen --python /usr/bin/python3
-rtk proxy .venv/bin/python -m rr_pressure eda
-rtk proxy .venv/bin/python -m unittest discover -s tests -v
-```
+## Published content
 
-The original standard-library audit remains runnable independently:
+The public app contains 69 aggregate player-role profiles: names, ranks, P10 scores, retained/peer-supported match counts, pressure opportunities, recent-evidence labels, role labels and eligibility. It contains no match-level cases or player photos. A shared initials tile uses only the display name. Raw competition files, reconciliation ledgers and detailed analytical reports remain private and ignored by Git.
 
-```sh
-rtk proxy python3 scripts/reconcile_and_pressure.py
-```
+The [aggregate-only PDF](dashboard/public/reports/pressure-index-report.pdf) matches the report page and carries public deep links. Hash and source-fingerprint checks reject a changed or stale PDF. The old PPTX and slide PDF are retired; rebuilding the presentation is separate work. Existing Git history and earlier deployments are retained; removing files from the current tree does not erase them.
 
-## Current artifacts
+The participant must confirm the competition's exact publication rule and decide whether the remaining public material is permitted. `noindex` is retained for search engines and does not restrict access.
 
-| Location | Contents |
-|---|---|
-| `reports/eda_2026-11-01/REPORT.md` | Interpretation, cohort definitions, caveats and figures. |
-| `reports/eda_2026-11-01/EDA_CHARTS.pdf` | Eight standalone chart pages. |
-| `reports/eda_2026-11-01/tables/` | Phase/innings/over patterns, outcome-based chase shares, player evidence and exclusions. |
-| `reports/eda_2026-11-01/audit/` | Schemas/missingness, conflicting lineup keys, player aliases, feature contract and settings. |
-| `data/processed/score_independent_states.parquet` | Every supplied event with typed columns, quality flags and accepted pre-event proxy states. |
-| `data/processed/preball_features.parquet` | Allowlisted accepted pre-event features, separated from outcomes. |
-| `data/processed/delivery_outcomes.parquet` | Recorded outcomes keyed by event ID. |
-| `data/processed/player_match_metrics.parquet` | Player/match/context blocks for later uncertainty analysis. |
-| `reports/eda_2026-11-01/manifest.json` | Input, code, config and output hashes, dependency versions and counts. |
+## Run and validate
 
-The cutoff remains 1 November 2026 inclusive. The production EDA still uses the registered `late OR collapse` proxy, with exact score/target/required-rate fields null. A separate diagnostic pilot now produces verified scores and full rule pressure only for completely accepted matches. No player ratings or final rankings have been created.
-
-## External reconciliation pilot
-
-Run the scoring audit first, then freeze the diagnostic sample before downloading sources:
+Use Node 22.x in `dashboard/`:
 
 ```sh
-rtk proxy .venv/bin/python -m rr_pressure select-pilot
-rtk proxy .venv/bin/python -m rr_pressure fetch-cricsheet
-rtk proxy .venv/bin/python -m rr_pressure reconcile-pilot
+rtk proxy npm ci
+rtk proxy npm test
+rtk proxy npm run build
+rtk proxy npm run start -- --port 3100
 ```
 
-The 20-match sample contains two matches per year/family (2022–2026, IPL/T20I), selected by scoring failure and risk/extras exposure. Unavailable matches are not replaced. Archives and player registers are downloaded once into ignored `data/external/cricsheet/`; cached hashes are verified on reuse. Source match dates after the cutoff are excluded. Snapshot retrieval after the cutoff is disclosed separately from match eligibility.
-
-Read `reports/reconciliation_pilot_2026-11-01/REPORT.md` locally. It reports year/family availability, alignment, acceptance, extra quantities, pressure shares and unresolved cases. `candidate_corrections.csv` includes rejected proposals for diagnosis. Only `verified_corrections.parquet` and `verified_preball_states.parquet` contain completely accepted matches; they are isolated from production EDA outputs. Each correction has its raw event ID/source row, source member/hash and JSON pointer. Source inputs are never rewritten.
-
-Match acceptance requires exact event order and participants, batting runs, known extra labels, wickets, complete innings and the correct result/terminal chase. Adjusted targets and unresolved discrepancies stay quarantined. The pilot is a stress sample, so its acceptance rate and pressure share are not population estimates. The next step is exception review and full-cohort coverage assessment before model fitting.
-
-External data is provided by [Cricsheet](https://cricsheet.org/), using its [JSON format](https://cricsheet.org/format/json/) and [People Register](https://cricsheet.org/register/), under the [Open Data Commons Attribution License 1.0](https://opendatacommons.org/licenses/by/1-0/). Derived outputs add alignment decisions and provenance. See [coverage caveats](https://cricsheet.org/downloads/), including withheld Afghanistan matches. All downloaded data and derived competition artifacts remain excluded from this repository.
-
-Next steps are to address material remaining coverage gaps, freeze a supported definition of performance change, then fit context baselines and run the chronological evaluation. The registered ranking design keeps 1,000 whole-match bootstrap replicates, about 20 upstream-model variants and the 70/30 versus 50/50 level/change comparison, subject to the support gate below. The optional explorer is deferred. The organiser clarification is drafted and unsent.
-
-## Full coverage and pressure-comparison validation
+With the production preview running, use a second terminal in `dashboard/`:
 
 ```sh
-rtk proxy .venv/bin/python -m rr_pressure reconcile-full
-rtk proxy .venv/bin/python -m rr_pressure pressure-validate
-rtk proxy .venv/bin/python -m unittest discover -s tests -q
+rtk proxy env DASHBOARD_URL=http://127.0.0.1:3100 npm run test:browser
 ```
 
-Private reviewed exceptions live in `data/curated/reconciliation_reviews.json`: identity aliases with evidence links, specific event-field decisions tied to source hashes and original values, reviewed retired-hurt events, and exact-date match-ordinal convention differences. Keep that private input with the source data for exact reproduction. Without it, the code performs strict reconciliation with fewer accepted matches. It never guesses new corrections or edits supplied files.
+Build checks enforce the public field contract, shared copy, numeric provenance, privacy and PDF freshness. See the [deployment guide](dashboard/DEPLOYMENT.md) for Vercel, report regeneration and route/screenshot verification.
 
-Full-corpus matching evaluates exact and adjacent dates, but a shifted match needs a unique complete event/result match; both dates respect the cutoff. Every candidate is logged, and one external match cannot be counted twice. [The matching policy](configs/reconciliation_policy.json) and [pressure-support checks](configs/pressure_validation.json) are versioned separately from the unchanged pressure rule.
-
-Local outputs:
-
-| Location | Contents |
-|---|---|
-| `reports/full_reconciliation_2026-11-01/REPORT.md` | Every supplied match, year/family/competition retention, pilot dispositions and remaining exclusions. |
-| `reports/full_reconciliation_2026-11-01/candidate_audit.csv` | All date candidates and individual alignment/result failures. |
-| `reports/full_reconciliation_2026-11-01/verified_events.parquet` | Complete accepted matches with original values, adopted scores, provenance and pre-ball states. Contains outcomes; do not feed all columns into a model. |
-| `reports/pressure_validation_2026-11-01/REPORT.md` | Pressure shares, context overlap, player coverage and development-only descriptive comparisons. |
-| `reports/pressure_validation_2026-11-01/VALIDATION_CHARTS.pdf` | Standalone coverage and comparison-support figures. |
-| `reports/pressure_validation_2026-11-01/model_gate.json` | Historical comparison-support decision from before model fitting. |
-
-The global pressure-change ranking gate currently fails: all late-phase deliveries are labelled pressure, leaving no ordinary comparison in that phase. The 70/30 default and 50/50 variant remain registered but unexecuted. [Supported method v1](SUPPORTED_METHOD.md) now freezes context-adjusted pressure level separately from change on supported contexts, eligibility, combination and missing-evidence rules. Do not change pressure thresholds to improve particular players' results.
-
-Uncertainty diagnostics use 1,000 whole-match resamples, not ball resampling. Raw and supported-context contrasts describe different populations; a third contrast reports the raw difference on the supported population. Context support is a descriptive condition and does not establish a causal pressure effect. All detailed reports, exception evidence and downloaded data remain ignored by Git.
-
-Aggregate 2026 EDA has already been inspected. Keep 2026 reserved from model and threshold tuning, and describe this exposure honestly in the evaluation report.
-
-## Frozen supported-context method
+The Python workspace uses Python 3.12 and pinned `uv.lock` dependencies. Source datasets and private review inputs are required for analytical reproduction; they are deliberately not shipped. The publication exporter has independent parity checks:
 
 ```sh
-rtk proxy .venv/bin/python -m rr_pressure prepare-method
-rtk proxy .venv/bin/python -m unittest discover -s tests -q
+rtk proxy .venv/bin/python -m unittest discover -s tests -p test_dashboard_export.py -v
 ```
 
-This preflight fits no model and computes no player performance scores. The [versioned configuration](configs/supported_method_v1.json) is frozen before the new eligibility diagnostics. It splits all-pressure level from same-player, same-year supported-context change; missing change remains null and cannot enter either blend. The old failed global-change gate stays intact.
+External reconciliation uses [Cricsheet](https://cricsheet.org/) and its [People Register](https://cricsheet.org/register/), under the [Open Data Commons Attribution License 1.0](https://opendatacommons.org/licenses/by/1-0/). Source coverage and retained-data limitations are disclosed in the dashboard and method documents.
 
-`reports/supported_method_2026-11-01/` contains the local report, frozen configuration, source/config/output hashes, model gate, exposure windows, player support tables, and match fold membership. `features.parquet` contains only the event join key and four allowlisted context predictors. Outcomes live in `targets.parquet`; player identities, pressure labels and role filters live in `identities_and_exposures.parquet`. Never feed those latter tables wholesale into a predictor. The exported 2026 targets are not analyzed by this command.
+## Authorship and AI use
 
-2022 supplies training warm-up only; scoring evidence begins in 2023. Train each annual fold on complete earlier-year matches. Development, reserved-year exposure and final retrospective exposure are audited separately. Both the population and the player need ordinary and pressure observations within the comparison cell. Under-80% source retention blocks an unqualified shortlist; insufficient comparisons do not imply poor performance.
+The pipeline, site and copy were built with AI coding assistance. Selections, interpretation and final review are the participant's responsibility. Technical tests do not substitute for that review.
 
-The historical peer baseline is now implemented and evaluated as described below. The live preflight does not execute the component estimators; those are checked using synthetic contributions. They preserve a fixed support population during match resampling and withhold selection scores when too many draws lack comparison groups. Further dependencies are resolving baseline calibration, reserved evaluation, the complete player-bootstrap/ranking runner, sensitivity analysis and evidence review.
+- [ ] I have reviewed and own the final selection arguments and limitations.
+- [ ] I have checked the competition's AI-use and publication rules.
+- [ ] I have completed the [submission checklist](docs/SUBMISSION_CHECKLIST.md), including dropdown names and the uploaded report.
 
-## Development peer baseline
+## Project records
 
-```sh
-rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-baseline
-```
-
-The command validates the frozen preflight artifacts and trains on earlier years to predict 2023–2025. It estimates batting runs/striker dismissals on non-wide opportunities and bowling conceded runs/credited wickets on all attempts. Models use family, innings, phase and wicket band, with hierarchical shrinkage and broader historical fallback. Player identities and pressure labels are excluded from predictors. Reserved 2026 targets are excluded from the loaded development table.
-
-All five registered prior strengths are reported, consuming 15 of the 20 fold/setting bundles. The default remains 200. Validation compares training-only global/family averages, checks annual loss and subgroup calibration, and uses 1,000 common whole-match resamples for prediction-loss and mean-bias intervals. [The validation screen](configs/baseline_validation_v1.json) was specified before fitting. These intervals are conditional on the fitted models and are separate from future player-rating bootstrap intervals.
-
-Local outputs are under `reports/baseline_development_2026-11-01/`: `REPORT.md`, `BASELINE_CHARTS.pdf`, per-fold model parameters/predictions, annual and pooled metrics, calibration/reliability/fallback tables, reference scales, `model_gate.json`, and a provenance manifest.
-
-The first run improves primary prediction loss for every target but flags systematic subgroup bias. Its promotion gate fails; reference scales remain candidates and 2026 evaluation remains gated. No player scores or rankings were generated. The focused contextual revision below is now executed. Read [progress.md](progress.md) for the measured results and current decision.
-
-## One contextual revision
-
-```sh
-rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-context-baseline
-```
-
-[The preregistered amendment](CONTEXT_BASELINE_V2.md) adds verified pre-ball scoring pace, progress/wickets and chase requirements, using a fixed ridge/logistic model and 365-day historical expectation weighting. It preserves role attribution, the 730-day player-rating policy, pressure thresholds and comparison eligibility. All preprocessing and fitting use earlier-year matches. The original baseline and its artifacts remain intact.
-
-The revision consumes three bundles, bringing the cumulative total to 18. It reuses the original validation screen and additionally compares paired losses with the original baseline. Outputs under `reports/context_baseline_v2_2026-11-01/` include a report, standalone chart pack, per-fold models/predictions, convergence/clipping diagnostics, paired whole-match intervals, calibration tables and a provenance manifest. These artifacts remain private and ignored by Git.
-
-Run prediction improves and calibration alerts fall from 29 to 18; wicket gains are inconclusive. The candidate still fails promotion. No reserved outcomes or player scores are analyzed. The retrospective reference below is now specified and evaluated; the historical failures remain preserved.
-
-## Contemporary peer reference
-
-```sh
-rtk proxy .venv/bin/python -m rr_pressure audit-reference
-rtk proxy env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m rr_pressure fit-retrospective-reference
-```
-
-[The fixed reference specification](RETROSPECTIVE_REFERENCE.md) uses two balanced hash partitions of complete matches and a year/family/innings/phase/wicket-band hierarchy with 200 prior events. Every evaluated match is excluded from all fitted means, comparators and validation scales. Later matches within a season may enter its opposite-partition reference, so this is retrospective cross-fitting. Development targets are restricted to 2023–2025; 2026 remains gated. The explicit internal budget maximum is 22 bundles; 20 have now been used, including the two development bundles here. No parameter or partition search is run.
-
-Local outputs in `reports/retrospective_reference_development_2026-11-01/` include models with membership/counts/shrinkage, predictions, annual and partition metrics, shared whole-match intervals, pooled and partition calibration screens, support/concentration diagnostics, candidate scales, a chart pack and provenance manifest. The loss benchmark and peer-support screens pass. Calibration has zero pooled alerts but 68 separate-fold alerts, so promotion fails. Candidate scales stay unfrozen; no reserved outcome evaluation or player scores are produced. The runner does not fit another candidate or spend reserved bundles automatically. See [progress.md](progress.md) for the next decision.
-
-The source data, generated artifacts, detailed data audit, and organiser clarification are private competition materials. They are excluded from version control by default. Running the pipeline overwrites its generated EDA artifacts; raw source files are fingerprinted and never edited.
+Agents and contributors should read [working instructions](docs/process/AGENTS.md) and [current progress](docs/process/progress.md) before substantive work. Historical milestones and internal handoff notes live under `docs/process/`. The [original implementation plan](IMPLEMENTATION_PLAN.md) is historical where superseded by the approved descriptive specification.
