@@ -166,11 +166,20 @@ test("all 69 direct profiles render and selected dossiers retain essential evide
   const players = JSON.parse(
     fs.readFileSync(path.resolve("content/generated/players.json"), "utf8"),
   ) as { role: string; id: string; name: string; selected: boolean }[];
-  for (const p of players) {
-    const r = await request.get(`/players/${p.role}/${p.id}`);
-    expect(r.status(), p.name).toBe(200);
-    expect(await r.text()).toContain(p.name);
-  }
+  for (let i = 0; i < players.length; i += 5)
+    await Promise.all(
+      players.slice(i, i + 5).map(async (p) => {
+        const r = await request.get(`/players/${p.role}/${p.id}`, {
+          timeout: 30_000,
+        });
+        try {
+          expect(r.status(), p.name).toBe(200);
+          expect(await r.text()).toContain(p.name);
+        } finally {
+          await r.dispose();
+        }
+      }),
+    );
   await page.goto("/players/batting/1318");
   await expect(
     page.getByText("No retained 2026 pressure evidence", { exact: true }),
