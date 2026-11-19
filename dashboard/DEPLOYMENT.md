@@ -29,6 +29,20 @@ The build checks strict public keys, shared copy, PDF freshness and privacy, the
 3. Push an ordinary commit to `main` and check the Vercel status for that exact commit. A response from the stable URL alone can be an older deployment.
 4. Verify all routes and download hashes against the committed aggregates. Test the production URL while logged out; judge access must not require Vercel login.
 
+Run the portable verification command from `dashboard/`:
+
+```sh
+rtk proxy npm run verify:deployment
+```
+
+It checks all 76 routes against current copy and JSON bindings, profile identity/aggregates, scope, canonicals, noindex, delivered script privacy, all twenty removed PNGs, both retired slide files, and the PDF hash. A fresh browser context saves overview/rankings/profile screenshots at 390 and 1440 pixels under ignored `reports/`. A stale release fails even if its routes return HTTP 200. Check GitHub/Vercel success for the exact pushed commit separately; the content receipt alone does not prove the Git commit identity.
+
+To run the same verification on a local preview:
+
+```sh
+rtk proxy env DASHBOARD_URL=http://127.0.0.1:3100 npm run verify:deployment
+```
+
 The recommended Git integration deploys only `dashboard/`. Root `.vercelignore` also excludes private workspace material and process notes for a root CLI upload. All browser-delivered content is public. `noindex` remains enabled; it is not access control.
 
 ## Publication boundaries

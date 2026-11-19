@@ -16,7 +16,10 @@ export async function generateMetadata({
 }) {
   const { role, playerId } = await params;
   const p = findPlayer(role, playerId);
-  return { title: p ? `${p.name} — Aggregate evidence` : "Player unavailable" };
+  return {
+    title: p ? `${p.name} — Aggregate evidence` : "Player unavailable",
+    ...(p ? { alternates: { canonical: playerUrl(p) } } : {}),
+  };
 }
 export default async function Profile({
   params,

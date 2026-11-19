@@ -28,6 +28,8 @@ The initial D file-count assumption passed locally but failed in Vercel. E repla
 
 Local route receipts and 390/1440 screenshots are kept privately under `reports/publication_cleanup_2026-11-18/`. Four Python export tests independently reproduce frozen values; the archive receipt pins every analytical source/configuration and the final protocol. Technical checks do not fill participant confirmation cells.
 
+Final local G results: all 76 routes, 10 delivered script assets, 22 removed-asset paths, the PDF hash and eight screenshots pass. Thirteen Node and nine browser tests, lint/format and a clean installation/deployment-style build pass. All 69 archived identities/ranks/P10s/retained counts and all 40 analytical baseline hashes remain equal. PDF extraction confirms the twenty names/P10s, privacy scan, exactly one authorship line and no localhost. The production verifier rejects the older live pages for missing numeric bindings, as intended. Production acceptance is incomplete until the current Vercel build succeeds and live checks pass.
+
 ## Retained risks and rollback
 
 Earlier public commits and deployments retain the old images/records/artifacts. No history rewrite, force push or deployment-history deletion is authorized here. The participant decides on visibility after confirming the exact competition rule; current-tree cleanup does not erase previous copies.
