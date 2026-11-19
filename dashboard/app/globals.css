@@ -2288,7 +2288,36 @@ details .table-scroll {
   }
 }
 
-/* One neutral identity tile, shared by every player. */
+/* Supplied portraits use their reviewed screenshot crop in a fixed viewport. */
+.player-portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.player-portrait-frame {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  transform: translateX(-50%);
+  overflow: hidden;
+  background: #fff;
+}
+.player-portrait-photo {
+  position: absolute;
+  display: block;
+  max-width: none;
+  height: auto;
+}
+.player-portrait-hero {
+  height: 100%;
+  aspect-ratio: auto;
+}
+/* Initials remain the fallback for comparison candidates without supplied art. */
 .player-initials {
   display: grid;
   place-items: center;

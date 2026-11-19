@@ -1,10 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import {
   inspectPlayer,
   inspectText,
   read,
   checkPublication,
+  inspectImageAsset,
+  root,
 } from "../scripts/check-publication.mjs";
 import { duplicatedCopy, checkCopy } from "../scripts/check-copy.mjs";
 import { validateDocument } from "../scripts/check-built-content.mjs";
@@ -37,14 +41,25 @@ test("public contract rejects unknown and nested match records", () => {
     inspectPlayer({ ...p, exposure: { ...p.exposure, match_id: 123 } }),
   );
 });
-test("publication gate rejects encoded fields, case opponents and retired wording", () => {
+test("supplied image whitelist rejects wrong files and unsafe paths", () => {
+  const asset = Object.values(read("content/player-assets.json"))[0];
+  const bytes = fs.readFileSync(path.join(root, "public", asset.src));
+  assert.doesNotThrow(() => inspectImageAsset(asset, bytes));
+  assert.throws(() =>
+    inspectImageAsset({ ...asset, src: "/player_image/../private.png" }, bytes),
+  );
+  assert.throws(() => inspectImageAsset({ ...asset, sha256: "wrong" }, bytes));
+  assert.throws(() =>
+    inspectImageAsset({ ...asset, crop: { ...asset.crop, height: 1 } }, bytes),
+  );
+  assert.doesNotThrow(() => inspectText(copy.portraitDisclosure));
+});
+test("publication gate rejects encoded fields, case opponents and retired downloads", () => {
   for (const bad of [
     "match_id",
     String.raw`match\u005fdate`,
     ...read("tests/fixtures/prohibited-public-terms.json"),
     "PLACEHOLDER",
-    "AI-generated",
-    "concept portrait",
     "Before uploading",
     "https://your-dashboard.vercel.app",
   ])

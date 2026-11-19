@@ -1,0 +1,362 @@
+{
+  "23": {
+    "src": "/player_image/piyush.png",
+    "width": 1122,
+    "height": 1402,
+    "crop": {
+      "x": 5,
+      "y": -35,
+      "width": 1112,
+      "height": 1390
+    },
+    "trim": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "sha256": "8b6fd6a1c3ff37deddfbaa9d0a1be48eba47bf14ae5d52ea8d1bcba35ad52f6a"
+  },
+  "781": {
+    "src": "/player_image/sunil.png",
+    "width": 329,
+    "height": 769,
+    "crop": {
+      "x": -70,
+      "y": 22,
+      "width": 472,
+      "height": 590
+    },
+    "trim": [
+      2,
+      3,
+      3,
+      7
+    ],
+    "sha256": "a59158082cc41c5ec9069ce4efdc7755d52b27636666c49fed3096c8c606df2c"
+  },
+  "1318": {
+    "src": "/player_image/Andre.png",
+    "width": 327,
+    "height": 393,
+    "crop": {
+      "x": 3,
+      "y": -14,
+      "width": 320,
+      "height": 400
+    },
+    "trim": [
+      4,
+      2,
+      2,
+      2
+    ],
+    "sha256": "0a2aa61e0a5bca55641e0c9853824166b1db9523693ff8275c50497733c169be"
+  },
+  "1699": {
+    "src": "/player_image/Suryakumar.png",
+    "width": 633,
+    "height": 800,
+    "crop": {
+      "x": 12,
+      "y": -16,
+      "width": 608,
+      "height": 760
+    },
+    "trim": [
+      2,
+      2,
+      3,
+      2
+    ],
+    "sha256": "fcb3b53c74eb6a56116324f57802c16d37cd735c2b84ac1ea152132ebeb73111"
+  },
+  "2756": {
+    "src": "/player_image/Shashank.png",
+    "width": 327,
+    "height": 407,
+    "crop": {
+      "x": 3,
+      "y": -12,
+      "width": 320,
+      "height": 400
+    },
+    "trim": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "sha256": "576f85007a1ad5183dfe4cd0440c6eab6e471442b29f3d595fc8a1f831ef2ad3"
+  },
+  "2933": {
+    "src": "/player_image/jasprit.png",
+    "width": 341,
+    "height": 769,
+    "crop": {
+      "x": -74,
+      "y": 8,
+      "width": 488,
+      "height": 610
+    },
+    "trim": [
+      2,
+      12,
+      4,
+      3
+    ],
+    "sha256": "5c51d3a2124bb27d85a0dd45c710164bd70a1bd5064091a94f0c1bba70ee0824"
+  },
+  "3125": {
+    "src": "/player_image/Nicholas.png",
+    "width": 633,
+    "height": 800,
+    "crop": {
+      "x": 8,
+      "y": -20,
+      "width": 616,
+      "height": 770
+    },
+    "trim": [
+      2,
+      2,
+      4,
+      2
+    ],
+    "sha256": "6300b01606488cab0b8ad8a69366f50ce18bce37a1b0ac2a7c698a4bcc1dfe1d"
+  },
+  "3647": {
+    "src": "/player_image/Shreyas.png",
+    "width": 322,
+    "height": 769,
+    "crop": {
+      "x": -62,
+      "y": 24,
+      "width": 448,
+      "height": 560
+    },
+    "trim": [
+      2,
+      3,
+      3,
+      7
+    ],
+    "sha256": "f6a7b5ac50790e60c0e3a5c9938902b9a55ebf7c7b093cf865b0c8e611b5e7fd"
+  },
+  "4373": {
+    "src": "/player_image/Mustafizur.png",
+    "width": 313,
+    "height": 769,
+    "crop": {
+      "x": -88,
+      "y": 13,
+      "width": 488,
+      "height": 610
+    },
+    "trim": [
+      2,
+      3,
+      4,
+      13
+    ],
+    "sha256": "17c20e4d7e27fc63ed467f7817ae12ef7ebaa5976a4800439fc0eec852e45e40"
+  },
+  "4391": {
+    "src": "/player_image/Liam.png",
+    "width": 329,
+    "height": 769,
+    "crop": {
+      "x": -64,
+      "y": 26,
+      "width": 456,
+      "height": 570
+    },
+    "trim": [
+      2,
+      3,
+      3,
+      2
+    ],
+    "sha256": "a80989fa13a4fc082e8cbca75125c11ceaa653048013144eb75a5907dcc2bba2"
+  },
+  "5837": {
+    "src": "/player_image/mahedi.png",
+    "width": 630,
+    "height": 801,
+    "crop": {
+      "x": -5,
+      "y": -18,
+      "width": 640,
+      "height": 800
+    },
+    "trim": [
+      4,
+      2,
+      4,
+      2
+    ],
+    "sha256": "66b12da4894eaae45d67bc2e730d48f809ad5661aec69fab7dd7f75dd0bd45d4"
+  },
+  "6256": {
+    "src": "/player_image/varun.png",
+    "width": 630,
+    "height": 801,
+    "crop": {
+      "x": -1,
+      "y": -20,
+      "width": 632,
+      "height": 790
+    },
+    "trim": [
+      2,
+      2,
+      4,
+      2
+    ],
+    "sha256": "f51e71efa23f24174d85d9e7a79e6beeaa5ab518edf6688a22b32a1740daac4b"
+  },
+  "6284": {
+    "src": "/player_image/Anukul.png",
+    "width": 630,
+    "height": 801,
+    "crop": {
+      "x": -9,
+      "y": -18,
+      "width": 648,
+      "height": 810
+    },
+    "trim": [
+      2,
+      2,
+      4,
+      2
+    ],
+    "sha256": "0f49bddbeefaa4cc2d8c3956c0a2fb8cf2b048327f235835b5dd6e1e0f8660e3"
+  },
+  "6354": {
+    "src": "/player_image/Spencer.png",
+    "width": 630,
+    "height": 801,
+    "crop": {
+      "x": 3,
+      "y": -20,
+      "width": 624,
+      "height": 780
+    },
+    "trim": [
+      4,
+      2,
+      4,
+      3
+    ],
+    "sha256": "13a6c28b309ae808acf0a7ed63b50117965fdcb678d71aeb2f609a6191e80a6f"
+  },
+  "6396": {
+    "src": "/player_image/Tim.png",
+    "width": 641,
+    "height": 800,
+    "crop": {
+      "x": 8,
+      "y": -18,
+      "width": 624,
+      "height": 780
+    },
+    "trim": [
+      3,
+      2,
+      3,
+      2
+    ],
+    "sha256": "9a24fb2e3396b59d229b299d5fb656f12d28e298477d5775bc52892f41f37add"
+  },
+  "6726": {
+    "src": "/player_image/Romario.png",
+    "width": 327,
+    "height": 393,
+    "crop": {
+      "x": 8,
+      "y": -8,
+      "width": 312,
+      "height": 390
+    },
+    "trim": [
+      4,
+      2,
+      2,
+      3
+    ],
+    "sha256": "f8a317293c6dc96043615a798348bba4191c287580f9aaeea9bccc1e0dd1a60a"
+  },
+  "7327": {
+    "src": "/player_image/Rasikh.png",
+    "width": 630,
+    "height": 801,
+    "crop": {
+      "x": -1,
+      "y": -16,
+      "width": 632,
+      "height": 790
+    },
+    "trim": [
+      2,
+      2,
+      4,
+      2
+    ],
+    "sha256": "ad0bdb0bc87fe788868847587e02554a101bddd453ca8fdb1f088ef79d9d63b4"
+  },
+  "7897": {
+    "src": "/player_image/Namboori.png",
+    "width": 329,
+    "height": 769,
+    "crop": {
+      "x": -80,
+      "y": 20,
+      "width": 488,
+      "height": 610
+    },
+    "trim": [
+      2,
+      7,
+      3,
+      2
+    ],
+    "sha256": "b9bae81ae55565c73e69700b00a85d5b32d26298cc7c40f810e6ec656b59f907"
+  },
+  "23311": {
+    "src": "/player_image/Jacob.png",
+    "width": 327,
+    "height": 407,
+    "crop": {
+      "x": 5,
+      "y": -12,
+      "width": 320,
+      "height": 400
+    },
+    "trim": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "sha256": "9c84dc31f80f001c221a198258687a56ff40d51a6acf228aefb02ba0a1c76868"
+  },
+  "35318": {
+    "src": "/player_image/Sakib.png",
+    "width": 630,
+    "height": 801,
+    "crop": {
+      "x": -5,
+      "y": -9,
+      "width": 640,
+      "height": 800
+    },
+    "trim": [
+      4,
+      2,
+      4,
+      2
+    ],
+    "sha256": "17a636c0651b7a0af3bc4f9b16c4d2d65d02d040c88750644f402b4c83603899"
+  }
+}

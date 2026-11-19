@@ -35,7 +35,7 @@ Run the portable verification command from `dashboard/`:
 rtk proxy npm run verify:deployment
 ```
 
-It checks all 76 routes against current copy and JSON bindings, profile identity/aggregates, scope, canonicals, noindex, delivered script privacy, all twenty removed PNGs, both retired slide files, and the PDF hash. A fresh browser context saves overview/rankings/profile screenshots at 390 and 1440 pixels under ignored `reports/`. A stale release fails even if its routes return HTTP 200. Check GitHub/Vercel success for the exact pushed commit separately; the content receipt alone does not prove the Git commit identity.
+It checks all 76 routes against current copy and JSON bindings, profile identity/aggregates, scope, canonicals, noindex, delivered script privacy, all twenty supplied PNG hashes, both retired slide files, and the PDF hash. A fresh browser context saves overview/rankings/profile screenshots at 390 and 1440 pixels under ignored `reports/`. A stale release fails even if its routes return HTTP 200. Check GitHub/Vercel success for the exact pushed commit separately; the content receipt alone does not prove the Git commit identity.
 
 To run the same verification on a local preview:
 
@@ -49,7 +49,7 @@ All browser-delivered content is public. `noindex` remains enabled; it is not ac
 
 ## Publication boundaries
 
-Only the strict aggregate contract in `content/public-contract.json` is exported. Match-level cases, source pointers, raw ledgers and event data are excluded. One shared `PlayerInitials` tile receives only the display name. No player raster assets or image manifest are allowed. The original images and retired report/slide files were archived outside the repository before deletion.
+Only the strict aggregate contract in `content/public-contract.json` is exported. Match-level cases, source pointers, raw ledgers and event data are excluded. The participant explicitly requested restoring the supplied RR-kit images on 19 November. `PlayerPortrait` uses an allowlisted manifest of twenty original PNGs and reviewed crop/trim settings; alternatives without supplied art use `PlayerInitials`. Publication checks validate each PNG's signature, dimensions and byte hash, and reject extra raster files or unknown asset fields. Shared footer copy identifies the portraits as illustrations. The original archive remains outside the repository; old report/slide artifacts stay retired.
 
 The old PPTX and slide PDF must remain absent. Rebuilding the presentation is outside this cleanup. Previous Git history and deployments have not been erased.
 

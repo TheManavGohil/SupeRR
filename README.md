@@ -14,7 +14,7 @@ The index is descriptive. It does not establish improvement over usual performan
 
 ## Published content
 
-The public app contains 69 aggregate player-role profiles: names, ranks, P10 scores, retained/peer-supported match counts, pressure opportunities, recent-evidence labels, role labels and eligibility. It contains no match-level cases or player photos. A shared initials tile uses only the display name. Raw competition files, reconciliation ledgers and detailed analytical reports remain private and ignored by Git.
+The public app contains 69 aggregate player-role profiles: names, ranks, P10 scores, retained/peer-supported match counts, pressure opportunities, recent-evidence labels, role labels and eligibility. It contains no match-level cases. Following the participant's explicit restoration request, the twenty selected players use the supplied RR-kit illustrations with reviewed screenshot crops; alternatives without supplied art use initials. Image paths, dimensions and hashes are allowlisted separately from analytical data. These illustrations do not establish team membership. Raw competition files, reconciliation ledgers and detailed analytical reports remain private and ignored by Git.
 
 The [aggregate-only PDF](dashboard/public/reports/pressure-index-report.pdf) matches the report page and carries public deep links. Hash and source-fingerprint checks reject a changed or stale PDF. The old PPTX and slide PDF are retired; rebuilding the presentation is separate work. Existing Git history and earlier deployments are retained; removing files from the current tree does not erase them.
 

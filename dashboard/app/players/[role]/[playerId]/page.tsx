@@ -3,7 +3,7 @@ import { copy, contribution } from "@/content/copy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { players, findPlayer, playerUrl } from "@/lib/data";
-import { PlayerInitials } from "@/components/player-initials";
+import { PlayerPortrait } from "@/components/player-portrait";
 import { Notice, RecentBadge, SectionHeading } from "@/components/ui";
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -65,7 +65,7 @@ export default async function Profile({
           <RecentBadge player={p} />
         </div>
         <div className="profile-portrait">
-          <PlayerInitials name={p.name} />
+          <PlayerPortrait player={p} variant="profile" />
         </div>
       </section>
       <div className="profile-summary">

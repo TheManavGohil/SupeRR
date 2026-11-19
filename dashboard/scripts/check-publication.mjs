@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 export const root = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -14,7 +15,6 @@ const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const opponent = new RegExp(`\\b(?:${terms.map(escape).join("|")})\\b`, "i");
 const forbidden =
   /\b(?:match_id|match_date|event_id|source_pointer|case_reasons|case_index)\b|your-dashboard\.vercel\.app|PLACEHOLDER|Before uploading/;
-const retired = /AI-generated|concept portrait/;
 export function decode(text) {
   return text
     .replace(/\\u([0-9a-f]{4})/gi, (_, n) =>
@@ -39,7 +39,7 @@ export function decode(text) {
         })[s],
     );
 }
-export function inspectText(text, label = "content", phase = "final") {
+export function inspectText(text, label = "content") {
   const decoded = decode(text);
   assert(
     !forbidden.test(decoded),
@@ -49,8 +49,45 @@ export function inspectText(text, label = "content", phase = "final") {
     !opponent.test(decoded),
     `Case opponent in ${label}: ${decoded.match(opponent)?.[0]}`,
   );
-  if (phase !== "a")
-    assert(!retired.test(decoded), `Retired image wording in ${label}`);
+}
+export function inspectImageAsset(asset, bytes) {
+  assert.deepEqual(Object.keys(asset).sort(), [
+    "crop",
+    "height",
+    "sha256",
+    "src",
+    "trim",
+    "width",
+  ]);
+  assert(
+    /^\/player_image\/[A-Za-z]+\.png$/.test(asset.src),
+    "Unapproved image path",
+  );
+  assert.equal(
+    bytes.subarray(0, 8).toString("hex"),
+    "89504e470d0a1a0a",
+    "Expected supplied PNG",
+  );
+  assert.equal(bytes.readUInt32BE(16), asset.width);
+  assert.equal(bytes.readUInt32BE(20), asset.height);
+  assert.equal(
+    createHash("sha256").update(bytes).digest("hex"),
+    asset.sha256,
+    "Supplied image hash mismatch",
+  );
+  assert.deepEqual(Object.keys(asset.crop).sort(), [
+    "height",
+    "width",
+    "x",
+    "y",
+  ]);
+  assert(Object.values(asset.crop).every(Number.isFinite));
+  assert(asset.crop.width > 0 && asset.crop.height > 0);
+  assert(Math.abs(asset.crop.width / asset.crop.height - 4 / 5) < 0.000001);
+  assert(Array.isArray(asset.trim) && asset.trim.length === 4);
+  assert(asset.trim.every((n) => Number.isFinite(n) && n >= 0));
+  assert(asset.trim[0] + asset.trim[2] < asset.height);
+  assert(asset.trim[1] + asset.trim[3] < asset.width);
 }
 export function inspectPlayer(p) {
   const exact = (obj, keys, label) =>
@@ -101,15 +138,40 @@ export function checkPublication({ built = false, phase = "final" } = {}) {
   ]);
   for (const f of generated) inspectText(fs.readFileSync(f, "utf8"), f, phase);
   if (phase !== "a") {
-    assert(
-      !fs.existsSync(path.join(root, "content/player-assets.json")),
-      "Retired image manifest",
+    const assets = read("content/player-assets.json");
+    assert.deepEqual(
+      Object.keys(assets).sort(),
+      players
+        .filter((p) => p.selected)
+        .map((p) => p.id)
+        .sort(),
+      "Images must match the twenty selected players",
     );
-    for (const f of walk(path.join(root, "public")))
-      assert(
-        !/\.(png|jpe?g|webp|avif)$/i.test(f),
-        `Player raster asset forbidden: ${f}`,
+    for (const asset of Object.values(assets))
+      inspectImageAsset(
+        asset,
+        fs.readFileSync(path.join(root, "public", asset.src)),
       );
+    const images = walk(path.join(root, "public")).filter((f) =>
+      /\.(png|jpe?g|webp|avif)$/i.test(f),
+    );
+    assert.deepEqual(
+      images
+        .map(
+          (f) =>
+            "/" +
+            path
+              .relative(path.join(root, "public"), f)
+              .split(path.sep)
+              .join("/"),
+        )
+        .sort(),
+      Object.values(assets)
+        .map((a) => a.src)
+        .sort(),
+      "Only the supplied player images are allowed",
+    );
+    inspectText(JSON.stringify(assets), "image manifest");
   }
   for (const f of walk(path.join(root, "public"))) {
     if (f.endsWith(".pdf"))

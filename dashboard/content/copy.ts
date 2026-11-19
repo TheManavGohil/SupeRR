@@ -15,6 +15,8 @@ export const cutoffText = new Intl.DateTimeFormat("en-GB", {
 export const copy = {
   authorship:
     "The pipeline, site and copy were built with AI coding assistance; selections, interpretation and final review are the participant’s responsibility.",
+  portraitDisclosure:
+    "Player portraits are supplied AI-created RR-kit illustrations, not official team photographs or signing announcements.",
   footer: `An independent SupeRR Selector Season ${release.season} submission. Retrospective evidence · ${cutoffText} cutoff.`,
   footerScope:
     "Observed pressure production, retained exposure and evidence limitations.",

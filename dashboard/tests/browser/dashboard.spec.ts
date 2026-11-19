@@ -1,12 +1,14 @@
 import { copy } from "../../content/copy";
 import site from "../../content/generated/site.json" with { type: "json" };
-import report from "../../content/generated/report.json" with { type: "json" };
+import reportManifest from "../../content/generated/report.json" with { type: "json" };
+import portraits from "../../content/player-assets.json" with { type: "json" };
 import { createHash } from "node:crypto";
 import { validateDocument } from "../../scripts/check-built-content.mjs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs";
 import path from "node:path";
+const report = reportManifest as { available: boolean; sha256?: string };
 
 test("report download follows the verified manifest and retired files stay absent", async ({
   page,
@@ -28,9 +30,47 @@ test("report download follows the verified manifest and retired files stay absen
   for (const route of [
     "/reports/pressure-index-submission.pptx",
     "/reports/pressure-index-slides.pdf",
-    "/player_image/Tim.png",
   ])
     expect((await request.get(route)).status()).toBe(404);
+});
+
+test("all supplied portraits load on their profiles and retain the reviewed crop", async ({
+  page,
+  request,
+}) => {
+  const players = JSON.parse(
+    fs.readFileSync(path.resolve("content/generated/players.json"), "utf8"),
+  ) as { id: string; name: string; role: string; selected: boolean }[];
+  for (const player of players.filter((p) => p.selected)) {
+    const asset = portraits[player.id as keyof typeof portraits];
+    const original = await request.get(asset.src);
+    expect(original.status(), player.name).toBe(200);
+    expect(
+      createHash("sha256")
+        .update(await original.body())
+        .digest("hex"),
+      player.name,
+    ).toBe(asset.sha256);
+    await page.goto(`/players/${player.role}/${player.id}`);
+    const image = page.locator(".profile-portrait img");
+    await expect(image).toHaveAttribute(
+      "alt",
+      `${player.name} — supplied RR-kit illustration`,
+    );
+    await expect
+      .poll(
+        () => image.evaluate((img) => (img as HTMLImageElement).naturalWidth),
+        { message: player.name },
+      )
+      .toBeGreaterThan(0);
+    const frame = page.locator(".profile-portrait .player-portrait-frame");
+    const box = await frame.boundingBox();
+    expect(box!.width / box!.height).toBeCloseTo(4 / 5, 2);
+  }
+  await page.goto("/players/batting/1077");
+  await expect(
+    page.locator(".profile-portrait .player-initials"),
+  ).toBeVisible();
 });
 
 test("scope, canonical links and JSON-backed values remain valid after interaction", async ({

@@ -10,6 +10,13 @@ import { root, read, inspectText } from "./check-publication.mjs";
 import { checkReport, sha256 } from "./report-state.mjs";
 
 const normal = (value) => value.replace(/\s+/g, " ").trim();
+const portraits = read("content/player-assets.json");
+function imageSource(src) {
+  const url = new URL(src, "https://local.invalid");
+  return url.pathname === "/_next/image"
+    ? url.searchParams.get("url")
+    : url.pathname;
+}
 const text = (node) =>
   node.nodeName === "#text"
     ? node.value
@@ -56,10 +63,19 @@ export function verifyRoute(html, route, players, publicBase) {
     robots?.attrs.content.includes("nofollow"),
     `${route}: nofollow changed`,
   );
-  assert(
-    !nodes.some((n) => n.tag === "img"),
-    `${route}: unexpected player image`,
-  );
+  const images = nodes.filter((n) => n.tag === "img");
+  for (const image of images)
+    assert(
+      Object.values(portraits).some(
+        (asset) => asset.src === imageSource(image.attrs.src),
+      ),
+      `${route}: unapproved image`,
+    );
+  if (images.length)
+    assert(
+      nodes.some((n) => n.attrs["data-copy-key"] === "portraitDisclosure"),
+      `${route}: missing portrait disclosure`,
+    );
   if (["/", "/methodology", "/report"].includes(route)) {
     for (const key of [
       "scoreScopeTitle",
@@ -96,7 +112,38 @@ export function verifyRoute(html, route, players, publicBase) {
         ),
         `${route}: missing player aggregate ${key}`,
       );
+    if (portraits[player.id])
+      assert(
+        images.some(
+          (image) => imageSource(image.attrs.src) === portraits[player.id].src,
+        ),
+        `${route}: missing player portrait`,
+      );
   }
+  if (route.startsWith("/rankings/"))
+    for (const selected of players.filter(
+      (p) => p.selected && route === `/rankings/${p.role}`,
+    ))
+      assert(
+        images.some(
+          (image) =>
+            imageSource(image.attrs.src) === portraits[selected.id].src,
+        ),
+        `${route}: missing ${selected.name} portrait`,
+      );
+  if (route === "/")
+    assert(
+      images.some(
+        (image) =>
+          imageSource(image.attrs.src) ===
+          portraits[
+            players.find(
+              (p) => p.selected && p.role === "batting" && p.rank === 1,
+            ).id
+          ].src,
+      ),
+      "Missing hero portrait",
+    );
   return {
     bindings,
     scripts: nodes
@@ -145,6 +192,7 @@ export async function verifyDeployment() {
     routes: [],
     scripts: [],
     retired: [],
+    images: [],
     screenshots: [],
     passed: false,
   };
@@ -211,6 +259,25 @@ export async function verifyDeployment() {
       );
       receipt.retired.push({ route, status: response.status() });
     }
+    for (const asset of Object.values(portraits)) {
+      const response = await context.request.get(new URL(asset.src, base).href);
+      assert.equal(
+        response.status(),
+        200,
+        `${asset.src}: missing supplied image`,
+      );
+      assert(response.headers()["content-type"]?.includes("image/png"));
+      assert.equal(
+        sha256(await response.body()),
+        asset.sha256,
+        `${asset.src}: image differs from supplied original`,
+      );
+      receipt.images.push({
+        route: asset.src,
+        status: response.status(),
+        sha256: asset.sha256,
+      });
+    }
     const pdf = await context.request.get(
       new URL("/reports/pressure-index-report.pdf", base).href,
     );
@@ -239,6 +306,12 @@ export async function verifyDeployment() {
           waitUntil: "networkidle",
         });
         await page.evaluate(() => document.fonts.ready);
+        await page.evaluate(async () => {
+          for (const image of document.images) image.loading = "eager";
+          await Promise.all(
+            [...document.images].map((image) => image.decode()),
+          );
+        });
         verifyRoute(await page.content(), route, players, site.publicBaseUrl);
         assert(
           await page.evaluate(
@@ -256,7 +329,7 @@ export async function verifyDeployment() {
     }
     receipt.passed = true;
     console.log(
-      `Verified ${receipt.routes.length} routes, ${receipt.scripts.length} script assets, ${receipt.retired.length} retired assets, matching PDF and ${receipt.screenshots.length} screenshots. Receipt: ${out}`,
+      `Verified ${receipt.routes.length} routes, ${receipt.scripts.length} script assets, ${receipt.images.length} supplied images, ${receipt.retired.length} retired assets, ${report.available ? "matching PDF" : "withdrawn PDF"} and ${receipt.screenshots.length} screenshots. Receipt: ${out}`,
     );
     return receipt;
   } catch (error) {

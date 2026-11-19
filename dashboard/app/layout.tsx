@@ -69,6 +69,9 @@ export default function RootLayout({
             <p>
               <CopyText name="authorship" />
             </p>
+            <p>
+              <CopyText name="portraitDisclosure" />
+            </p>
           </div>
           <div>
             <Link href="/methodology">

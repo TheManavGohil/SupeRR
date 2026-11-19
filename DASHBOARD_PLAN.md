@@ -12,7 +12,7 @@ The index orders observed pressure production against supported peers. It does n
 
 `scripts/export_dashboard.py` is a read-only publication exporter. It verifies frozen analytical artifacts and emits an explicit aggregate contract for 69 existing player-role entries, including the twenty selections. Allowed player fields are identity/name, discipline, rank, selection, observed-role label, P10 score, retained and peer-supported match counts, pressure opportunities, recent status and eligibility. Unknown fields fail export/content checks.
 
-The four generated JSON files contain players, release totals, site/method constants and report availability/hash metadata. No match-level cases, opponent narratives, source pointers, per-match splits or raw event data are published. The exporter tests compare against the private frozen source without recomputing scores.
+The four generated JSON files contain players, release totals, site/method constants and report availability/hash metadata. The separate image manifest contains only asset paths, image geometry, crop/trim settings and original-byte hashes. No match-level cases, opponent narratives, source pointers, per-match splits or raw event data are published. The exporter tests compare against the private frozen source without recomputing scores.
 
 ## Application structure
 
@@ -22,9 +22,9 @@ The four generated JSON files contain players, release totals, site/method const
 | Routes | Overview, two rankings, comparison, methodology, validation, report and 69 static profiles. |
 | Shared copy | `dashboard/content/copy.ts`; pages, components and PDF renderer import the same phrases. |
 | Numeric provenance | Generated JSON bindings and validated shared copy; built HTML and served routes are checked. |
-| Player presentation | `PlayerInitials`, driven only by display name, on overview/rankings/profiles. No player images. |
+| Player presentation | `PlayerPortrait` on overview/rankings/profiles, using only the twenty supplied images and reviewed crop/trim metadata; `PlayerInitials` is the fallback for alternatives. |
 | Interaction | Search, fixed evidence filters, table/card view and URL-backed same-role comparison. |
-| Visuals | White/blush RR-inspired palette, consistent initials tiles, clear typographic hierarchy and responsive spacing. |
+| Visuals | White/blush RR-inspired palette, consistent portrait framing, clear typographic hierarchy and responsive spacing. |
 | Publication checks | Exact nested field contract, encoded-text privacy scanning, shared-copy guard, numeric bindings and PDF freshness. |
 | Accessibility | Keyboard and reduced-motion behavior, readable without JavaScript, automated WCAG A/AA checks and phone overflow checks. |
 
