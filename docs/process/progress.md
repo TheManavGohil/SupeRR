@@ -26,6 +26,10 @@ A, B and C production statuses succeeded. D failed with the user-supplied `Expec
 
 All local phase screenshots/route receipts are private under `reports/publication_cleanup_2026-11-18/`. D's earlier `d-production` route receipt only establishes privacy/HTTP behavior of an older release, not successful D deployment. The latest isolated clean-install/deployment-style build is `/tmp/rr-dashboard-clean-cqvn7y08` (temporary verification workspace). Final local receipts are under `reports/publication_cleanup_2026-11-18/g-local/`; production rejection receipts have `passed: false`.
 
+## Deployment input correction — 19 November 2026
+
+The participant supplied the latest failure: `check-content.mjs:39`, missing PDF (`false !== true`) while the manifest enables it. Reproduced that the inherited repository `.vercelignore` rule `reports/` excludes `public/reports/pressure-index-report.pdf` when applied from Vercel's dashboard root. Added a project-level `dashboard/.vercelignore`, anchored the repository private-directory rules, and added a real ignore-semantics regression checking all required sources/assets plus private exclusions. The PDF guard remains strict and now explains missing deployment inputs. The participant subsequently explicitly chose “Restore the supplied RR player images”; that overrides the earlier image-removal instruction. Restore only those twenty archived images/crops while retaining aggregate privacy and frozen analytical values. Fourteen Node tests, lint, the local production build and a clean installation/build from the 61 files retained by the corrected filters all pass. The filtered checkout also passes all fourteen tests. Image restoration and the new deployment/live checks are in progress; no production success is claimed yet.
+
 ## Artifacts and privacy
 
 - Current app: [dashboard](../../dashboard/DEPLOYMENT.md); public base `https://supe-rr-manav.vercel.app`.
@@ -37,7 +41,7 @@ All local phase screenshots/route receipts are private under `reports/publicatio
 
 ## Exact next work
 
-1. Read the latest Vercel failure log when supplied. The first D count assumption has been corrected, but a distinct subsequent failure remains unknown. Do not guess another fix or weaken privacy/provenance gates.
+1. Complete the clean build from files retained by the corrected Vercel filters, then commit/push the deployment-input fix. The latest supplied log resolved the missing-PDF blocker; keep all report/privacy/provenance gates intact.
 2. Correct the deployment issue, run the affected checks, commit/push on `main`, and confirm Vercel success for that exact commit. The portable command is `rtk proxy npm run verify:deployment` in `dashboard/`; run the nine browser tests against the public URL as well. It verifies current content, not Git commit identity; both content and deployment status are required.
 3. Inspect the final live 390/1440 screenshots and matching PDF, then record actual production results. Technical implementation is complete locally; production acceptance remains incomplete.
 4. Keep participant gates in [one checklist](../SUBMISSION_CHECKLIST.md): nineteen dropdown labels lack earlier authenticated evidence, all twenty final confirmations remain blank; exact publication-rule wording/visibility decision, final authorship review, PDF and form review remain open. Recheck the live submission deadline and rules; dated November 14 evidence is not current permission to submit.

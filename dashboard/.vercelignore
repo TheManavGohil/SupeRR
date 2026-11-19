@@ -1,0 +1,10 @@
+# This project-level file takes precedence over the repository ignore file.
+# Keep public/reports/ available: the build verifies the committed PDF.
+/node_modules/
+/.next/
+/out/
+/test-results/
+/playwright-report/
+/.vercel/
+/.env*
+/*.tsbuildinfo

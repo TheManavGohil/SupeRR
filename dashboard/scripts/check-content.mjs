@@ -36,7 +36,11 @@ assert.equal(release.pressureEvents, 43029);
 assert.equal(release.verifiedEvents, 155799);
 assert.equal(release.verifiedPressureEvents, 54721);
 const pdf = path.join(root, "public/reports/pressure-index-report.pdf");
-assert.equal(fs.existsSync(pdf), report.available);
+assert.equal(
+  fs.existsSync(pdf),
+  report.available,
+  "PDF availability must match content/generated/report.json; check that .vercelignore includes public/reports/pressure-index-report.pdf in deployment inputs",
+);
 console.log(
   "Content checks passed: frozen top tens, strict aggregate contract and complete recent-status counts.",
 );

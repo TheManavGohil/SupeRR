@@ -43,7 +43,9 @@ To run the same verification on a local preview:
 rtk proxy env DASHBOARD_URL=http://127.0.0.1:3100 npm run verify:deployment
 ```
 
-The recommended Git integration deploys only `dashboard/`. Root `.vercelignore` also excludes private workspace material and process notes for a root CLI upload. All browser-delivered content is public. `noindex` remains enabled; it is not access control.
+The recommended Git integration deploys only `dashboard/`. Its own `.vercelignore` excludes caches, browser-test outputs and environment files while keeping the verified public PDF. Vercel gives this project-level file precedence over the repository-level file. Root ignore rules use anchored paths for private workspace material and process notes; an unanchored `reports/` rule would also remove the public PDF. A regression check validates both policies against all required sources/assets. See [Vercel's ignore-file documentation](https://vercel.com/docs/deployments/vercel-ignore#monorepos).
+
+All browser-delivered content is public. `noindex` remains enabled; it is not access control.
 
 ## Publication boundaries
 
